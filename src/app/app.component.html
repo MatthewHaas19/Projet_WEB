@@ -1,0 +1,16 @@
+<!-- Header -->
+<mat-toolbar color="accent">
+  <mat-toolbar-row>
+  <span>MyServices</span>
+  <span class="spacer"></span>
+    <button mat-button [matMenuTriggerFor]="menu"><mat-icon class="icon">home</mat-icon></button>
+    <mat-menu #menu="matMenu" xPosition="before">
+      <button mat-menu-item (click)="Login()">Login</button>
+      <button mat-menu-item (click)="Register()">Register</button>
+    </mat-menu>
+  </mat-toolbar-row>
+</mat-toolbar>
+
+
+<router-outlet></router-outlet>
+
