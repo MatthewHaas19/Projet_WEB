@@ -8,7 +8,7 @@ import {
   MatToolbarModule,
   MatExpansionModule,
   MatSidenavModule,
-  MatMenuModule, MatIconModule
+  MatMenuModule, MatIconModule, MatListModule
 } from '@angular/material';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -51,8 +51,10 @@ const appRoutes: Routes = [
     MatSidenavModule,
     MatMenuModule,
     MatIconModule,
+    MatSidenavModule,
     HttpClientModule,
-    RouterModule.forRoot(appRoutes)
+    RouterModule.forRoot(appRoutes),
+    MatListModule
   ],
   providers: [],
   bootstrap: [AppComponent]
