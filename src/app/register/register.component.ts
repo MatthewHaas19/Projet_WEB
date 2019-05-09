@@ -1,25 +1,63 @@
-import {Component} from '@angular/core';
-import {FormControl, FormGroupDirective, NgForm, Validators} from '@angular/forms';
-import {ErrorStateMatcher} from '@angular/material/core';
+import {Component, OnInit} from '@angular/core';
+import {Validators, FormGroup, FormBuilder} from '@angular/forms';
 
-/** Error when invalid control is dirty, touched, or submitted. */
-export class MyErrorStateMatcher implements ErrorStateMatcher {
-  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
-    const isSubmitted = form && form.submitted;
-    return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
-  }
-}
+import {UserService} from '../user.service';
+import {Router} from '@angular/router';
+import { User } from '../models/User.model';
+
+
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss']
 })
-export class RegisterComponent {
-  emailFormControl = new FormControl('', [
-    Validators.required,
-    Validators.email,
-  ]);
+export class RegisterComponent implements OnInit{
 
-  matcher = new MyErrorStateMatcher();
+  userForm: FormGroup;
+
+
+  constructor(private formBuilder: FormBuilder,
+              private userService: UserService,
+              private router: Router) {}
+
+  ngOnInit(): void {
+    this.initForm();
+  }
+
+  initForm() {
+    this.userForm = this.formBuilder.group({
+      firstname: ['', Validators.required],
+      lastname: ['', Validators.required],
+      email: ['', [Validators.required,Validators.email]],
+      password: ['', Validators.required],
+      cpassword: ['', Validators.required],
+      phone: ['', Validators.required]
+    })
+  }
+
+  onSubmitForm() {
+    const formValue = this.userForm.value;
+
+    if(formValue['password'] != formValue['cpassword']){
+      alert("Passwords do not match")
+      return;
+    }
+    const newUser = new User(
+      formValue['firstname'],
+      formValue['lastname'],
+      formValue['email'],
+      formValue['password'],
+      formValue['phone'],
+    );
+    this.userService.addUser(newUser).subscribe(data =>{
+      console.log(data);
+      if(data.success) {
+        this.router.navigate(['']);
+      }
+      else {
+        alert(data.message);
+      }
+    })
+  }
 
 }

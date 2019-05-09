@@ -1,26 +1,49 @@
-import {Component} from '@angular/core';
-import {FormControl, FormGroupDirective, NgForm, Validators} from '@angular/forms';
-import {ErrorStateMatcher} from '@angular/material/core';
+import {Component, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {UserService} from '../user.service';
+import {Router} from '@angular/router';
 
-/** Error when invalid control is dirty, touched, or submitted. */
-export class MyErrorStateMatcher implements ErrorStateMatcher {
-  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
-    const isSubmitted = form && form.submitted;
-    return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
-  }
-}
+
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent {
-  emailFormControl = new FormControl('', [
-    Validators.required,
-    Validators.email,
-  ]);
+export class LoginComponent implements OnInit{
 
-  matcher = new MyErrorStateMatcher();
+  userForm: FormGroup;
+
+
+  constructor(private formBuilder: FormBuilder,
+              private userService: UserService,
+              private router: Router) {}
+  ngOnInit(): void {
+    this.initForm();
+  }
+
+  initForm() {
+    this.userForm = this.formBuilder.group({
+      email: ['', [Validators.required,Validators.email]],
+      password: ['', Validators.required]
+    })
+  }
+  onSubmitForm() {
+
+    const formValue = this.userForm.value;
+    const username = formValue['email'];
+    const password = formValue['password'];
+
+    this.userService.getUserDetails(username, password).subscribe(data => {
+      if(data.success) {
+        this.router.navigate(['home'])
+      } else {
+        window.alert(data.message)
+      }
+    });
+
+    console.log(username,password)
+  }
+
 }
 

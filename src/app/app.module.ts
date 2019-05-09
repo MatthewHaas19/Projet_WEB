@@ -18,10 +18,13 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RegisterComponent } from './register/register.component';
 import {ReactiveFormsModule, FormsModule} from '@angular/forms';
 import {RouterModule, Routes} from '@angular/router';
+import {HttpClientModule} from '@angular/common/http';
+import { HomeComponent } from './home/home.component';
 
 
 const appRoutes: Routes = [
   { path: 'register', component: RegisterComponent},
+  { path: 'home', component: HomeComponent},
   { path: '', component: LoginComponent}
 ]
 
@@ -30,7 +33,8 @@ const appRoutes: Routes = [
   declarations: [
     AppComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
@@ -47,6 +51,7 @@ const appRoutes: Routes = [
     MatSidenavModule,
     MatMenuModule,
     MatIconModule,
+    HttpClientModule,
     RouterModule.forRoot(appRoutes)
   ],
   providers: [],
