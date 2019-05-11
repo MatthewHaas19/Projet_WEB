@@ -1,0 +1,113 @@
+.profile-container{
+  width: 485px;
+  height: 485px;
+  margin: 0 auto;
+  margin-top: 50px;
+  .profile-menu{
+    float: left;
+    width: 37%;
+    height: 482px;
+    background: #fff;
+    box-shadow: 0 0 25px rgba(#000, 0.2);
+    .image-container{
+      width: 70px;
+      height: 70px;
+      margin: 60px;
+      img{
+        max-width: 100%;
+        height: auto;
+        border-radius:50%;
+        &:hover{
+          opacity: 0.8;
+        }
+      }
+    }
+    ul{
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      li{
+        padding: 10px 20px;
+        font-size: 13px;
+        &:hover, &.active{
+          background: #f7f7f7;
+          border-left: 5px solid  #ff3c8a;
+        }
+        &:last-child{
+          margin-top: 50px;
+        }
+      }
+    }
+  }
+  .profile-content{
+    width: 63%;
+    float: right;
+    background: #fff;
+    box-shadow: 0 0 25px rgba(#000, 0.2);
+    .actions{
+      width: 100%;
+      background: linear-gradient(to right, #ff3c8a 0%, #ffbcd7 100%);
+      height: 40px;
+      line-height: 40;
+      color: #fff;
+      padding: 20px 0 0 0;
+      mat-icon{
+        padding-left: 20px;
+        float: left;
+        &:hover{
+          opacity: 0.8;
+        }
+      }
+      mat-icon+mat-icon{
+        padding-right: 20px;
+        float: right;
+      }
+    }
+    .pic{
+      background: linear-gradient(to right, #ff3c8a 0%, #ffbcd7 100%);
+      text-align: center;
+      color: #fff;
+      padding: 0 0 20px 0;
+      img{
+        width: 90px;
+        height: auto;
+        border-radius: 50%;
+        &:hover{
+          opacity: 0.8;
+        }
+      }
+      h2{
+        font-size: 17px;
+        padding: 0;
+        margin: 0;
+        font-weight: 400;
+      }
+      span{
+        font-size: 15px;
+        font-weight: 300;
+      }
+    }
+    .summary{
+      color: #fff;
+      .content{
+        width: 50%;
+        float: left;
+        text-align: center;
+        display: block;
+        background: linear-gradient(to right,  #ff3c8a 0%, #ffbcd7 100%);
+        padding: 10px 0;
+        span{
+          display: block;
+          font-size: 15px;
+          font-weight: 500;
+        }
+      }
+    }
+    .profile-details{
+      padding: 0;
+      margin: 0;
+      color: #929292;
+
+    }
+  }
+}

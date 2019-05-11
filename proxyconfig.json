@@ -1,7 +1,8 @@
 {
   "/api": {
-    "target": "http://[::1]:1234",
+    "target": "http://[::1]:3000",
     "secure": false,
     "changeOrigin": true
   }
 }
+

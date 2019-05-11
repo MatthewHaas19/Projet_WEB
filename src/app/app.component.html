@@ -3,10 +3,11 @@
   <mat-toolbar-row>
   <span>MyServices</span>
   <span class="spacer"></span>
-    <button mat-button [matMenuTriggerFor]="menu"><mat-icon class="icon">home</mat-icon></button>
+    <button mat-button [matMenuTriggerFor]="menu"><mat-icon class="icon">menu</mat-icon></button>
     <mat-menu #menu="matMenu" xPosition="before">
-      <button mat-menu-item (click)="Login()">Login</button>
-      <button mat-menu-item (click)="Register()">Register</button>
+      <button mat-menu-item (click)="Login()" *ngIf="!isAuth()">Login</button>
+      <button mat-menu-item (click)="Register()" *ngIf="!isAuth()">Register</button>
+      <button mat-menu-item (click)="Logout() " *ngIf="isAuth()">Logout</button>
     </mat-menu>
   </mat-toolbar-row>
 </mat-toolbar>

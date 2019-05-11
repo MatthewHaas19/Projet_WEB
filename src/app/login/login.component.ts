@@ -1,8 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {UserService} from '../user.service';
 import {Router} from '@angular/router';
-
+import {AuthentificationService, TokenPayload} from '../../authentification.service';
 
 
 @Component({
@@ -12,11 +11,20 @@ import {Router} from '@angular/router';
 })
 export class LoginComponent implements OnInit{
 
+  credentials: TokenPayload = {
+    id: 0,
+    firstname: '',
+    lastname: '',
+    email: '',
+    password: '',
+    phone: '',
+  }
+
   userForm: FormGroup;
 
 
   constructor(private formBuilder: FormBuilder,
-              private userService: UserService,
+              private auth: AuthentificationService,
               private router: Router) {}
   ngOnInit(): void {
     this.initForm();
@@ -28,22 +36,22 @@ export class LoginComponent implements OnInit{
       password: ['', Validators.required]
     })
   }
+
+
   onSubmitForm() {
 
     const formValue = this.userForm.value;
-    const username = formValue['email'];
-    const password = formValue['password'];
+    this.credentials.email = formValue['email'];
+    this.credentials.password = formValue['password'];
 
-    this.userService.getUserDetails(username, password).subscribe(data => {
-      if(data.success) {
-        this.router.navigate(['home'])
-      } else {
-        window.alert(data.message)
+    this.auth.login(this.credentials).subscribe((data) =>{
+        console.log(data)
+      if(data.error == 'Incorrect Details'){
+        alert(data.error)
+      }else{
+        this.router.navigate(['profile']);
       }
-    });
-
-    console.log(username,password)
+    })
   }
-
 }
 
