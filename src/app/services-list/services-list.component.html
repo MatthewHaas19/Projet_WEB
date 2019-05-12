@@ -1,3 +1,10 @@
-<p>
-  services-list works!
-</p>
+<div class="container">
+  <div class="service" *ngFor="let service of this.MyServices">
+    <mat-card>
+      <h1>{{service.name}}</h1>
+      <h2>{{service.idType}}</h2>
+      <img id="img1" src="assets/images/service.jpg">
+      <p>{{service.desc}}</p>
+    </mat-card>
+  </div>
+</div>

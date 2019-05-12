@@ -9,6 +9,10 @@ export interface ServiceDetails {
   desc: string;
 }
 
+export interface IdType {
+  idType: string;
+}
+
 
 
 @Injectable()
@@ -18,13 +22,22 @@ export class ServicesService {
 
   public addService(service: ServiceDetails) {
     console.log(service);
-    this.http.post('/api/addService', service).subscribe(()=> {
-      console.log('service added')
-    })
+    this.http.post('/api/addService', service).subscribe(() => {
+      console.log('service added');
+    });
   }
 
   public getTypes(): Observable<any> {
     return this.http.get('/api/typeServices');
   }
+
+  public getServices(): Observable<any> {
+    return this.http.get('/api/getServices');
+  }
+
+  public LibelleOfServices(idType): Observable<any>{
+    return this.http.get('/api/LibelleOfServices/'+idType)
+  }
+
 
 }

@@ -15,6 +15,31 @@ services.get('/typeServices',(req,res) => {
   })
 });
 
+services.get('/getServices',(req,res) => {
+  Service.findAll().then(services => {
+    res.json(services);
+  })
+});
+
+
+
+services.get('/LibelleOfServices/:id',(req,res) => {
+  console.log(req.params.id)
+  TypeService.findOne({
+    where: {
+      idType: req.params.id
+    }
+  }).then(service => {
+    if (!service) {
+      res.send('error of type service')
+    } else {
+      console.log(service)
+      res.json(service)
+    }
+  })
+});
+
+
 services.post('/addService',(req,res) => {
   const serviceData = {
     name : req.body.name,
