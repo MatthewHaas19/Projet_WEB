@@ -44,6 +44,7 @@ services.post('/addService',(req,res) => {
   const serviceData = {
     name : req.body.name,
     desc: req.body.desc,
+    price: req.body.price,
     idType: req.body.type,
   };
 

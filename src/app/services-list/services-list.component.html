@@ -1,10 +1,12 @@
 <div class="container">
   <div class="service" *ngFor="let service of this.MyServices">
     <mat-card>
-      <h1>{{service.name}}</h1>
-      <h2>{{service.idType}}</h2>
+      <h2>{{service.name}}</h2>
+      <h4>{{service.idType}}</h4>
       <img id="img1" src="assets/images/service.jpg">
+      <p>{{service.price}} €</p>
       <p>{{service.desc}}</p>
+      <button mat-raised-button color="accent" type="submit" (click)="OrderOne(service.name)">Order</button>
     </mat-card>
   </div>
 </div>

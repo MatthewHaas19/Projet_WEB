@@ -3,11 +3,16 @@
   <mat-toolbar-row>
   <span>MyServices</span>
   <span class="spacer"></span>
+    <button mat-icon-button (click)="Cart()" *ngIf="isAuth()">
+      <mat-icon matBadge = {{OrderNumber}} >near_me</mat-icon>
+    </button>
     <button mat-button [matMenuTriggerFor]="menu"><mat-icon class="icon">menu</mat-icon></button>
     <mat-menu #menu="matMenu" xPosition="before">
       <button mat-menu-item (click)="Login()" *ngIf="!isAuth()">Login</button>
       <button mat-menu-item (click)="Register()" *ngIf="!isAuth()">Register</button>
       <button mat-menu-item (click)="Logout() " *ngIf="isAuth()">Logout</button>
+      <button mat-menu-item (click)="Services() " *ngIf="isAuth()">Services</button>
+      <button mat-menu-item (click)="AddServices() " *ngIf="isAdmin()">Add Services</button>
     </mat-menu>
   </mat-toolbar-row>
 </mat-toolbar>

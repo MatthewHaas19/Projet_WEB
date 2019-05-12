@@ -15,6 +15,9 @@ module.exports = db.sequelize.define(
     desc: {
       type: Sequelize.STRING
     },
+    price: {
+      type: Sequelize.INTEGER
+    },
     idType: {
       type: Sequelize.INTEGER
     }

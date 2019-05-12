@@ -22,6 +22,7 @@
             </mat-optgroup>
           </mat-select>
         </mat-form-field>
+        <mat-slider [max]="50" [min]="0" [step]="0.5" [thumbLabel]="true" formControlName="price"></mat-slider>
         <mat-form-field class="example-full-width">
           <textarea matInput #message maxlength="42" placeholder="Description" formControlName="desc"></textarea>
           <mat-hint align="start"><strong>Describe the service</strong> </mat-hint>
@@ -38,6 +39,7 @@
       <h2>{{serviceForm.value['name']}}</h2>
       <h4>{{serviceForm.value['type'].libelle}}</h4>
       <img id="img1" src="assets/images/service.jpg">
+      <h4>{{serviceForm.value['price']}} €</h4>
       <p>{{serviceForm.value['desc']}}</p>
     </mat-card>
   </div>

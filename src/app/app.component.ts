@@ -1,14 +1,25 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {AuthentificationService} from '../authentification.service';
+import {OrderService} from '../order.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
-  constructor(private router: Router,private auth: AuthentificationService) {}
+export class AppComponent implements OnInit{
+  constructor(private router: Router,private auth: AuthentificationService, private order: OrderService) {}
+
+  OrderNumber = 0;
+
+  ngOnInit(): void {
+    this.OrderCount()
+  }
+
+  Cart(){
+    console.log("cart")
+  }
 
   Login() {
   this.router.navigate([''])
@@ -16,6 +27,17 @@ export class AppComponent {
 
   isAuth() {
     return this.auth.isLoggedIn();
+  }
+
+  isAdmin() {
+    return this.auth.isAdmin();
+  }
+
+  Services() {
+    this.router.navigate(['/services-list'])
+  }
+  AddServices(){
+    this.router.navigate(['/services'])
   }
 
   Logout() {
@@ -26,6 +48,19 @@ export class AppComponent {
   Register() {
   this.router.navigate(['register'])
 }
+
+  OrderCount(){
+    this.auth.profile().subscribe(
+      user => {
+        this.order.OrderCount(user.id).subscribe(data => {
+          this.OrderNumber = data.length
+        })
+      },
+      err => {
+        console.error((err))
+      }
+    )
+  }
 
 
 }

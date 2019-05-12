@@ -34,7 +34,8 @@ export class ServicesComponent implements OnInit {
   infos = {
     name: '',
     type: '',
-    desc: ''
+    desc: '',
+    price: 0
   }
 
 
@@ -69,7 +70,8 @@ export class ServicesComponent implements OnInit {
     this.serviceForm = this.formBuilder.group({
       name: ['', Validators.required],
       type: ['', Validators.required],
-      desc: ['', Validators.required]
+      desc: ['', Validators.required],
+      price: ['', Validators.required]
     })
   }
 
@@ -80,8 +82,12 @@ export class ServicesComponent implements OnInit {
     this.infos.name = formValue['name'];
     this.infos.type = formValue['type'].idType;
     this.infos.desc = formValue['desc'];
+    this.infos.price = formValue['price'];
 
-    this.services.addService(this.infos);
+    this.services.addService2(this.infos).then((res) => {
+      this.router.navigate(['/services-list'])
+    })
+
   }
 
   openDialog(): void {

@@ -1,10 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import {ServicesService} from '../../services.service';
+import {AuthentificationService} from '../../authentification.service';
+import {OrderService} from '../../order.service';
 
 
 export interface ServiceDetails {
   name: string;
   idType: string;
+  price: number;
   desc: string;
 }
 
@@ -12,6 +15,7 @@ export interface Services {
   name: string;
   idType: string;
   libelle: string;
+  price: number;
   desc: string;
 }
 
@@ -28,18 +32,12 @@ export interface IdType {
 export class ServicesListComponent implements OnInit {
 
   MyServices: ServiceDetails[];
-  AllServices: Services[] = [];
-  aService: Services = {
-    name : '',
-    idType: '',
-    libelle: '',
-    desc: ''
-  };
-  Test;
-  private idType: IdType;
-  private ResidType: IdType;
 
-  constructor(private services: ServicesService) { }
+  private idType: IdType;
+
+  constructor(private services: ServicesService,
+              private auth: AuthentificationService,
+              private order: OrderService) { }
 
   ngOnInit() {
     this.services.getServices().subscribe(
@@ -61,6 +59,17 @@ export class ServicesListComponent implements OnInit {
           this.MyServices[i].idType = data.libelle.toString();
           console.log(this.MyServices)
     });
+  }
+
+  OrderOne(name){
+    this.auth.profile().subscribe(
+      user => {
+        this.order.OrderOne(name, user.id)
+      },
+      err => {
+        console.error((err))
+      }
+    )
   }
 
 }

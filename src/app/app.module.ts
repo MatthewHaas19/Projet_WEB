@@ -9,7 +9,7 @@ import {
   MatExpansionModule,
   MatSidenavModule,
   MatSelectModule,
-  MatMenuModule, MatIconModule, MatListModule, MatProgressBarModule, MatDialogModule
+  MatMenuModule, MatIconModule, MatListModule, MatProgressBarModule, MatDialogModule, MatSliderModule, MatBadgeModule
 } from '@angular/material';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -27,11 +27,14 @@ import { AuthGuardService} from '../auth-guard.service';
 import { DialogOverviewExampleDialogComponent, ServicesComponent} from './services/services.component';
 import { ServicesListComponent } from './services-list/services-list.component';
 import {ServicesService} from '../services.service';
+import {AdminGuardService} from '../admin-guard.service';
+import {OrderService} from '../order.service';
+import { CartComponent } from './cart/cart.component';
 
 const appRoutes: Routes = [
   { path: 'register', component: RegisterComponent},
   { path: 'home', component: HomeComponent},
-  { path: 'services', component: ServicesComponent},
+  { path: 'services', component: ServicesComponent, canActivate: [AdminGuardService]},
   { path: 'services-list', component: ServicesListComponent},
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuardService]},
   { path: '', component: LoginComponent}
@@ -47,7 +50,8 @@ const appRoutes: Routes = [
     ProfileComponent,
     ServicesComponent,
     ServicesListComponent,
-    DialogOverviewExampleDialogComponent
+    DialogOverviewExampleDialogComponent,
+    CartComponent
   ],
   imports: [
     BrowserModule,
@@ -69,11 +73,13 @@ const appRoutes: Routes = [
     MatProgressBarModule,
     MatSelectModule,
     MatDialogModule,
+    MatSliderModule,
     RouterModule.forRoot(appRoutes),
-    MatListModule
+    MatListModule,
+    MatBadgeModule
   ],
   entryComponents : [DialogOverviewExampleDialogComponent],
-  providers: [AuthGuardService,AuthentificationService,ServicesService],
+  providers: [AuthGuardService, AuthentificationService, ServicesService, AdminGuardService, OrderService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

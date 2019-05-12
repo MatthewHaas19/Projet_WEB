@@ -12,6 +12,7 @@ export interface UserDetails {
   email: string
   password: string
   phone: string
+  isAdmin: string
   exp: number
   iat: number
 }
@@ -63,6 +64,20 @@ export class AuthentificationService {
     const user = this.getUserDetails()
     if(user) {
       return user.exp > Date.now() / 1000
+    } else {
+      return false
+    }
+  }
+
+  public isAdmin(): boolean {
+    const user = this.getUserDetails()
+    if(user) {
+      if(user.isAdmin === 'false'){
+        return false
+      }
+      else{
+        return true
+      }
     } else {
       return false
     }

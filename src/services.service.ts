@@ -7,6 +7,7 @@ export interface ServiceDetails {
   name: string;
   type: string;
   desc: string;
+  price: number;
 }
 
 export interface IdType {
@@ -20,11 +21,14 @@ export class ServicesService {
 
   constructor(private http: HttpClient, private router: Router) {}
 
-  public addService(service: ServiceDetails) {
-    console.log(service);
-    this.http.post('/api/addService', service).subscribe(() => {
-      console.log('service added');
-    });
+  public addService2(service: ServiceDetails): Promise<any> {
+    return new Promise((resolve) => {
+      console.log(service);
+      this.http.post('/api/addService', service).subscribe(() => {
+        console.log('service added');
+        resolve()
+      });
+    })
   }
 
   public getTypes(): Observable<any> {
