@@ -29,7 +29,7 @@ export class OrderService {
     });
   }
 
-  public OrderCount(idUser): Observable<any>{
+  public getAllPendingOrders(idUser): Observable<any>{
     return this.http.get('/api/OrderPending/'+idUser)
   }
 

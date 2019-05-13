@@ -65,6 +65,7 @@ export class ServicesListComponent implements OnInit {
     this.auth.profile().subscribe(
       user => {
         this.order.OrderOne(name, user.id)
+        alert('Ty for your order')
       },
       err => {
         console.error((err))

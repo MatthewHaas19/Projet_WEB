@@ -18,7 +18,7 @@ export class AppComponent implements OnInit{
   }
 
   Cart(){
-    console.log("cart")
+    this.router.navigate(['/cart'])
   }
 
   Login() {
@@ -52,7 +52,7 @@ export class AppComponent implements OnInit{
   OrderCount(){
     this.auth.profile().subscribe(
       user => {
-        this.order.OrderCount(user.id).subscribe(data => {
+        this.order.getAllPendingOrders(user.id).subscribe(data => {
           this.OrderNumber = data.length
         })
       },

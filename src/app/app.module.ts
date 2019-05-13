@@ -9,7 +9,7 @@ import {
   MatExpansionModule,
   MatSidenavModule,
   MatSelectModule,
-  MatMenuModule, MatIconModule, MatListModule, MatProgressBarModule, MatDialogModule, MatSliderModule, MatBadgeModule
+  MatMenuModule, MatIconModule, MatListModule, MatProgressBarModule, MatDialogModule, MatSliderModule, MatBadgeModule, MatTableModule
 } from '@angular/material';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -30,6 +30,10 @@ import {ServicesService} from '../services.service';
 import {AdminGuardService} from '../admin-guard.service';
 import {OrderService} from '../order.service';
 import { CartComponent } from './cart/cart.component';
+import { WorkerLoginComponent } from './worker-login/worker-login.component';
+import {WorkerAuthService} from '../WorkerAuth.service';
+import { WorkerRegisterComponent } from './worker-register/worker-register.component';
+import { WorkerProfileComponent } from './worker-profile/worker-profile.component';
 
 const appRoutes: Routes = [
   { path: 'register', component: RegisterComponent},
@@ -37,6 +41,10 @@ const appRoutes: Routes = [
   { path: 'services', component: ServicesComponent, canActivate: [AdminGuardService]},
   { path: 'services-list', component: ServicesListComponent},
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuardService]},
+  { path: 'cart', component: CartComponent, canActivate: [AuthGuardService]},
+  { path: 'worker-login', component: WorkerLoginComponent},
+  { path: 'worker-register', component: WorkerRegisterComponent},
+  { path: 'worker-profile', component: WorkerProfileComponent},
   { path: '', component: LoginComponent}
 ]
 
@@ -51,7 +59,10 @@ const appRoutes: Routes = [
     ServicesComponent,
     ServicesListComponent,
     DialogOverviewExampleDialogComponent,
-    CartComponent
+    CartComponent,
+    WorkerLoginComponent,
+    WorkerRegisterComponent,
+    WorkerProfileComponent
   ],
   imports: [
     BrowserModule,
@@ -74,12 +85,13 @@ const appRoutes: Routes = [
     MatSelectModule,
     MatDialogModule,
     MatSliderModule,
+    MatTableModule,
     RouterModule.forRoot(appRoutes),
     MatListModule,
     MatBadgeModule
   ],
   entryComponents : [DialogOverviewExampleDialogComponent],
-  providers: [AuthGuardService, AuthentificationService, ServicesService, AdminGuardService, OrderService],
+  providers: [AuthGuardService, AuthentificationService, ServicesService, AdminGuardService, OrderService, WorkerAuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
