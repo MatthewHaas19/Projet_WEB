@@ -2,7 +2,7 @@ const express = require("express");
 const workers = express.Router();
 const cors = require("cors");
 const jwt = require("jsonwebtoken");
-const bcrypt = require("bcrypt");
+const bcrypt = require("../server.js").bcrypt;
 
 const Worker = require("../models/Worker");
 workers.use(cors());
