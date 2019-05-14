@@ -33,4 +33,12 @@ export class OrderService {
     return this.http.get('/api/OrderPending/'+idUser)
   }
 
+  public getPendingOrders(): Observable<any>{
+    return this.http.get('/api/OrderAllPending')
+  }
+
+  public PickAnOrder(order,id): Observable<any>{
+    return this.http.put('/api/PickAnOrder/'+id,order)
+  }
+
 }

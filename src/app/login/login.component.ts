@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {AuthentificationService, TokenPayload} from '../../authentification.service';
@@ -10,6 +10,10 @@ import {AuthentificationService, TokenPayload} from '../../authentification.serv
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit{
+
+
+  @Output() output = new EventEmitter();
+
 
   credentials: TokenPayload = {
     id: 0,
@@ -50,6 +54,7 @@ export class LoginComponent implements OnInit{
         alert(data.error)
       }else{
         this.router.navigate(['profile']);
+        this.output.emit('')
       }
     })
   }

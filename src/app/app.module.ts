@@ -34,6 +34,7 @@ import { WorkerLoginComponent } from './worker-login/worker-login.component';
 import {WorkerAuthService} from '../WorkerAuth.service';
 import { WorkerRegisterComponent } from './worker-register/worker-register.component';
 import { WorkerProfileComponent } from './worker-profile/worker-profile.component';
+import { OrderPendingComponent } from './order-pending/order-pending.component';
 
 const appRoutes: Routes = [
   { path: 'register', component: RegisterComponent},
@@ -45,6 +46,7 @@ const appRoutes: Routes = [
   { path: 'worker-login', component: WorkerLoginComponent},
   { path: 'worker-register', component: WorkerRegisterComponent},
   { path: 'worker-profile', component: WorkerProfileComponent},
+  { path: 'order-pending', component: OrderPendingComponent},
   { path: '', component: LoginComponent}
 ]
 
@@ -62,7 +64,8 @@ const appRoutes: Routes = [
     CartComponent,
     WorkerLoginComponent,
     WorkerRegisterComponent,
-    WorkerProfileComponent
+    WorkerProfileComponent,
+    OrderPendingComponent
   ],
   imports: [
     BrowserModule,

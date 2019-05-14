@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnChanges, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {AuthentificationService} from '../authentification.service';
 import {OrderService} from '../order.service';
@@ -8,13 +8,21 @@ import {OrderService} from '../order.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit{
+export class AppComponent implements OnInit, OnChanges{
   constructor(private router: Router,private auth: AuthentificationService, private order: OrderService) {}
 
   OrderNumber = 0;
 
   ngOnInit(): void {
-    this.OrderCount()
+    if(this.isAuth()){
+      this.OrderCount()
+    }
+  }
+
+  ngOnChanges(): void {
+    if(this.isAuth()){
+      this.OrderCount()
+    }
   }
 
   Cart(){

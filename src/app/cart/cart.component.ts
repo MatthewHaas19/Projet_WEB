@@ -29,6 +29,14 @@ export class CartComponent implements OnInit {
     this.getAllOrder();
   }
 
+  getColor(status):string{
+    if(status === 'pending'){
+      return 'red'
+    }else{
+      return 'lime'
+    }
+  }
+
   getAllOrder() {
     this.auth.profile().subscribe(
       user => {

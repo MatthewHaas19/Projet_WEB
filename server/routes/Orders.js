@@ -49,14 +49,55 @@ orders.get('/OrderPending/:id',(req,res) => {
   Order.findAll({
     where: {
       idUser: req.params.id,
+      orderStatus: ['pending', 'On his way']
+    }
+  }).then(order => {
+    if (!order) {
+      res.send({})
+    } else {
+      res.send(order)
+    }
+  })
+})
+
+
+orders.get('/OrderAllPending',(req,res) => {
+  Order.findAll({
+    where: {
       orderStatus: 'pending'
     }
   }).then(order => {
     if (!order) {
       res.send({})
     } else {
-      console.log(order)
       res.send(order)
+    }
+  })
+})
+
+
+
+orders.put('/PickAnOrder/:id',(req,res) => {
+  Order.findOne({
+    where: {
+      idOrder: req.body.idOrder
+    }
+  }).then(order => {
+    if (!order) {
+      res.send('error : there is no order with that id')
+    } else {
+      Order.update({
+        orderStatus: 'On his way',
+        idWorker: req.params.id
+      },
+        {
+          where: {
+           idOrder: req.body.idOrder
+          }
+        }).then(order => {
+          console.log(order)
+          res.json(order)
+      })
     }
   })
 })
