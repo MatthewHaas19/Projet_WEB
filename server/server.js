@@ -1,14 +1,23 @@
 var express = require("express")
 var cors = require("cors")
+const path = require('path');
 var bodyParser = require("body-parser")
 var app = express()
 var port = process.env.PORT || 3000
+
+app.use(express.static(__dirname + '/dist/Projet'));
+app.get('/*', function(req,res){
+  res.sendFile(path.join(__dirname+'/dist/Projet/index.html'));
+})
+
 
 app.use(bodyParser.json())
 app.use(cors())
 app.use(
   bodyParser.urlencoded({ extended: false})
 )
+
+
 
 var Users = require("./routes/Users")
 var Services = require("./routes/Services")
