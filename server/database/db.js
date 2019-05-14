@@ -1,7 +1,9 @@
 const Sequelize = require("sequelize")
 const db = {}
-const sequelize = new Sequelize("projet","root","root", {
-  host: "localhost",
+const sequelize = new Sequelize('mysql://matthewh:myservices@51.254.214.203/myservices')
+/*
+const sequelize = new Sequelize("myservices","matthewh","myservices", {
+  host: "http://51.254.214.203/phpmyadmin",
   dialect: "mysql",
   operatorsAliases: false,
 
@@ -12,7 +14,7 @@ const sequelize = new Sequelize("projet","root","root", {
     idle: 10000
   }
 })
-
+*/
 
 db.sequelize = sequelize
 db.Sequelize = Sequelize

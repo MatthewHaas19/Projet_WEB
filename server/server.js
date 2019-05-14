@@ -8,6 +8,7 @@ var port = process.env.PORT || 8080
 const bcrypt = require('bcrypt');
 module.exports.bcrypt = bcrypt;
 
+
 app.use(express.static(__dirname + '/dist/Projet'));
 app.get('/*', function(req,res){
   res.sendFile(path.join(__dirname+'/dist/Projet/index.html'));

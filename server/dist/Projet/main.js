@@ -1622,9 +1622,13 @@ var AuthentificationService = /** @class */ (function () {
         return request;
     };
     AuthentificationService.prototype.profile = function () {
-        return this.http.get('/api/profile', {
+        var base = this.http.get('/api/profile', {
             headers: { Authorization: "" + this.getToken() }
         });
+        var request = base.pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["map"])(function (data) {
+            return data;
+        }));
+        return request;
     };
     AuthentificationService.prototype.logout = function () {
         this.token = '';
