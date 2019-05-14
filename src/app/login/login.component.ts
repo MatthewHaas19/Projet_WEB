@@ -12,8 +12,6 @@ import {AuthentificationService, TokenPayload} from '../../authentification.serv
 export class LoginComponent implements OnInit{
 
 
-  @Output() output = new EventEmitter();
-
 
   credentials: TokenPayload = {
     id: 0,
@@ -54,7 +52,7 @@ export class LoginComponent implements OnInit{
         alert(data.error)
       }else{
         this.router.navigate(['profile']);
-        this.output.emit('')
+        console.log('Welcome !')
       }
     })
   }

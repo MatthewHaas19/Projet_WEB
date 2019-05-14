@@ -112,17 +112,11 @@ export class AuthentificationService {
   }
 
   public profile(): Observable<any> {
-    const base = this.http.get('/api/profile', {
-      headers: { Authorization: `${this.getToken()}` }
+    return this.http.get('/api/profile', {
+      headers: {Authorization: `${this.getToken()}`}
     })
-
-    const request = base.pipe(
-      map(data => {
-        return data
-      })
-    )
-    return request
   }
+
 
   public logout(): void {
     this.token = ''

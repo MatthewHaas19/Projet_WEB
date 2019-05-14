@@ -638,7 +638,6 @@ var LoginComponent = /** @class */ (function () {
         this.formBuilder = formBuilder;
         this.auth = auth;
         this.router = router;
-        this.output = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
         this.credentials = {
             id: 0,
             firstname: '',
@@ -669,14 +668,10 @@ var LoginComponent = /** @class */ (function () {
             }
             else {
                 _this.router.navigate(['profile']);
-                _this.output.emit('');
+                console.log('Welcome !');
             }
         });
     };
-    tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Output"])(),
-        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", Object)
-    ], LoginComponent.prototype, "output", void 0);
     LoginComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
             selector: 'app-login',
@@ -1622,13 +1617,9 @@ var AuthentificationService = /** @class */ (function () {
         return request;
     };
     AuthentificationService.prototype.profile = function () {
-        var base = this.http.get('/api/profile', {
+        return this.http.get('/api/profile', {
             headers: { Authorization: "" + this.getToken() }
         });
-        var request = base.pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["map"])(function (data) {
-            return data;
-        }));
-        return request;
     };
     AuthentificationService.prototype.logout = function () {
         this.token = '';
