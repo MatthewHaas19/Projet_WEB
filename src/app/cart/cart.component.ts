@@ -2,26 +2,39 @@ import { Component, OnInit } from '@angular/core';
 import {AuthentificationService} from '../../authentification.service';
 import {OrderService} from '../../order.service';
 import {MatTableDataSource} from '@angular/material';
+import {animate, state, style, transition, trigger} from '@angular/animations';
 
 interface Order {
   idOrder: number;
   orderDate: Date;
   orderStatus: string;
+  name: string;
+  desc: string;
+  price: number;
 }
 
 
 @Component({
   selector: 'app-cart',
   templateUrl: './cart.component.html',
-  styleUrls: ['./cart.component.scss']
+  styleUrls: ['./cart.component.scss'],
+  animations: [
+    trigger('detailExpand', [
+      state('collapsed', style({height: '0px', minHeight: '0', display: 'none'})),
+      state('expanded', style({height: '*'})),
+      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+    ]),
+  ],
 })
 export class CartComponent implements OnInit {
 
 
   Orders: Order[] = [];
-  dataSource
 
-  displayedColumns: string[] = ['id', 'status', 'date'];
+  dataSource
+  expandedElement: Order | null;
+
+  displayedColumns: string[] = ['idOrder', 'name', 'orderStatus', 'orderDate'];
 
   constructor(private auth: AuthentificationService, private order: OrderService) { }
 
@@ -30,10 +43,13 @@ export class CartComponent implements OnInit {
   }
 
   getColor(status):string{
-    if(status === 'pending'){
+    if(status.toString() === 'pending'){
       return 'red'
     }else{
-      return 'lime'
+      if(status.toString() === 'red'){
+        return 'lime'
+      }
+      return 'black'
     }
   }
 
@@ -41,17 +57,45 @@ export class CartComponent implements OnInit {
     this.auth.profile().subscribe(
       user => {
         this.order.getAllPendingOrders(user.id).subscribe(data => {
-          for (const order of data) {
-            console.log(this.Orders);
-            this.Orders.push(order);
-          }
-          this.dataSource = new MatTableDataSource(this.Orders)
+          this.getInfoOrder(data)
         });
       },
       err => {
         console.error((err));
       }
     );
+  }
+
+  getInfoOrder(orders){
+    for (const order of orders) {
+
+
+      this.order.getServiceByOrder(order.idOrder).subscribe(data=>{
+        var aOrder = {
+          idOrder: 0,
+          orderDate: new Date(),
+          orderStatus: '',
+          name: '',
+          desc: '',
+          price: 0
+        }
+
+        aOrder.idOrder = order.idOrder
+        aOrder.orderStatus = order.orderStatus
+        aOrder.orderDate = order.orderDate
+
+        aOrder.name = data.name
+        aOrder.desc = data.desc
+        aOrder.price = data.price
+
+        this.Orders.push(aOrder);
+
+        this.dataSource = new MatTableDataSource(this.Orders)
+      })
+
+
+    }
+
   }
 
 }

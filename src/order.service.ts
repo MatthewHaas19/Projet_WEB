@@ -41,4 +41,8 @@ export class OrderService {
     return this.http.put('/api/PickAnOrder/'+id,order)
   }
 
+  public getServiceByOrder(idOrder): Observable<any>{
+    return this.http.get('/api/getServiceByOrder/'+idOrder)
+  }
+
 }

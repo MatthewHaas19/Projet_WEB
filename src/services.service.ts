@@ -43,5 +43,4 @@ export class ServicesService {
     return this.http.get('/api/LibelleOfServices/'+idType)
   }
 
-
 }

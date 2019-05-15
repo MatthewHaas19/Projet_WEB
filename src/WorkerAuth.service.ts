@@ -36,13 +36,13 @@ export class WorkerAuthService {
   constructor(private http: HttpClient, private router: Router){}
 
   private saveToken(token: string): void {
-    localStorage.setItem('userToken',token)
+    localStorage.setItem('workerToken',token)
     this.token = token
   }
 
   private getToken(): string {
     if(!this.token){
-      this.token = localStorage.getItem('userToken')
+      this.token = localStorage.getItem('workerToken')
     }
     return this.token
   }
@@ -105,8 +105,8 @@ export class WorkerAuthService {
 
   public logout(): void {
     this.token = ''
-    window.localStorage.removeItem('userToken')
-    this.router.navigateByUrl('/')
+    window.localStorage.removeItem('workerToken')
+    this.router.navigateByUrl('/worker-login')
   }
 
 }

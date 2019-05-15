@@ -2,6 +2,8 @@ import {Component, OnChanges, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {AuthentificationService} from '../authentification.service';
 import {OrderService} from '../order.service';
+import {WorkerAuthService} from '../WorkerAuth.service';
+import {ThemePalette} from '@angular/material';
 
 @Component({
   selector: 'app-root',
@@ -9,7 +11,12 @@ import {OrderService} from '../order.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit, OnChanges{
-  constructor(private router: Router,private auth: AuthentificationService, private order: OrderService) {}
+
+
+  constructor(private router: Router,
+              private auth: AuthentificationService,
+              private order: OrderService,
+              private worker: WorkerAuthService) {}
 
   OrderNumber = 0;
 
@@ -30,11 +37,20 @@ export class AppComponent implements OnInit, OnChanges{
   }
 
   Login() {
-  this.router.navigate([''])
+    this.router.navigate([''])
   }
+
+  Profile() {
+    this.router.navigate(['/profile'])
+  }
+
 
   isAuth() {
     return this.auth.isLoggedIn();
+  }
+
+  isWorker() {
+    return this.worker.isLoggedIn();
   }
 
   isAdmin() {
@@ -44,6 +60,7 @@ export class AppComponent implements OnInit, OnChanges{
   Services() {
     this.router.navigate(['/services-list'])
   }
+
   AddServices(){
     this.router.navigate(['/services'])
   }
@@ -56,6 +73,24 @@ export class AppComponent implements OnInit, OnChanges{
   Register() {
   this.router.navigate(['register'])
 }
+
+  ProfileWorker() {
+    this.router.navigate(['/worker-profile'])
+  }
+
+  LogoutWorker() {
+    this.worker.logout()
+    this.router.navigate(['/worker-login'])
+  }
+
+  OrdersPending() {
+    this.router.navigate(['/order-pending'])
+  }
+
+  WorkerLogin() {
+    this.router.navigate(['/worker-login'])
+  }
+
 
   OrderCount(){
     this.auth.profile().subscribe(

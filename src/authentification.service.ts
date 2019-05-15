@@ -4,6 +4,7 @@ import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import {Token} from '@angular/compiler';
+import {WorkerDetails} from './WorkerAuth.service';
 
 export interface UserDetails {
   id: number
@@ -18,8 +19,9 @@ export interface UserDetails {
 }
 
 interface TokenResponse{
-  token: string
+  token: string;
 }
+
 
 export interface TokenPayload{
   id: number
@@ -37,7 +39,7 @@ export class AuthentificationService {
   constructor(private http: HttpClient, private router: Router){}
 
   private saveToken(token: string): void {
-    localStorage.setItem('userToken',token)
+    localStorage.setItem('userToken', token)
     this.token = token
   }
 
@@ -71,12 +73,13 @@ export class AuthentificationService {
 
   public isAdmin(): boolean {
     const user = this.getUserDetails()
+
     if(user) {
-      if(user.isAdmin === 'false'){
-        return false
+      if(user.isAdmin === 'true'){
+        return true
       }
       else{
-        return true
+        return false
       }
     } else {
       return false
@@ -113,10 +116,9 @@ export class AuthentificationService {
 
   public profile(): Observable<any> {
     return this.http.get('/api/profile', {
-      headers: {Authorization: `${this.getToken()}`}
+      headers: { Authorization: `${this.getToken()}` }
     })
   }
-
 
   public logout(): void {
     this.token = ''

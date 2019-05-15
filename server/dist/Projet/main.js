@@ -49,12 +49,12 @@ var WorkerAuthService = /** @class */ (function () {
         this.router = router;
     }
     WorkerAuthService.prototype.saveToken = function (token) {
-        localStorage.setItem('userToken', token);
+        localStorage.setItem('workerToken', token);
         this.token = token;
     };
     WorkerAuthService.prototype.getToken = function () {
         if (!this.token) {
-            this.token = localStorage.getItem('userToken');
+            this.token = localStorage.getItem('workerToken');
         }
         return this.token;
     };
@@ -108,8 +108,8 @@ var WorkerAuthService = /** @class */ (function () {
     };
     WorkerAuthService.prototype.logout = function () {
         this.token = '';
-        window.localStorage.removeItem('userToken');
-        this.router.navigateByUrl('/');
+        window.localStorage.removeItem('workerToken');
+        this.router.navigateByUrl('/worker-login');
     };
     WorkerAuthService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])(),
@@ -210,7 +210,7 @@ var AppRoutingModule = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<!-- Header -->\n<mat-toolbar color=\"accent\">\n  <mat-toolbar-row>\n  <span>MyServices</span>\n  <span class=\"spacer\"></span>\n    <button mat-icon-button (click)=\"Cart()\" *ngIf=\"isAuth()\">\n      <mat-icon matBadge = {{OrderNumber}} >near_me</mat-icon>\n    </button>\n    <button mat-button [matMenuTriggerFor]=\"menu\"><mat-icon class=\"icon\">menu</mat-icon></button>\n    <mat-menu #menu=\"matMenu\" xPosition=\"before\">\n      <button mat-menu-item (click)=\"Login()\" *ngIf=\"!isAuth()\">Login</button>\n      <button mat-menu-item (click)=\"Register()\" *ngIf=\"!isAuth()\">Register</button>\n      <button mat-menu-item (click)=\"Logout() \" *ngIf=\"isAuth()\">Logout</button>\n      <button mat-menu-item (click)=\"Services() \" *ngIf=\"isAuth()\">Services</button>\n      <button mat-menu-item (click)=\"AddServices() \" *ngIf=\"isAdmin()\">Add Services</button>\n    </mat-menu>\n  </mat-toolbar-row>\n</mat-toolbar>\n\n\n<router-outlet></router-outlet>\n\n"
+module.exports = "<!-- Header -->\n  <mat-toolbar color=\"accent\">\n  <mat-toolbar-row>\n  <span>MyServices</span>\n  <span class=\"spacer\"></span>\n    <button mat-icon-button (click)=\"Cart()\" *ngIf=\"isAuth()\">\n      <mat-icon matBadge = {{OrderNumber}} >near_me</mat-icon>\n    </button>\n    <button mat-button [matMenuTriggerFor]=\"menu\"><mat-icon class=\"icon\">menu</mat-icon></button>\n    <mat-menu #menu=\"matMenu\" xPosition=\"before\">\n      <button mat-menu-item (click)=\"Login()\" *ngIf=\"!isAuth() && !isWorker()\">Login</button>\n      <button mat-menu-item (click)=\"WorkerLogin()\" *ngIf=\"!isAuth() && !isWorker()\">Worker Login</button>\n      <button mat-menu-item (click)=\"Register()\" *ngIf=\"!isAuth() && !isWorker()\">Register</button>\n      <button mat-menu-item (click)=\"Logout() \" *ngIf=\"isAuth()\">Logout</button>\n      <button mat-menu-item (click)=\"Services() \" *ngIf=\"isAuth()\">Services</button>\n      <button mat-menu-item (click)=\"Profile() \" *ngIf=\"isAuth()\">Profile</button>\n      <button mat-menu-item (click)=\"AddServices() \" *ngIf=\"isAdmin()\">Add Services</button>\n\n      <button mat-menu-item (click)=\"LogoutWorker() \" *ngIf=\"isWorker()\">Logout</button>\n      <button mat-menu-item (click)=\"OrdersPending() \" *ngIf=\"isWorker()\">Orders-Pending</button>\n      <button mat-menu-item (click)=\"ProfileWorker() \" *ngIf=\"isWorker()\">Profile</button>\n    </mat-menu>\n  </mat-toolbar-row>\n</mat-toolbar>\n\n\n<router-outlet></router-outlet>\n\n"
 
 /***/ }),
 
@@ -240,16 +240,19 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
 /* harmony import */ var _authentification_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../authentification.service */ "./src/authentification.service.ts");
 /* harmony import */ var _order_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../order.service */ "./src/order.service.ts");
+/* harmony import */ var _WorkerAuth_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../WorkerAuth.service */ "./src/WorkerAuth.service.ts");
+
 
 
 
 
 
 var AppComponent = /** @class */ (function () {
-    function AppComponent(router, auth, order) {
+    function AppComponent(router, auth, order, worker) {
         this.router = router;
         this.auth = auth;
         this.order = order;
+        this.worker = worker;
         this.OrderNumber = 0;
     }
     AppComponent.prototype.ngOnInit = function () {
@@ -268,8 +271,14 @@ var AppComponent = /** @class */ (function () {
     AppComponent.prototype.Login = function () {
         this.router.navigate(['']);
     };
+    AppComponent.prototype.Profile = function () {
+        this.router.navigate(['/profile']);
+    };
     AppComponent.prototype.isAuth = function () {
         return this.auth.isLoggedIn();
+    };
+    AppComponent.prototype.isWorker = function () {
+        return this.worker.isLoggedIn();
     };
     AppComponent.prototype.isAdmin = function () {
         return this.auth.isAdmin();
@@ -287,6 +296,19 @@ var AppComponent = /** @class */ (function () {
     AppComponent.prototype.Register = function () {
         this.router.navigate(['register']);
     };
+    AppComponent.prototype.ProfileWorker = function () {
+        this.router.navigate(['/worker-profile']);
+    };
+    AppComponent.prototype.LogoutWorker = function () {
+        this.worker.logout();
+        this.router.navigate(['/worker-login']);
+    };
+    AppComponent.prototype.OrdersPending = function () {
+        this.router.navigate(['/order-pending']);
+    };
+    AppComponent.prototype.WorkerLogin = function () {
+        this.router.navigate(['/worker-login']);
+    };
     AppComponent.prototype.OrderCount = function () {
         var _this = this;
         this.auth.profile().subscribe(function (user) {
@@ -303,7 +325,10 @@ var AppComponent = /** @class */ (function () {
             template: __webpack_require__(/*! ./app.component.html */ "./src/app/app.component.html"),
             styles: [__webpack_require__(/*! ./app.component.scss */ "./src/app/app.component.scss")]
         }),
-        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"], _authentification_service__WEBPACK_IMPORTED_MODULE_3__["AuthentificationService"], _order_service__WEBPACK_IMPORTED_MODULE_4__["OrderService"]])
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"],
+            _authentification_service__WEBPACK_IMPORTED_MODULE_3__["AuthentificationService"],
+            _order_service__WEBPACK_IMPORTED_MODULE_4__["OrderService"],
+            _WorkerAuth_service__WEBPACK_IMPORTED_MODULE_5__["WorkerAuthService"]])
     ], AppComponent);
     return AppComponent;
 }());
@@ -454,7 +479,7 @@ var AppModule = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<table mat-table [dataSource]=\"dataSource\" class=\"mat-elevation-z8\" >\n\n  <ng-container matColumnDef=\"id\">\n    <th mat-header-cell *matHeaderCellDef> Id </th>\n    <td mat-cell *matCellDef=\"let element\"> {{element.idOrder}} </td>\n  </ng-container>\n\n  <!-- Name Column -->\n  <ng-container matColumnDef=\"date\">\n    <th mat-header-cell *matHeaderCellDef> Date </th>\n    <td mat-cell *matCellDef=\"let element\"> {{element.orderDate}} </td>\n  </ng-container>\n\n  <!-- Weight Column -->\n  <ng-container matColumnDef=\"status\">\n    <th mat-header-cell *matHeaderCellDef> Order Status </th>\n    <td mat-cell *matCellDef=\"let element\" [style.color]=\"getColor(element.orderStatus)\"> {{element.orderStatus}} </td>\n  </ng-container>\n\n  <tr mat-header-row *matHeaderRowDef=\"displayedColumns\"></tr>\n  <tr mat-row *matRowDef=\"let row; columns: displayedColumns;\"></tr>\n</table>\n\n"
+module.exports = "<table mat-table [dataSource]=\"dataSource\" multiTemplateDataRows class=\"mat-elevation-z8\" >\n\n  <ng-container matColumnDef=\"{{column}}\" *ngFor=\"let column of displayedColumns\">\n    <th mat-header-cell *matHeaderCellDef>{{column}}</th>\n    <td mat-cell *matCellDef=\"let element\" [style.color]=\"getColor(element[column])\"> {{element[column]}} </td>\n  </ng-container>\n\n  <ng-container matColumnDef=\"expandedDetail\">\n    <td mat-cell *matCellDef=\"let element\" [attr.colspan]=\"displayedColumns.length\">\n      <div class=\"exemple-element-detail\" [@detailExpand]=\"element == expandedElement ? 'expanded' : 'collapsed'\">\n        <div class=\"example-element-description\">\n          <img id=\"img1\" src=\"assets/images/service.jpg\">\n          <span>{{element.desc}} -- </span>\n          <span>{{element.price}} €</span>\n        </div>\n      </div>\n    </td>\n  </ng-container>\n\n  <tr mat-header-row *matHeaderRowDef=\"displayedColumns\"></tr>\n  <tr mat-row *matRowDef=\"let element; columns: displayedColumns;\"\n      class=\"example-element-row\"\n      [class.example-expanded-row]=\"expandedElement === element\"\n      (click)=\"expandedElement = expandedElement === element ? null : element\">\n  </tr>\n  <tr mat-row *matRowDef=\"let row; columns: ['expandedDetail']\" class=\"example-detail-row\"></tr>\n</table>\n\n"
 
 /***/ }),
 
@@ -465,7 +490,7 @@ module.exports = "<table mat-table [dataSource]=\"dataSource\" class=\"mat-eleva
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "table {\n  min-width: 150px;\n  max-width: 500px;\n  width: 100%;\n  margin: 0 auto;\n  margin-top: 10%;\n  margin-bottom: 10%; }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvY2FydC9DOlxcVXNlcnNcXE1hdHRoZXdcXERlc2t0b3BcXFByb2pldF9XRUIvc3JjXFxhcHBcXGNhcnRcXGNhcnQuY29tcG9uZW50LnNjc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7RUFDRSxnQkFBZ0I7RUFDaEIsZ0JBQWdCO0VBQ2hCLFdBQVk7RUFDWixjQUFjO0VBQ2QsZUFBZTtFQUNmLGtCQUFrQixFQUFBIiwiZmlsZSI6InNyYy9hcHAvY2FydC9jYXJ0LmNvbXBvbmVudC5zY3NzIiwic291cmNlc0NvbnRlbnQiOlsidGFibGV7XHJcbiAgbWluLXdpZHRoOiAxNTBweDtcclxuICBtYXgtd2lkdGg6IDUwMHB4O1xyXG4gIHdpZHRoOiAxMDAlIDtcclxuICBtYXJnaW46IDAgYXV0bztcclxuICBtYXJnaW4tdG9wOiAxMCU7XHJcbiAgbWFyZ2luLWJvdHRvbTogMTAlO1xyXG59XHJcbiJdfQ== */"
+module.exports = "#img1 {\n  min-width: 80px;\n  max-width: 100px;\n  width: 100%;\n  margin: 8px 0;\n  height: auto; }\n\ntable {\n  min-width: 150px;\n  max-width: 500px;\n  width: 100%;\n  margin: 0 auto;\n  margin-top: 10%;\n  margin-bottom: 10%; }\n\ntr.example-detail-row {\n  height: 0; }\n\ntr.example-element-row:not(.example-expanded-row):hover {\n  background: #f5f5f5; }\n\ntr.example-element-row:not(.example-expanded-row):active {\n  background: #efefef; }\n\n.example-element-row td {\n  border-bottom-width: 0; }\n\n.example-element-detail {\n  overflow: hidden;\n  display: flex; }\n\n.example-element-symbol {\n  font-weight: bold;\n  font-size: 40px;\n  line-height: normal; }\n\n.example-element-description .span {\n  padding: 14px; }\n\n.example-element-description-attribution {\n  opacity: 0.5; }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvY2FydC9DOlxcVXNlcnNcXE1hdHRoZXdcXERlc2t0b3BcXFByb2pldF9XRUIvc3JjXFxhcHBcXGNhcnRcXGNhcnQuY29tcG9uZW50LnNjc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7RUFDRSxlQUFlO0VBQ2YsZ0JBQWdCO0VBQ2hCLFdBQVc7RUFDWCxhQUFhO0VBQ2IsWUFBWSxFQUFBOztBQUlkO0VBQ0UsZ0JBQWdCO0VBQ2hCLGdCQUFnQjtFQUNoQixXQUFZO0VBQ1osY0FBYztFQUNkLGVBQWU7RUFDZixrQkFBa0IsRUFBQTs7QUFHcEI7RUFDRSxTQUFTLEVBQUE7O0FBR1g7RUFDRSxtQkFBbUIsRUFBQTs7QUFHckI7RUFDRSxtQkFBbUIsRUFBQTs7QUFHckI7RUFDRSxzQkFBc0IsRUFBQTs7QUFHeEI7RUFDRSxnQkFBZ0I7RUFDaEIsYUFBYSxFQUFBOztBQUtmO0VBQ0UsaUJBQWlCO0VBQ2pCLGVBQWU7RUFDZixtQkFBbUIsRUFBQTs7QUFHckI7RUFFSSxhQUFhLEVBQUE7O0FBSWpCO0VBQ0UsWUFBWSxFQUFBIiwiZmlsZSI6InNyYy9hcHAvY2FydC9jYXJ0LmNvbXBvbmVudC5zY3NzIiwic291cmNlc0NvbnRlbnQiOlsiI2ltZzEge1xyXG4gIG1pbi13aWR0aDogODBweDtcclxuICBtYXgtd2lkdGg6IDEwMHB4O1xyXG4gIHdpZHRoOiAxMDAlO1xyXG4gIG1hcmdpbjogOHB4IDA7XHJcbiAgaGVpZ2h0OiBhdXRvO1xyXG59XHJcblxyXG5cclxudGFibGV7XHJcbiAgbWluLXdpZHRoOiAxNTBweDtcclxuICBtYXgtd2lkdGg6IDUwMHB4O1xyXG4gIHdpZHRoOiAxMDAlIDtcclxuICBtYXJnaW46IDAgYXV0bztcclxuICBtYXJnaW4tdG9wOiAxMCU7XHJcbiAgbWFyZ2luLWJvdHRvbTogMTAlO1xyXG59XHJcblxyXG50ci5leGFtcGxlLWRldGFpbC1yb3cge1xyXG4gIGhlaWdodDogMDtcclxufVxyXG5cclxudHIuZXhhbXBsZS1lbGVtZW50LXJvdzpub3QoLmV4YW1wbGUtZXhwYW5kZWQtcm93KTpob3ZlciB7XHJcbiAgYmFja2dyb3VuZDogI2Y1ZjVmNTtcclxufVxyXG5cclxudHIuZXhhbXBsZS1lbGVtZW50LXJvdzpub3QoLmV4YW1wbGUtZXhwYW5kZWQtcm93KTphY3RpdmUge1xyXG4gIGJhY2tncm91bmQ6ICNlZmVmZWY7XHJcbn1cclxuXHJcbi5leGFtcGxlLWVsZW1lbnQtcm93IHRkIHtcclxuICBib3JkZXItYm90dG9tLXdpZHRoOiAwO1xyXG59XHJcblxyXG4uZXhhbXBsZS1lbGVtZW50LWRldGFpbCB7XHJcbiAgb3ZlcmZsb3c6IGhpZGRlbjtcclxuICBkaXNwbGF5OiBmbGV4O1xyXG59XHJcblxyXG5cclxuXHJcbi5leGFtcGxlLWVsZW1lbnQtc3ltYm9sIHtcclxuICBmb250LXdlaWdodDogYm9sZDtcclxuICBmb250LXNpemU6IDQwcHg7XHJcbiAgbGluZS1oZWlnaHQ6IG5vcm1hbDtcclxufVxyXG5cclxuLmV4YW1wbGUtZWxlbWVudC1kZXNjcmlwdGlvbiB7XHJcbiAgLnNwYW57XHJcbiAgICBwYWRkaW5nOiAxNHB4O1xyXG4gIH1cclxufVxyXG5cclxuLmV4YW1wbGUtZWxlbWVudC1kZXNjcmlwdGlvbi1hdHRyaWJ1dGlvbiB7XHJcbiAgb3BhY2l0eTogMC41O1xyXG59XHJcbiJdfQ== */"
 
 /***/ }),
 
@@ -484,6 +509,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _authentification_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../authentification.service */ "./src/authentification.service.ts");
 /* harmony import */ var _order_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../order.service */ "./src/order.service.ts");
 /* harmony import */ var _angular_material__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/material */ "./node_modules/@angular/material/esm5/material.es5.js");
+/* harmony import */ var _angular_animations__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/animations */ "./node_modules/@angular/animations/fesm5/animations.js");
+
 
 
 
@@ -494,38 +521,71 @@ var CartComponent = /** @class */ (function () {
         this.auth = auth;
         this.order = order;
         this.Orders = [];
-        this.displayedColumns = ['id', 'status', 'date'];
+        this.displayedColumns = ['idOrder', 'name', 'orderStatus', 'orderDate'];
     }
     CartComponent.prototype.ngOnInit = function () {
         this.getAllOrder();
     };
     CartComponent.prototype.getColor = function (status) {
-        if (status === 'pending') {
+        if (status.toString() === 'pending') {
             return 'red';
         }
         else {
-            return 'lime';
+            if (status.toString() === 'red') {
+                return 'lime';
+            }
+            return 'black';
         }
     };
     CartComponent.prototype.getAllOrder = function () {
         var _this = this;
         this.auth.profile().subscribe(function (user) {
             _this.order.getAllPendingOrders(user.id).subscribe(function (data) {
-                for (var _i = 0, data_1 = data; _i < data_1.length; _i++) {
-                    var order = data_1[_i];
-                    console.log(_this.Orders);
-                    _this.Orders.push(order);
-                }
-                _this.dataSource = new _angular_material__WEBPACK_IMPORTED_MODULE_4__["MatTableDataSource"](_this.Orders);
+                _this.getInfoOrder(data);
             });
         }, function (err) {
             console.error((err));
         });
     };
+    CartComponent.prototype.getInfoOrder = function (orders) {
+        var _this = this;
+        var _loop_1 = function (order) {
+            this_1.order.getServiceByOrder(order.idOrder).subscribe(function (data) {
+                var aOrder = {
+                    idOrder: 0,
+                    orderDate: new Date(),
+                    orderStatus: '',
+                    name: '',
+                    desc: '',
+                    price: 0
+                };
+                aOrder.idOrder = order.idOrder;
+                aOrder.orderStatus = order.orderStatus;
+                aOrder.orderDate = order.orderDate;
+                aOrder.name = data.name;
+                aOrder.desc = data.desc;
+                aOrder.price = data.price;
+                _this.Orders.push(aOrder);
+                _this.dataSource = new _angular_material__WEBPACK_IMPORTED_MODULE_4__["MatTableDataSource"](_this.Orders);
+            });
+        };
+        var this_1 = this;
+        for (var _i = 0, orders_1 = orders; _i < orders_1.length; _i++) {
+            var order = orders_1[_i];
+            _loop_1(order);
+        }
+    };
     CartComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
             selector: 'app-cart',
             template: __webpack_require__(/*! ./cart.component.html */ "./src/app/cart/cart.component.html"),
+            animations: [
+                Object(_angular_animations__WEBPACK_IMPORTED_MODULE_5__["trigger"])('detailExpand', [
+                    Object(_angular_animations__WEBPACK_IMPORTED_MODULE_5__["state"])('collapsed', Object(_angular_animations__WEBPACK_IMPORTED_MODULE_5__["style"])({ height: '0px', minHeight: '0', display: 'none' })),
+                    Object(_angular_animations__WEBPACK_IMPORTED_MODULE_5__["state"])('expanded', Object(_angular_animations__WEBPACK_IMPORTED_MODULE_5__["style"])({ height: '*' })),
+                    Object(_angular_animations__WEBPACK_IMPORTED_MODULE_5__["transition"])('expanded <=> collapsed', Object(_angular_animations__WEBPACK_IMPORTED_MODULE_5__["animate"])('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+                ]),
+            ],
             styles: [__webpack_require__(/*! ./cart.component.scss */ "./src/app/cart/cart.component.scss")]
         }),
         tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_authentification_service__WEBPACK_IMPORTED_MODULE_2__["AuthentificationService"], _order_service__WEBPACK_IMPORTED_MODULE_3__["OrderService"]])
@@ -1583,11 +1643,11 @@ var AuthentificationService = /** @class */ (function () {
     AuthentificationService.prototype.isAdmin = function () {
         var user = this.getUserDetails();
         if (user) {
-            if (user.isAdmin === 'false') {
-                return false;
+            if (user.isAdmin === 'true') {
+                return true;
             }
             else {
-                return true;
+                return false;
             }
         }
         else {
@@ -1736,6 +1796,9 @@ var OrderService = /** @class */ (function () {
     };
     OrderService.prototype.PickAnOrder = function (order, id) {
         return this.http.put('/api/PickAnOrder/' + id, order);
+    };
+    OrderService.prototype.getServiceByOrder = function (idOrder) {
+        return this.http.get('/api/getServiceByOrder/' + idOrder);
     };
     OrderService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])(),

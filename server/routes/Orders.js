@@ -102,4 +102,25 @@ orders.put('/PickAnOrder/:id',(req,res) => {
   })
 })
 
+
+orders.get('/getServiceByOrder/:id',(req,res) => {
+  Compose.findOne({
+    where: {
+      idOrder: req.params.id
+    }
+  }).then(compose => {
+    if (!compose) {
+      res.send({})
+    } else {
+      Service.findOne({
+        where: {
+          idServices: compose.idService
+        }
+      }).then(service => {
+        res.send(service)
+      })
+    }
+  })
+})
+
 module.exports = orders;

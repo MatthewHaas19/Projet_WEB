@@ -1,5 +1,5 @@
 <!-- Header -->
-<mat-toolbar color="accent">
+  <mat-toolbar color="accent">
   <mat-toolbar-row>
   <span>MyServices</span>
   <span class="spacer"></span>
@@ -8,11 +8,17 @@
     </button>
     <button mat-button [matMenuTriggerFor]="menu"><mat-icon class="icon">menu</mat-icon></button>
     <mat-menu #menu="matMenu" xPosition="before">
-      <button mat-menu-item (click)="Login()" *ngIf="!isAuth()">Login</button>
-      <button mat-menu-item (click)="Register()" *ngIf="!isAuth()">Register</button>
+      <button mat-menu-item (click)="Login()" *ngIf="!isAuth() && !isWorker()">Login</button>
+      <button mat-menu-item (click)="WorkerLogin()" *ngIf="!isAuth() && !isWorker()">Worker Login</button>
+      <button mat-menu-item (click)="Register()" *ngIf="!isAuth() && !isWorker()">Register</button>
       <button mat-menu-item (click)="Logout() " *ngIf="isAuth()">Logout</button>
       <button mat-menu-item (click)="Services() " *ngIf="isAuth()">Services</button>
+      <button mat-menu-item (click)="Profile() " *ngIf="isAuth()">Profile</button>
       <button mat-menu-item (click)="AddServices() " *ngIf="isAdmin()">Add Services</button>
+
+      <button mat-menu-item (click)="LogoutWorker() " *ngIf="isWorker()">Logout</button>
+      <button mat-menu-item (click)="OrdersPending() " *ngIf="isWorker()">Orders-Pending</button>
+      <button mat-menu-item (click)="ProfileWorker() " *ngIf="isWorker()">Profile</button>
     </mat-menu>
   </mat-toolbar-row>
 </mat-toolbar>
