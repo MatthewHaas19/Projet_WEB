@@ -5741,8 +5741,8 @@ Zone.__load_patch('PromiseRejectionEvent', function (global, Zone) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var web_animations_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! web-animations-js */ "./node_modules/web-animations-js/web-animations.min.js");
-/* harmony import */ var web_animations_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(web_animations_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var web_animations_js_web_animations_min__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! web-animations-js/web-animations.min */ "./node_modules/web-animations-js/web-animations.min.js");
+/* harmony import */ var web_animations_js_web_animations_min__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(web_animations_js_web_animations_min__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var zone_js_dist_zone__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! zone.js/dist/zone */ "./node_modules/zone.js/dist/zone.js");
 /* harmony import */ var zone_js_dist_zone__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(zone_js_dist_zone__WEBPACK_IMPORTED_MODULE_1__);
 /**
