@@ -27,21 +27,19 @@ export interface DialogData {
 })
 export class ServicesComponent implements OnInit {
 
-
-  TypeList : Type[];
   TypesGroups: TypeGroup[] = []
 
   infos = {
     name: '',
     type: '',
     desc: '',
-    price: 0
+    price: 0,
+    image: 'assets/images/service.jpg',
   }
 
 
-  file: string;
   serviceForm: FormGroup;
-
+  fileUrl: string;
 
   constructor(public dialog: MatDialog,
               private formBuilder: FormBuilder,
@@ -83,10 +81,15 @@ export class ServicesComponent implements OnInit {
     this.infos.type = formValue['type'].idType;
     this.infos.desc = formValue['desc'];
     this.infos.price = formValue['price'];
+    if(this.fileUrl && this.fileUrl !== ''){
+      this.infos.image = this.fileUrl
+    }
 
-    this.services.addService2(this.infos).then((res) => {
-      this.router.navigate(['/services-list'])
-    })
+    if(this.infos.name && this.infos.type && this.infos.desc && this.infos.type){
+      this.services.addService2(this.infos).then((res) => {
+        this.router.navigate(['/services-list'])
+      })
+    }
 
   }
 
@@ -94,14 +97,17 @@ export class ServicesComponent implements OnInit {
     console.log('test')
     const dialogRef = this.dialog.open(DialogOverviewExampleDialogComponent, {
       width: '250px',
-      data: {file: this.file}
+      data: {file: this.fileUrl}
     });
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
-      this.file = result;
+      this.infos.image = result;
+      console.log(result)
     });
   }
+
+
 }
 
 @Component({
@@ -112,10 +118,38 @@ export class ServicesComponent implements OnInit {
 export class DialogOverviewExampleDialogComponent {
 
   constructor(public dialogRef: MatDialogRef<DialogOverviewExampleDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData) {}
+    @Inject(MAT_DIALOG_DATA) public data: DialogData,
+              private services: ServicesService) {}
+
+  fileIsUploading = false;
+  fileUrl: string;
+  fileUploaded = false;
+
 
   onNoClick(): void {
     this.dialogRef.close();
+  }
+
+  onUploadFile(file: File) {
+    this.fileIsUploading = true;
+    this.services.uploadFile(file).then(
+      (url: string) => {
+        this.fileUrl = url;
+        this.data.file = url;
+        console.log('url:',url)
+        this.fileIsUploading = false;
+        this.fileUploaded = true ;
+      }
+    )
+  }
+
+  detectFiles(event) {
+    this.onUploadFile(event.target.files[0])
+  }
+
+  UploadValidate(){
+    this.data.file = this.fileUrl
+    this.dialogRef.close(this.data.file);
   }
 
 }

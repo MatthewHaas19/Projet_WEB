@@ -11,6 +11,7 @@ export interface ServiceDetails {
   idType: string;
   price: number;
   desc: string;
+  image: string;
 }
 
 export interface Services {
@@ -19,6 +20,7 @@ export interface Services {
   libelle: string;
   price: number;
   desc: string;
+  image: string;
 }
 
 export interface IdType {

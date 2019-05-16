@@ -1,11 +1,12 @@
 <div mat-dialog-content>
   <p>Upload File</p>
-  <input #file type="file" [hidden]="true" accept="image/*" [(ngModel)]="data.file">
+  <input #file type="file" [hidden]="true" accept="image/*" (change)="detectFiles($event)">
+  <p *ngIf="fileUploaded">File uploaded</p>
   <button mat-button (click)= "file.click()">
     <mat-icon color="accent">file_upload</mat-icon>
   </button>
 </div>
 <div mat-dialog-actions>
   <button mat-button (click)="onNoClick()">Back</button>
-  <button mat-button>Upload</button>
+  <button mat-button (click)="UploadValidate()" [disabled]="fileIsUploading" [mat-dialog-close]="data.file" cdkFocusInitial>Upload</button>
 </div>

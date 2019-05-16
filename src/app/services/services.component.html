@@ -38,7 +38,7 @@
 
       <h2>{{serviceForm.value['name']}}</h2>
       <h4>{{serviceForm.value['type'].libelle}}</h4>
-      <img id="img1" src="assets/images/service.jpg">
+      <img id="img1" [src]="infos.image">
       <h4>{{serviceForm.value['price']}} €</h4>
       <p>{{serviceForm.value['desc']}}</p>
     </mat-card>

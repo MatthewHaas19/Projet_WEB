@@ -1113,7 +1113,7 @@ var RegisterComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container\">\n  <div class=\"service\" *ngFor=\"let service of this.MyServices\">\n    <mat-card>\n      <h2>{{service.name}}</h2>\n      <h4>{{service.idType}}</h4>\n      <img id=\"img1\" src=\"assets/images/service.jpg\">\n      <p>{{service.price}} €</p>\n      <p>{{service.desc}}</p>\n      <button mat-raised-button color=\"accent\" type=\"submit\" (click)=\"OrderOne(service.name)\">Order</button>\n    </mat-card>\n  </div>\n</div>\n"
+module.exports = "<div class=\"container\">\n  <div class=\"service\" *ngFor=\"let service of this.MyServices\">\n    <mat-card>\n      <h2>{{service.name}}</h2>\n      <h4>{{service.idType}}</h4>\n      <img id=\"img1\" [src]=\"service.image\">\n      <p>{{service.price}} €</p>\n      <p>{{service.desc}}</p>\n      <button mat-raised-button color=\"accent\" type=\"submit\" (click)=\"OrderOne(service.name)\">Order</button>\n    </mat-card>\n  </div>\n</div>\n"
 
 /***/ }),
 
@@ -1218,7 +1218,7 @@ var ServicesListComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div mat-dialog-content>\r\n  <p>Upload File</p>\r\n  <input #file type=\"file\" [hidden]=\"true\" accept=\"image/*\" [(ngModel)]=\"data.file\">\r\n  <button mat-button (click)= \"file.click()\">\r\n    <mat-icon color=\"accent\">file_upload</mat-icon>\r\n  </button>\r\n</div>\r\n<div mat-dialog-actions>\r\n  <button mat-button (click)=\"onNoClick()\">Back</button>\r\n  <button mat-button>Upload</button>\r\n</div>\r\n"
+module.exports = "<div mat-dialog-content>\r\n  <p>Upload File</p>\r\n  <input #file type=\"file\" [hidden]=\"true\" accept=\"image/*\" (change)=\"detectFiles($event)\">\r\n  <p *ngIf=\"fileUploaded\">File uploaded</p>\r\n  <button mat-button (click)= \"file.click()\">\r\n    <mat-icon color=\"accent\">file_upload</mat-icon>\r\n  </button>\r\n</div>\r\n<div mat-dialog-actions>\r\n  <button mat-button (click)=\"onNoClick()\">Back</button>\r\n  <button mat-button (click)=\"UploadValidate()\" [disabled]=\"fileIsUploading\" [mat-dialog-close]=\"data.file\" cdkFocusInitial>Upload</button>\r\n</div>\r\n"
 
 /***/ }),
 
@@ -1229,7 +1229,7 @@ module.exports = "<div mat-dialog-content>\r\n  <p>Upload File</p>\r\n  <input #
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container\">\n  <div class=\"form\">\n    <mat-card>\n      <h1>Form</h1>\n      <form [formGroup]=\"serviceForm\" (ngSubmit)=\"onSubmitForm()\">\n        <button mat-icon-button type=\"submit\" (click)=\"openDialog()\">\n          <mat-icon color=\"accent\">cloud_upload</mat-icon>\n        </button>\n        <mat-form-field appearance=\"outline\">\n          <mat-label>Service name</mat-label>\n          <input matInput placeholder=\"Enter service name\" formControlName=\"name\">\n        </mat-form-field>\n        <mat-form-field>\n          <mat-label>Services Types</mat-label>\n          <mat-select formControlName=\"type\">\n            <mat-option>-- None --</mat-option>\n            <mat-optgroup *ngFor=\"let group of TypesGroups\" [label]=\"group.name\"\n                          [disabled]=\"group.disabled\">\n              <mat-option *ngFor=\"let type of group.type\" [value]=\"type\">\n                {{type.libelle}}\n              </mat-option>\n            </mat-optgroup>\n          </mat-select>\n        </mat-form-field>\n        <mat-slider [max]=\"50\" [min]=\"0\" [step]=\"0.5\" [thumbLabel]=\"true\" formControlName=\"price\"></mat-slider>\n        <mat-form-field class=\"example-full-width\">\n          <textarea matInput #message maxlength=\"42\" placeholder=\"Description\" formControlName=\"desc\"></textarea>\n          <mat-hint align=\"start\"><strong>Describe the service</strong> </mat-hint>\n          <mat-hint align=\"end\">{{message.value.length}} / 42</mat-hint>\n        </mat-form-field>\n        <button id=\"button1\" mat-raised-button color=\"accent\" type=\"submit\" [disabled]=\"serviceForm.invalid\">Submit</button>\n      </form>\n    </mat-card>\n  </div>\n  <div class=\"preview\">\n    <mat-card>\n      <h1>Preview</h1>\n\n      <h2>{{serviceForm.value['name']}}</h2>\n      <h4>{{serviceForm.value['type'].libelle}}</h4>\n      <img id=\"img1\" src=\"assets/images/service.jpg\">\n      <h4>{{serviceForm.value['price']}} €</h4>\n      <p>{{serviceForm.value['desc']}}</p>\n    </mat-card>\n  </div>\n</div>\n\n"
+module.exports = "<div class=\"container\">\n  <div class=\"form\">\n    <mat-card>\n      <h1>Form</h1>\n      <form [formGroup]=\"serviceForm\" (ngSubmit)=\"onSubmitForm()\">\n        <button mat-icon-button type=\"submit\" (click)=\"openDialog()\">\n          <mat-icon color=\"accent\">cloud_upload</mat-icon>\n        </button>\n        <mat-form-field appearance=\"outline\">\n          <mat-label>Service name</mat-label>\n          <input matInput placeholder=\"Enter service name\" formControlName=\"name\">\n        </mat-form-field>\n        <mat-form-field>\n          <mat-label>Services Types</mat-label>\n          <mat-select formControlName=\"type\">\n            <mat-option>-- None --</mat-option>\n            <mat-optgroup *ngFor=\"let group of TypesGroups\" [label]=\"group.name\"\n                          [disabled]=\"group.disabled\">\n              <mat-option *ngFor=\"let type of group.type\" [value]=\"type\">\n                {{type.libelle}}\n              </mat-option>\n            </mat-optgroup>\n          </mat-select>\n        </mat-form-field>\n        <mat-slider [max]=\"50\" [min]=\"0\" [step]=\"0.5\" [thumbLabel]=\"true\" formControlName=\"price\"></mat-slider>\n        <mat-form-field class=\"example-full-width\">\n          <textarea matInput #message maxlength=\"42\" placeholder=\"Description\" formControlName=\"desc\"></textarea>\n          <mat-hint align=\"start\"><strong>Describe the service</strong> </mat-hint>\n          <mat-hint align=\"end\">{{message.value.length}} / 42</mat-hint>\n        </mat-form-field>\n        <button id=\"button1\" mat-raised-button color=\"accent\" type=\"submit\" [disabled]=\"serviceForm.invalid\">Submit</button>\n      </form>\n    </mat-card>\n  </div>\n  <div class=\"preview\">\n    <mat-card>\n      <h1>Preview</h1>\n\n      <h2>{{serviceForm.value['name']}}</h2>\n      <h4>{{serviceForm.value['type'].libelle}}</h4>\n      <img id=\"img1\" [src]=\"infos.image\">\n      <h4>{{serviceForm.value['price']}} €</h4>\n      <p>{{serviceForm.value['desc']}}</p>\n    </mat-card>\n  </div>\n</div>\n\n"
 
 /***/ }),
 
@@ -1278,7 +1278,8 @@ var ServicesComponent = /** @class */ (function () {
             name: '',
             type: '',
             desc: '',
-            price: 0
+            price: 0,
+            image: 'assets/images/service.jpg',
         };
     }
     ServicesComponent.prototype.ngOnInit = function () {
@@ -1310,20 +1311,26 @@ var ServicesComponent = /** @class */ (function () {
         this.infos.type = formValue['type'].idType;
         this.infos.desc = formValue['desc'];
         this.infos.price = formValue['price'];
-        this.services.addService2(this.infos).then(function (res) {
-            _this.router.navigate(['/services-list']);
-        });
+        if (this.fileUrl && this.fileUrl !== '') {
+            this.infos.image = this.fileUrl;
+        }
+        if (this.infos.name && this.infos.type && this.infos.desc && this.infos.type) {
+            this.services.addService2(this.infos).then(function (res) {
+                _this.router.navigate(['/services-list']);
+            });
+        }
     };
     ServicesComponent.prototype.openDialog = function () {
         var _this = this;
         console.log('test');
         var dialogRef = this.dialog.open(DialogOverviewExampleDialogComponent, {
             width: '250px',
-            data: { file: this.file }
+            data: { file: this.fileUrl }
         });
         dialogRef.afterClosed().subscribe(function (result) {
             console.log('The dialog was closed');
-            _this.file = result;
+            _this.infos.image = result;
+            console.log(result);
         });
     };
     ServicesComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
@@ -1341,12 +1348,33 @@ var ServicesComponent = /** @class */ (function () {
 }());
 
 var DialogOverviewExampleDialogComponent = /** @class */ (function () {
-    function DialogOverviewExampleDialogComponent(dialogRef, data) {
+    function DialogOverviewExampleDialogComponent(dialogRef, data, services) {
         this.dialogRef = dialogRef;
         this.data = data;
+        this.services = services;
+        this.fileIsUploading = false;
+        this.fileUploaded = false;
     }
     DialogOverviewExampleDialogComponent.prototype.onNoClick = function () {
         this.dialogRef.close();
+    };
+    DialogOverviewExampleDialogComponent.prototype.onUploadFile = function (file) {
+        var _this = this;
+        this.fileIsUploading = true;
+        this.services.uploadFile(file).then(function (url) {
+            _this.fileUrl = url;
+            _this.data.file = url;
+            console.log('url:', url);
+            _this.fileIsUploading = false;
+            _this.fileUploaded = true;
+        });
+    };
+    DialogOverviewExampleDialogComponent.prototype.detectFiles = function (event) {
+        this.onUploadFile(event.target.files[0]);
+    };
+    DialogOverviewExampleDialogComponent.prototype.UploadValidate = function () {
+        this.data.file = this.fileUrl;
+        this.dialogRef.close(this.data.file);
     };
     DialogOverviewExampleDialogComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
@@ -1355,7 +1383,7 @@ var DialogOverviewExampleDialogComponent = /** @class */ (function () {
             styles: [__webpack_require__(/*! ./services.component.scss */ "./src/app/services/services.component.scss")]
         }),
         tslib__WEBPACK_IMPORTED_MODULE_0__["__param"](1, Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Inject"])(_angular_material__WEBPACK_IMPORTED_MODULE_3__["MAT_DIALOG_DATA"])),
-        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_angular_material__WEBPACK_IMPORTED_MODULE_3__["MatDialogRef"], Object])
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_angular_material__WEBPACK_IMPORTED_MODULE_3__["MatDialogRef"], Object, _services_service__WEBPACK_IMPORTED_MODULE_5__["ServicesService"]])
     ], DialogOverviewExampleDialogComponent);
     return DialogOverviewExampleDialogComponent;
 }());
@@ -2040,6 +2068,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
+/* harmony import */ var firebase__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! firebase */ "./node_modules/firebase/dist/index.cjs.js");
+/* harmony import */ var firebase__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(firebase__WEBPACK_IMPORTED_MODULE_4__);
+
 
 
 
@@ -2048,6 +2079,17 @@ var ServicesService = /** @class */ (function () {
     function ServicesService(http, router) {
         this.http = http;
         this.router = router;
+        var firebaseConfig = {
+            apiKey: "AIzaSyAXY8b8nzGuZyipX-WtoUa_qemKIZnkSfk",
+            authDomain: "myservices-123.firebaseapp.com",
+            databaseURL: "https://myservices-123.firebaseio.com",
+            projectId: "myservices-123",
+            storageBucket: "myservices-123.appspot.com",
+            messagingSenderId: "777087620663",
+            appId: "1:777087620663:web:8234ff1ad806bcb6"
+        };
+        // Initialize Firebase
+        firebase__WEBPACK_IMPORTED_MODULE_4__["initializeApp"](firebaseConfig);
     }
     ServicesService.prototype.addService2 = function (service) {
         var _this = this;
@@ -2067,6 +2109,22 @@ var ServicesService = /** @class */ (function () {
     };
     ServicesService.prototype.LibelleOfServices = function (idType) {
         return this.http.get('/api/LibelleOfServices/' + idType);
+    };
+    ServicesService.prototype.uploadFile = function (file) {
+        return new Promise(function (resolve, reject) {
+            var UniqueFileName = Date.now().toString();
+            var upload = firebase__WEBPACK_IMPORTED_MODULE_4__["storage"]().ref()
+                .child('images/' + UniqueFileName + file.name)
+                .put(file);
+            upload.on(firebase__WEBPACK_IMPORTED_MODULE_4__["storage"].TaskEvent.STATE_CHANGED, function () {
+                console.log('Uploading ...');
+            }, function (error) {
+                console.log('Error while uploading the file : ' + error);
+                reject();
+            }, function () {
+                resolve(upload.snapshot.ref.getDownloadURL());
+            });
+        });
     };
     ServicesService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])(),

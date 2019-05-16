@@ -3,7 +3,7 @@
     <mat-card>
       <h2>{{service.name}}</h2>
       <h4>{{service.idType}}</h4>
-      <img id="img1" src="assets/images/service.jpg">
+      <img id="img1" [src]="service.image">
       <p>{{service.price}} €</p>
       <p>{{service.desc}}</p>
       <button mat-raised-button color="accent" type="submit" (click)="OrderOne(service.name)">Order</button>

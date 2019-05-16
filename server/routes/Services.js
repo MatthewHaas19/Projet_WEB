@@ -46,6 +46,7 @@ services.post('/addService',(req,res) => {
     desc: req.body.desc,
     price: req.body.price,
     idType: req.body.type,
+    image: req.body.image,
   };
 
   console.log(serviceData)

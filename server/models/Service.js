@@ -20,6 +20,9 @@ module.exports = db.sequelize.define(
     },
     idType: {
       type: Sequelize.INTEGER
+    },
+    image: {
+      type: Sequelize.STRING
     }
   },
   {
