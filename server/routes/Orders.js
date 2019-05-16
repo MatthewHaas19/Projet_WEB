@@ -45,6 +45,22 @@ orders.post('/OrderOne',(req,res) => {
 });
 
 
+orders.put('/setFinished',(req,res) => {
+  Order.update({
+      orderStatus: 'Finished',
+    },
+    {
+      where: {
+        idOrder: req.body.idOrder
+      }
+    }).then(order => {
+    console.log(order)
+    res.json(order)
+  }).catch(err => {
+    console.log(err)
+  })
+});
+
 orders.get('/OrderPending/:id',(req,res) => {
   Order.findAll({
     where: {
@@ -75,6 +91,20 @@ orders.get('/OrderAllPending',(req,res) => {
   })
 })
 
+orders.get('/getWorkerOrders/:id',(req,res) => {
+  Order.findAll({
+    where: {
+      idWorker: req.params.id,
+      orderStatus: 'On his way'
+    }
+  }).then(order => {
+    if (!order) {
+      res.send({})
+    } else {
+      res.send(order)
+    }
+  })
+})
 
 
 orders.put('/PickAnOrder/:id',(req,res) => {
@@ -122,5 +152,6 @@ orders.get('/getServiceByOrder/:id',(req,res) => {
     }
   })
 })
+
 
 module.exports = orders;

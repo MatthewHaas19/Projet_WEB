@@ -126,4 +126,8 @@ export class AuthentificationService {
     this.router.navigateByUrl('/')
   }
 
+  public userById(id): Observable<any> {
+    return this.http.get('/api/userById/'+id)
+  }
+
 }

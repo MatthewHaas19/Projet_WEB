@@ -2,6 +2,7 @@ import {Component, OnChanges, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {AuthentificationService} from '../authentification.service';
 import {OrderService} from '../order.service';
+import {Location} from '@angular/common';
 import {WorkerAuthService} from '../WorkerAuth.service';
 import {ThemePalette} from '@angular/material';
 
@@ -12,13 +13,32 @@ import {ThemePalette} from '@angular/material';
 })
 export class AppComponent implements OnInit, OnChanges{
 
+  color: string = 'accent'
 
   constructor(private router: Router,
               private auth: AuthentificationService,
               private order: OrderService,
-              private worker: WorkerAuthService) {}
+              private worker: WorkerAuthService,
+              private location: Location) {
+    router.events.subscribe(val => {
+      if(location.path() === '/worker-login' ||
+        location.path() === '/worker-register' ||
+        location.path() === '/worker-profile' ||
+        location.path() === '/order-pending'){
+        this.color = 'primary';
+      } else {
+        this.color = 'accent'
+        if(this.auth.isLoggedIn()){
+          this.OrderCount()
+        }
+      }
+
+
+    })
+  }
 
   OrderNumber = 0;
+
 
   ngOnInit(): void {
     if(this.isAuth()){

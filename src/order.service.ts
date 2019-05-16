@@ -45,4 +45,12 @@ export class OrderService {
     return this.http.get('/api/getServiceByOrder/'+idOrder)
   }
 
+  public getWorkerOrders(idWorker): Observable<any>{
+    return this.http.get('/api/getWorkerOrders/'+idWorker)
+  }
+
+  public setFinished(order): Observable<any> {
+    return this.http.put('/api/setFinished', order)
+  }
+
 }

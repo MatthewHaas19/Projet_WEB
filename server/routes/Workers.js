@@ -84,5 +84,22 @@ workers.get('/WorkerProfile',(req,res) => {
   })
 });
 
+workers.get('/workerById/:id',(req,res) => {
+
+  Worker.findOne({
+    where: {
+      id: req.params.id
+    }
+  }).then(worker => {
+    if(worker) {
+      res.json(worker)
+    }else{
+      res.send('Worker does not exists')
+    }
+  }).catch(err => {
+    res.send('error ' + err)
+  })
+});
+
 
 module.exports = workers;

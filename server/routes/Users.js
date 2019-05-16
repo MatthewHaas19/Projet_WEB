@@ -85,4 +85,22 @@ users.get('/profile',(req,res) => {
 });
 
 
+users.get('/userById/:id',(req,res) => {
+
+  User.findOne({
+    where: {
+      id: req.params.id
+    }
+  }).then(user => {
+    if(user) {
+      res.json(user)
+    }else{
+      res.send('User does not exists')
+    }
+  }).catch(err => {
+    res.send('error ' + err)
+  })
+});
+
+
 module.exports = users;

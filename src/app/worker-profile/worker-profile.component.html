@@ -31,7 +31,8 @@
       </div>
     </div>
     <div class="profile-details">
-
+      <h2>Currents orders</h2>
+      <button mat-button *ngFor="let order of Orders" (click)="openDialog(order)">{{order.idOrder}} --Adress-- {{order.orderDate}} --{{order.name}}</button>
     </div>
   </div>
 </div>

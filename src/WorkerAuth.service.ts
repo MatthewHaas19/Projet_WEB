@@ -109,4 +109,9 @@ export class WorkerAuthService {
     this.router.navigateByUrl('/worker-login')
   }
 
+  public workerById(id): Observable<any> {
+    return this.http.get('/api/workerById/'+id)
+  }
+
+
 }

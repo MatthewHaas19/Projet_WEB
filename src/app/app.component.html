@@ -1,5 +1,5 @@
 <!-- Header -->
-  <mat-toolbar color="accent">
+  <mat-toolbar color={{color}}>
   <mat-toolbar-row>
   <span>MyServices</span>
   <span class="spacer"></span>
@@ -14,7 +14,7 @@
       <button mat-menu-item (click)="Logout() " *ngIf="isAuth()">Logout</button>
       <button mat-menu-item (click)="Services() " *ngIf="isAuth()">Services</button>
       <button mat-menu-item (click)="Profile() " *ngIf="isAuth()">Profile</button>
-      <button mat-menu-item (click)="AddServices() " *ngIf="isAdmin()">Add Services</button>
+      <button mat-menu-item (click)="AddServices() " *ngIf="isAuth() && isAdmin()">Add Services</button>
 
       <button mat-menu-item (click)="LogoutWorker() " *ngIf="isWorker()">Logout</button>
       <button mat-menu-item (click)="OrdersPending() " *ngIf="isWorker()">Orders-Pending</button>
@@ -22,7 +22,6 @@
     </mat-menu>
   </mat-toolbar-row>
 </mat-toolbar>
-
 
 <router-outlet></router-outlet>
 

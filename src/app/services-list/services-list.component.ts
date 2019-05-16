@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import {ServicesService} from '../../services.service';
 import {AuthentificationService} from '../../authentification.service';
 import {OrderService} from '../../order.service';
+import {MatSnackBar} from '@angular/material';
+import {Router} from '@angular/router';
 
 
 export interface ServiceDetails {
@@ -37,7 +39,9 @@ export class ServicesListComponent implements OnInit {
 
   constructor(private services: ServicesService,
               private auth: AuthentificationService,
-              private order: OrderService) { }
+              private order: OrderService,
+              private snackBar: MatSnackBar,
+              private router: Router) { }
 
   ngOnInit() {
     this.services.getServices().subscribe(
@@ -65,7 +69,12 @@ export class ServicesListComponent implements OnInit {
     this.auth.profile().subscribe(
       user => {
         this.order.OrderOne(name, user.id)
-        alert('Ty for your order')
+        this.snackBar.open('Ty for your order', '!', {
+          duration: 2000,
+        })
+        this.router.navigate(['cart'])
+        this.router.navigate(['services-list'])
+
       },
       err => {
         console.error((err))

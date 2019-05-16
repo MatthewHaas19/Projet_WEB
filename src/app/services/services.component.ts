@@ -91,6 +91,7 @@ export class ServicesComponent implements OnInit {
   }
 
   openDialog(): void {
+    console.log('test')
     const dialogRef = this.dialog.open(DialogOverviewExampleDialogComponent, {
       width: '250px',
       data: {file: this.file}
@@ -110,8 +111,7 @@ export class ServicesComponent implements OnInit {
 })
 export class DialogOverviewExampleDialogComponent {
 
-  constructor(
-    public dialogRef: MatDialogRef<DialogOverviewExampleDialogComponent>,
+  constructor(public dialogRef: MatDialogRef<DialogOverviewExampleDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData) {}
 
   onNoClick(): void {

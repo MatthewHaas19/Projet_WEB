@@ -33,8 +33,9 @@ import { CartComponent } from './cart/cart.component';
 import { WorkerLoginComponent } from './worker-login/worker-login.component';
 import {WorkerAuthService} from '../WorkerAuth.service';
 import { WorkerRegisterComponent } from './worker-register/worker-register.component';
-import { WorkerProfileComponent } from './worker-profile/worker-profile.component';
+import {OrderInfoDialogComponent, WorkerProfileComponent} from './worker-profile/worker-profile.component';
 import { OrderPendingComponent } from './order-pending/order-pending.component';
+import {MatSnackBarModule} from '@angular/material';
 
 const appRoutes: Routes = [
   { path: 'register', component: RegisterComponent},
@@ -65,7 +66,8 @@ const appRoutes: Routes = [
     WorkerLoginComponent,
     WorkerRegisterComponent,
     WorkerProfileComponent,
-    OrderPendingComponent
+    OrderPendingComponent,
+    OrderInfoDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -77,6 +79,7 @@ const appRoutes: Routes = [
     ReactiveFormsModule,
     FormsModule,
     MatButtonModule,
+    MatSnackBarModule,
     MatToolbarModule,
     MatExpansionModule,
     MatSidenavModule,
@@ -93,7 +96,7 @@ const appRoutes: Routes = [
     MatListModule,
     MatBadgeModule
   ],
-  entryComponents : [DialogOverviewExampleDialogComponent],
+  entryComponents : [DialogOverviewExampleDialogComponent,OrderInfoDialogComponent],
   providers: [AuthGuardService, AuthentificationService, ServicesService, AdminGuardService, OrderService, WorkerAuthService],
   bootstrap: [AppComponent]
 })

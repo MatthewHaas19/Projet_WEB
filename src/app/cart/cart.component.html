@@ -12,6 +12,7 @@
           <img id="img1" src="assets/images/service.jpg">
           <span>{{element.desc}} -- </span>
           <span>{{element.price}} €</span>
+          <span *ngIf="element.idWorker">{{element.firstname}} {{element.lastname}}</span>
         </div>
       </div>
     </td>
