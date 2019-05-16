@@ -14,7 +14,7 @@ interface Order {
   price: number;
 }
 
-export interface DialogData {
+export interface DialogData2 {
   firstname: string;
   lastname: string;
   desc: string;
@@ -134,7 +134,7 @@ export class WorkerProfileComponent implements OnInit {
 export class OrderInfoDialogComponent {
 
   constructor(public dialogRef: MatDialogRef<OrderInfoDialogComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: DialogData) {}
+              @Inject(MAT_DIALOG_DATA) public data: DialogData2) {}
 
   onNoClick(): void {
     this.dialogRef.close();
