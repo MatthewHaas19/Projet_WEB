@@ -29,6 +29,7 @@ export class LoginComponent implements OnInit {
               private auth: AuthentificationService,
               private router: Router) {}
   ngOnInit(): void {
+    this.auth.logout();
     this.initForm();
   }
 // We Init the form with the validators

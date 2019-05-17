@@ -51,7 +51,8 @@ export class ProfileComponent implements OnInit {
     // we store the image url which was upload by the admin
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.details = result
+        this.details.image = result
+        console.log(result)
         this.auth.modify(this.details.id,result).subscribe()
       }
     });

@@ -256,7 +256,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var AppComponent = /** @class */ (function () {
-    //We refresh the order count when navigating and the display the content in a certain color depending of the routes
+    // We refresh the order count when navigating and the display the content in a certain color depending of the routes
     function AppComponent(router, auth, order, worker, location) {
         var _this = this;
         this.router = router;
@@ -282,11 +282,6 @@ var AppComponent = /** @class */ (function () {
         });
     }
     AppComponent.prototype.ngOnInit = function () {
-        if (this.isAuth()) {
-            this.OrderCount();
-        }
-    };
-    AppComponent.prototype.ngOnChanges = function () {
         if (this.isAuth()) {
             this.OrderCount();
         }
@@ -335,7 +330,7 @@ var AppComponent = /** @class */ (function () {
     AppComponent.prototype.WorkerLogin = function () {
         this.router.navigate(['/worker-login']);
     };
-    //We count the number of order of a client
+    // We count the number of order of a client
     AppComponent.prototype.OrderCount = function () {
         var _this = this;
         this.auth.profile().subscribe(function (user) {
@@ -772,6 +767,7 @@ var LoginComponent = /** @class */ (function () {
         };
     }
     LoginComponent.prototype.ngOnInit = function () {
+        this.auth.logout();
         this.initForm();
     };
     // We Init the form with the validators
@@ -1038,7 +1034,8 @@ var ProfileComponent = /** @class */ (function () {
         // we store the image url which was upload by the admin
         dialogRef.afterClosed().subscribe(function (result) {
             if (result) {
-                _this.details = result;
+                _this.details.image = result;
+                console.log(result);
                 _this.auth.modify(_this.details.id, result).subscribe();
             }
         });

@@ -19,7 +19,6 @@ users.post('/register',(req,res) => {
     phone: req.body.phone,
     image: 'https://pixeltime.ro/profile.jpg'
   };
-
       const hash = bcrypt.hashSync(userData.password, 10);
       userData.password = hash;
       User.create(userData).then(user => {
@@ -32,9 +31,6 @@ users.post('/register',(req,res) => {
       })
 
 });
-
-
-
 
 users.post('/login', (req,res) => {
   User.findOne({
