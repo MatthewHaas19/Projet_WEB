@@ -113,5 +113,8 @@ export class WorkerAuthService {
     return this.http.get('/api/workerById/'+id)
   }
 
+  public addReview(review): Observable<any> {
+    return this.http.post('/api/worker-review',review)
+  }
 
 }

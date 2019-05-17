@@ -45,13 +45,13 @@ export class ServicesListComponent implements OnInit {
               private snackBar: MatSnackBar,
               private router: Router) { }
 
+  // We init this page by getting all the services en then we will deplay them
   ngOnInit() {
     this.services.getServices().subscribe(
       service => {
         this.MyServices = service;
-        const AllServices: Services[] = [];
-        for (var i=0;i<this.MyServices.length;i++) {
-           this.GetLibelle(this.MyServices[i].idType,i)
+        for (let i = 0; i < this.MyServices.length; i++) {
+           this.GetLibelle(this.MyServices[i].idType, i);
         }
       },
       err => {
@@ -60,28 +60,31 @@ export class ServicesListComponent implements OnInit {
     );
   }
 
-  GetLibelle(type: string,i) {
+  // We get the libelle of a service type with his id
+  GetLibelle(type: string, i) {
         this.services.LibelleOfServices(type).subscribe(data => {
           this.MyServices[i].idType = data.libelle.toString();
-          console.log(this.MyServices)
+          console.log(this.MyServices);
     });
   }
 
-  OrderOne(name){
+  // We create an order for the user which order the service
+  OrderOne(name) {
     this.auth.profile().subscribe(
       user => {
-        this.order.OrderOne(name, user.id)
+        this.order.OrderOne(name, user.id);
         this.snackBar.open('Ty for your order', '!', {
           duration: 2000,
-        })
-        this.router.navigate(['cart'])
-        this.router.navigate(['services-list'])
+        });
+        // We refresh the router-outlet to actualise the count of pending orders in the navbar
+        this.router.navigate(['cart']);
+        this.router.navigate(['services-list']);
 
       },
       err => {
-        console.error((err))
+        console.error((err));
       }
-    )
+    );
   }
 
 }

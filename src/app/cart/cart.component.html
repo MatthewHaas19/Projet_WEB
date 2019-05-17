@@ -1,10 +1,14 @@
+<!-- We use mat-table from Angular material to display the current orders of the client -->
+<!-- All our data is stored in the array 'dataSource' -->
 <table mat-table [dataSource]="dataSource" multiTemplateDataRows class="mat-elevation-z8" >
 
-  <ng-container matColumnDef="{{column}}" *ngFor="let column of displayedColumns">
-    <th mat-header-cell *matHeaderCellDef>{{column}}</th>
+  <!-- in 'element' there is all the infos of a client order  -->
+  <ng-container matColumnDef="{{column}}" *ngFor="let column of displayedColumns"> <!--  we use the directive ngFor to display all the columns -->
+    <th mat-header-cell *matHeaderCellDef>{{column}}</th> <!--  we define the header of the table -->
     <td mat-cell *matCellDef="let element" [style.color]="getColor(element[column])"> {{element[column]}} </td>
   </ng-container>
 
+  <!-- We define the detail that will expanded when clicking on the order -->
   <ng-container matColumnDef="expandedDetail">
     <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
       <div class="example-element-detail" [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
@@ -18,6 +22,8 @@
     </td>
   </ng-container>
 
+
+  <!-- we tell the table which columns will be rendered in the header and data rows -->
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
   <tr mat-row *matRowDef="let element; columns: displayedColumns;"
       class="example-element-row"

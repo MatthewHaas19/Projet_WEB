@@ -21,10 +21,10 @@ import {ReactiveFormsModule, FormsModule} from '@angular/forms';
 import {RouterModule, Routes} from '@angular/router';
 import {HttpClientModule} from '@angular/common/http';
 import { HomeComponent } from './home/home.component';
-import { ProfileComponent } from './profile/profile.component'
+import {ProfileComponent, UploadProfileComponent} from './profile/profile.component';
 import { AuthentificationService} from '../authentification.service';
 import { AuthGuardService} from '../auth-guard.service';
-import { DialogOverviewExampleDialogComponent, ServicesComponent} from './services/services.component';
+import { UploadServiceComponent, ServicesComponent} from './services/services.component';
 import { ServicesListComponent } from './services-list/services-list.component';
 import {ServicesService} from '../services.service';
 import {AdminGuardService} from '../admin-guard.service';
@@ -61,13 +61,14 @@ const appRoutes: Routes = [
     ProfileComponent,
     ServicesComponent,
     ServicesListComponent,
-    DialogOverviewExampleDialogComponent,
+    UploadServiceComponent,
     CartComponent,
     WorkerLoginComponent,
     WorkerRegisterComponent,
     WorkerProfileComponent,
     OrderPendingComponent,
-    OrderInfoDialogComponent
+    OrderInfoDialogComponent,
+    UploadProfileComponent
   ],
   imports: [
     BrowserModule,
@@ -94,9 +95,9 @@ const appRoutes: Routes = [
     MatTableModule,
     RouterModule.forRoot(appRoutes),
     MatListModule,
-    MatBadgeModule
+    MatBadgeModule,
   ],
-  entryComponents : [DialogOverviewExampleDialogComponent,OrderInfoDialogComponent],
+  entryComponents : [UploadServiceComponent, OrderInfoDialogComponent, UploadProfileComponent],
   providers: [AuthGuardService, AuthentificationService, ServicesService, AdminGuardService, OrderService, WorkerAuthService],
   bootstrap: [AppComponent]
 })

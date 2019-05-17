@@ -15,7 +15,6 @@ orders.post('/OrderOne',(req,res) => {
     orderDate: Date.now()
   }
 
-  console.log(idUser)
 
   Order.create(idUser).then(order => {
     console.log("result : ", order)

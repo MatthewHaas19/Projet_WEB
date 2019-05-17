@@ -14,6 +14,7 @@ export class RegisterComponent implements OnInit {
 
   userForm: FormGroup;
 
+// We define credentials to ensure to not have a conflict of data type with the authentification service
   credentials: TokenPayload = {
     id: 0,
     firstname: '',
@@ -32,6 +33,7 @@ export class RegisterComponent implements OnInit {
     this.initForm();
   }
 
+  // We Init the form with the validators
   initForm() {
     this.userForm = this.formBuilder.group({
       firstname: ['', Validators.required],
@@ -43,7 +45,8 @@ export class RegisterComponent implements OnInit {
     });
   }
 
-  // @ts-ignore
+  // We store the results of the form and we send them to the server. If the email is not already taken
+  // we redirect the user and if not we alert the user
   onSubmitForm() {
     const formValue = this.userForm.value;
 
@@ -60,10 +63,10 @@ export class RegisterComponent implements OnInit {
 
     this.auth.register(this.credentials).subscribe(
       (data) => {
-        console.log(data)
-        if(data.error == 'User already exists'){
-          alert('User already exist')
-        }else{
+        console.log(data);
+        if (data.error == 'User already exists') {
+          alert('User already exist');
+        } else {
           this.router.navigate(['profile']);
         }
       },

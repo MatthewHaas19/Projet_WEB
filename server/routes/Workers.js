@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("../server.js").bcrypt;
 
 const Worker = require("../models/Worker");
+const Review = require("../models/Review");
 workers.use(cors());
 
 process.env.SECRET_KEY = 'secret';
@@ -17,13 +18,6 @@ workers.post('/WorkerRegister',(req,res) => {
     password: req.body.password,
     phone: req.body.phone
   };
-
-  Worker.findOne({
-    where: {
-      email: req.body.email
-    }
-  }).then(user => {
-    if(!user){
       const hash = bcrypt.hashSync(userData.password, 10);
       userData.password = hash;
       Worker.create(userData).then(user => {
@@ -32,14 +26,8 @@ workers.post('/WorkerRegister',(req,res) => {
         });
         res.json({token:token})
       }).catch(err => {
-        res.send('error: ' + err)
+        res.json({error: 'User already exists'})
       })
-    }else{
-      res.json({error: 'User already exists'})
-    }
-  }).catch(err => {
-    res.send('error: ' + err)
-  })
 });
 
 workers.post('/WorkerLogin', (req,res) => {
@@ -101,5 +89,35 @@ workers.get('/workerById/:id',(req,res) => {
   })
 });
 
+workers.post('/worker-review', (req,res) => {
+  const reviewData = {
+    idUser: req.body.idUser,
+    idWorker: req.body.idWorker,
+    Content: req.body.content,
+    Type: 'worker'
+  };
+  console.log(reviewData)
+  Review.create(reviewData).then(result => {
+    res.json(result)
+  })
+});
+
+workers.get('/worker-reviews/:id',(req,res) => {
+
+  Review.findAll({
+    where: {
+      idUser: req.params.id,
+      Type: 'user'
+    }
+  }).then(review => {
+    if(review) {
+      res.json(review)
+    }else{
+      res.send('No review')
+    }
+  }).catch(err => {
+    res.send('error ' + err)
+  })
+});
 
 module.exports = workers;

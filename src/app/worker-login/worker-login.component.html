@@ -1,3 +1,5 @@
+<!-- We use the reactive form method for the login -->
+
 <mat-card>
   <h2>Login</h2>
   <form class="example-form" [formGroup]="userForm" (ngSubmit)="onSubmitForm()">
@@ -7,6 +9,8 @@
     <mat-form-field class="example-full-width">
       <input type="password" matInput placeholder="Password" formControlName="password">
     </mat-form-field>
+
+    <!-- we disable the button if the form is not valid -->
     <button mat-raised-button color="primary" type="submit" [disabled]="userForm.invalid">Login</button>
   </form>
 </mat-card>

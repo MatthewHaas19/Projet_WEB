@@ -1,9 +1,12 @@
+<!-- We use two way data binding to display the preview of the form while the user is entering the data -->
+
+<!-- Form side -->
 <div class="container">
   <div class="form">
     <mat-card>
       <h1>Form</h1>
       <form [formGroup]="serviceForm" (ngSubmit)="onSubmitForm()">
-        <button mat-icon-button type="submit" (click)="openDialog()">
+        <button mat-icon-button type="submit" (click)="openDialog()"> <!-- Open the dialog page for the download of a file -->
           <mat-icon color="accent">cloud_upload</mat-icon>
         </button>
         <mat-form-field appearance="outline">
@@ -32,6 +35,8 @@
       </form>
     </mat-card>
   </div>
+
+  <!-- Preview side -->
   <div class="preview">
     <mat-card>
       <h1>Preview</h1>

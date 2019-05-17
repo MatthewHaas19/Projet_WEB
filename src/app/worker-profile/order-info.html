@@ -1,6 +1,9 @@
+<!-- Dialog page displayed when a worker click on an order he picked -->
+
 <h1 mat-dialog-title>{{data.firstname}} {{data.lastname}}</h1>
 <div mat-dialog-content>{{data.desc}}</div>
 
+<!-- We let the possibility for the worker to let a review before closing the order -->
 <mat-form-field class="example-full-width">
   <input matInput #message maxlength="42" placeholder="Review" [(ngModel)]="data.review">
   <mat-hint align="start"><strong>Don't disclose personal info</strong> </mat-hint>
@@ -9,6 +12,6 @@
 
 
 <div mat-dialog-actions>
-  <button mat-button (click)="onNoClick()">No Thanks</button>
-  <button mat-button [mat-dialog-close]="data.review">Ok</button>
+  <button mat-button (click)="onNoClick()">Back</button>
+  <button mat-button [mat-dialog-close]="data.review">Order has been done</button>
 </div>

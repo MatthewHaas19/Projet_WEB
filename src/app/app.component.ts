@@ -15,6 +15,7 @@ export class AppComponent implements OnInit, OnChanges{
 
   color: string = 'accent'
 
+  //We refresh the order count when navigating and the display the content in a certain color depending of the routes
   constructor(private router: Router,
               private auth: AuthentificationService,
               private order: OrderService,
@@ -111,7 +112,7 @@ export class AppComponent implements OnInit, OnChanges{
     this.router.navigate(['/worker-login'])
   }
 
-
+//We count the number of order of a client
   OrderCount(){
     this.auth.profile().subscribe(
       user => {

@@ -28,6 +28,9 @@ module.exports = db.sequelize.define(
       type: Sequelize.STRING,
       defaultValue: 'false'
     },
+    image: {
+      type: Sequelize.STRING
+    },
   },
   {
     timestamps: false

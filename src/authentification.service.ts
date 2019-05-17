@@ -14,6 +14,7 @@ export interface UserDetails {
   password: string
   phone: string
   isAdmin: string
+  image: string
   exp: number
   iat: number
 }
@@ -128,6 +129,14 @@ export class AuthentificationService {
 
   public userById(id): Observable<any> {
     return this.http.get('/api/userById/'+id)
+  }
+
+  public getReview(idUser): Observable<any> {
+    return this.http.get('/api/user-reviews/' + idUser)
+  }
+
+  public modify(id, image): Observable<any> {
+    return this.http.put('/api/modify/' + id, {img: image})
   }
 
 }

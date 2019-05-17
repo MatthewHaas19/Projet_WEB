@@ -12,6 +12,7 @@ import {WorkerAuthService} from '../../WorkerAuth.service';
 })
 export class WorkerLoginComponent implements OnInit {
 
+// We define credentials to ensure to not have a conflict of data type with the workerAuth service
   credentials: TokenPayload = {
     id: 0,
     firstname: '',
@@ -27,10 +28,12 @@ export class WorkerLoginComponent implements OnInit {
   constructor(private formBuilder: FormBuilder,
               private worker: WorkerAuthService,
               private router: Router) {}
+
   ngOnInit(): void {
     this.initForm();
   }
 
+  // We Init the form with the validators
   initForm() {
     this.userForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
@@ -38,7 +41,8 @@ export class WorkerLoginComponent implements OnInit {
     });
   }
 
-
+// We store the result of the form and we send them to the server. If the infos are correct
+// we redirect the worker and if not we alert him
   onSubmitForm() {
 
     const formValue = this.userForm.value;

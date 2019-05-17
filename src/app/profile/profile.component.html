@@ -1,7 +1,9 @@
+<!-- HTML Page for the user profile -->
+
 <div class="profile-container">
   <div class="profile-menu">
     <div class="image-container">
-      <img src="https://pixeltime.ro/profile.jpg" alt="">
+      <img [src]="details?.image" alt="">
     </div>
     <ul>
       <li class="active">Profile</li>
@@ -12,11 +14,15 @@
   </div>
   <div class="profile-content">
     <div class="actions">
-      <mat-icon class="icon">add_a_photo</mat-icon>
-      <mat-icon class="icon">create</mat-icon>
+      <button mat-icon-button (click)="openDialog()">
+        <mat-icon class="icon">add_a_photo</mat-icon>
+      </button>
+      <button mat-icon-button (click)="openDialog()">
+        <mat-icon class="icon">create</mat-icon>
+      </button>
     </div>
     <div class="pic">
-      <img src="https://pixeltime.ro/profile.jpg" alt="">
+      <img [src]="details?.image" alt="">
       <h2>{{details?.firstname}} {{details?.lastname}}</h2>
       <span>{{details?.email}}</span>
     </div>
@@ -31,9 +37,9 @@
       </div>
     </div>
     <div class="profile-details">
-      <mat-card>
-        <h2>Infos</h2>
-      </mat-card>
+      <mat-list role="list" *ngFor="let rev of review">
+        <mat-list-item role="listitem"><h4>{{rev.Content}}</h4></mat-list-item>
+      </mat-list>
     </div>
   </div>
 </div>

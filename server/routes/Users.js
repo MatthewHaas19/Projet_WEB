@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("../server.js").bcrypt;
 
 const User = require("../models/User");
+const Review = require("../models/Review");
 users.use(cors());
 
 process.env.SECRET_KEY = 'secret';
@@ -15,15 +16,10 @@ users.post('/register',(req,res) => {
     lastname: req.body.lastname,
     email: req.body.email,
     password: req.body.password,
-    phone: req.body.phone
+    phone: req.body.phone,
+    image: 'https://pixeltime.ro/profile.jpg'
   };
 
-  User.findOne({
-    where: {
-      email: req.body.email
-    }
-  }).then(user => {
-    if(!user){
       const hash = bcrypt.hashSync(userData.password, 10);
       userData.password = hash;
       User.create(userData).then(user => {
@@ -32,15 +28,13 @@ users.post('/register',(req,res) => {
         });
         res.json({token:token})
       }).catch(err => {
-        res.send('error: ' + err)
+        res.json({error: 'User already exists'})
       })
-    }else{
-      res.json({error: 'User already exists'})
-    }
-  }).catch(err => {
-    res.send('error: ' + err)
-  })
+
 });
+
+
+
 
 users.post('/login', (req,res) => {
   User.findOne({
@@ -102,5 +96,53 @@ users.get('/userById/:id',(req,res) => {
   })
 });
 
+users.post('/user-review', (req,res) => {
+  const reviewData = {
+    Content: req.body.content,
+    idUser: req.body.idUser,
+    idWorker: req.body.idWorker,
+    Type: 'user'
+  };
+  Review.Create(reviewData).then(result => {
+    res.json(result)
+  })
+});
+
+
+users.put('/modify/:id',(req,res) => {
+console.log(req.params.id,req.body.img)
+  User.update({
+      image: req.body.img,
+    },
+    {
+      where: {
+        id: req.params.id
+      }
+    }).then(user => {
+    console.log(user)
+    res.json(user)
+  }).catch(err => {
+    console.log(err)
+  })
+});
+
+
+users.get('/user-reviews/:id',(req,res) => {
+
+  Review.findAll({
+    where: {
+      idUser: req.params.id,
+      Type: 'worker'
+    }
+  }).then(review => {
+    if(review) {
+      res.json(review)
+    }else{
+      res.send('No review')
+    }
+  }).catch(err => {
+    res.send('error ' + err)
+  })
+});
 
 module.exports = users;

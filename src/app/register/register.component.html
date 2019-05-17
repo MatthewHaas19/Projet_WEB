@@ -1,8 +1,9 @@
+<!-- We use the form reactive method -->
 <mat-card>
   <h2>Register</h2>
-  <form class="example-form" [formGroup]="userForm" (ngSubmit)="onSubmitForm()">
+  <form class="example-form" [formGroup]="userForm" (ngSubmit)="onSubmitForm()"> <!-- Submitting will start this method -->
     <table class="example-full-width" cellspacing="0"><tr>
-      <td><mat-form-field class="example-full-width">
+      <td><mat-form-field class="example-full-width"> <!-- We define all of our inputs -->
         <input matInput placeholder="First name" formControlName="firstname">
       </mat-form-field></td>
       <td><mat-form-field class="example-full-width">
@@ -24,6 +25,6 @@
       <mat-icon matSuffix>mode_edit</mat-icon>
     </mat-form-field>
     <button mat-raised-button color="accent" type="submit" [disabled]="userForm.invalid">Submit</button>
-  </form>
+  </form> <!-- the submit is impossible while the form is invalid, while the validators are not passed -->
 </mat-card>
 
