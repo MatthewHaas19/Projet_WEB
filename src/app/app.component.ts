@@ -15,6 +15,10 @@ export class AppComponent implements OnInit {
 
   color = 'accent';
 
+  Auth = false;
+  Admin = false;
+  Worker = false;
+
   // We refresh the order count when navigating and the display the content in a certain color depending of the routes
   constructor(private router: Router,
               private auth: AuthentificationService,
@@ -22,6 +26,7 @@ export class AppComponent implements OnInit {
               private worker: WorkerAuthService,
               private location: Location) {
     router.events.subscribe(val => {
+      this.ngOnInit()
       if (location.path() === '/worker-login' ||
         location.path() === '/worker-register' ||
         location.path() === '/worker-profile' ||
@@ -29,12 +34,7 @@ export class AppComponent implements OnInit {
         this.color = 'primary';
       } else {
         this.color = 'accent';
-        if (this.auth.isLoggedIn()) {
-          this.OrderCount();
-        }
       }
-
-
     });
   }
 
@@ -42,9 +42,12 @@ export class AppComponent implements OnInit {
 
 
   ngOnInit(): void {
-    if (this.isAuth()) {
+    if (this.auth.isLoggedIn()) {
       this.OrderCount();
+      this.Auth = true;
+      this.Admin = this.auth.isAdmin()
     }
+    this.Worker = this.worker.isLoggedIn()
   }
 
 
@@ -58,15 +61,15 @@ export class AppComponent implements OnInit {
 
 
   isAuth() {
-    return this.auth.isLoggedIn();
+    return this.Auth
   }
 
   isWorker() {
-    return this.worker.isLoggedIn();
+    return this.Worker
   }
 
   isAdmin() {
-    return this.auth.isAdmin();
+    return this.Admin
   }
 
   Services() {
@@ -75,6 +78,7 @@ export class AppComponent implements OnInit {
 
   Logout() {
     this.auth.logout();
+    this.Auth = false;
     this.router.navigate(['']);
   }
 
@@ -86,6 +90,7 @@ export class AppComponent implements OnInit {
 
   LogoutWorker() {
     this.worker.logout();
+    this.Worker = false;
     this.router.navigate(['/worker-login']);
   }
 

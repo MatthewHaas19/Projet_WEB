@@ -1,0 +1,52 @@
+<!-- We use two way data binding to display the preview of the form while the user is entering the data -->
+
+<!-- Form side -->
+<div class="container">
+  <div class="form">
+    <mat-card>
+      <h1>Form</h1>
+      <form [formGroup]="serviceForm" (ngSubmit)="onSubmitForm()">
+        <button mat-icon-button type="submit" (click)="openDialog()"> <!-- Open the dialog page for the download of a file -->
+          <mat-icon color="accent">cloud_upload</mat-icon>
+        </button>
+        <mat-form-field appearance="outline">
+          <mat-label>Service name</mat-label>
+          <input matInput placeholder="Enter service name" formControlName="name" >
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Services Types</mat-label>
+          <mat-select formControlName="type">
+            <mat-option>-- None --</mat-option>
+            <mat-optgroup *ngFor="let group of TypesGroups" [label]="group.name"
+                          [disabled]="group.disabled">
+              <mat-option *ngFor="let type of group.type" [value]="type">
+                {{type.libelle}}
+              </mat-option>
+            </mat-optgroup>
+          </mat-select>
+        </mat-form-field>
+        <mat-slider [max]="50" [min]="0" [step]="0.5" [thumbLabel]="true" formControlName="price" ></mat-slider>
+        <mat-form-field class="example-full-width">
+          <textarea matInput #message maxlength="42" placeholder="Description" formControlName="desc" ></textarea>
+          <mat-hint align="start"><strong>Describe the service</strong> </mat-hint>
+          <mat-hint align="end">{{message.value.length}} / 42</mat-hint>
+        </mat-form-field>
+        <button id="button1" mat-raised-button color="accent" type="submit" [disabled]="serviceForm.invalid">Submit</button>
+      </form>
+    </mat-card>
+  </div>
+
+  <!-- Preview side -->
+  <div class="preview">
+    <mat-card>
+      <h1>Preview</h1>
+
+      <h2>{{serviceForm.value['name']}}</h2>
+      <h4>{{serviceForm.value['type'].libelle}}</h4>
+      <img id="img1" [src]="infos.image">
+      <h4>{{serviceForm.value['price']}} €</h4>
+      <p>{{serviceForm.value['desc']}}</p>
+    </mat-card>
+  </div>
+</div>
+

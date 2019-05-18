@@ -64,6 +64,18 @@ export class ServicesListComponent implements OnInit {
     );
   }
 
+  onDelete(name, image) {
+    this.services.delete(name, image).subscribe(
+      () => {
+        this.ngOnInit()
+      }
+    )
+  }
+
+  isAdmin(){
+    return this.auth.isLoggedIn() && this.auth.isAdmin()
+  }
+
   // We get the libelle of a service type with his id
   GetLibelle(type: string, i) {
         this.services.LibelleOfServices(type).subscribe(data => {

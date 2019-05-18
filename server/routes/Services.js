@@ -21,6 +21,34 @@ services.get('/getServices',(req,res) => {
   })
 });
 
+services.get('/getService/:id',(req,res) => {
+  Service.findOne({
+      where: {
+        name: req.params.id
+      }
+  }).then(services => {
+    console.log('service:',services)
+    TypeService.findOne({
+      where: {
+        idType: services.idType
+      }
+    }).then(type => {
+      const aService = {
+        idService: services.idServices,
+        name: services.name,
+        idType: services.idType,
+        desc: services.desc,
+        price: services.price,
+        image: services.image,
+        libelle: ''
+      }
+      aService.libelle = type.libelle
+      console.log(aService)
+      res.json(aService);
+    })
+  })
+});
+
 
 
 services.get('/LibelleOfServices/:id',(req,res) => {
@@ -70,5 +98,41 @@ services.post('/addService',(req,res) => {
     res.send('error: ' + err)
   })
 });
+
+
+services.delete('/deleteServices/:name',(req,res) => {
+  Service.destroy({
+    where: {
+      name: req.params.name
+    }
+  }).then(service => {
+    console.log(service)
+    res.json(service)
+  })
+});
+
+
+
+services.put('/modifyService/:id',(req,res) => {
+  Service.update({
+      name : req.body.name,
+      desc: req.body.desc,
+      price: req.body.price,
+      idType: req.body.type,
+      image: req.body.image,
+    },
+    {
+      where: {
+        idServices: req.params.id
+      }
+    }).then(service => {
+      res.json(service)
+    console.log("result : ",service)
+    }).catch(err => {
+      res.send('error: ' + err)
+    })
+});
+
+
 
 module.exports = services;

@@ -45,12 +45,39 @@ export class ServicesService {
     })
   }
 
+  public modifyService(image, service: ServiceDetails,id): Promise<any> {
+    if(image !== 'assets/images/service.jpg'){
+      const storageRef = firebase.storage().refFromURL(image)
+      storageRef.delete().then(
+        () => {
+          console.log('Last image removed')
+        },
+        (error) => {
+          console.log('Could not remove photo! : ' + error)
+        }
+      )
+    }
+
+    return new Promise((resolve) => {
+      console.log(service);
+      this.http.put('/api/modifyService/'+id, service).subscribe(() => {
+        console.log('service modified');
+        resolve()
+      });
+    })
+  }
+
+
   public getTypes(): Observable<any> {
     return this.http.get('/api/typeServices');
   }
 
   public getServices(): Observable<any> {
     return this.http.get('/api/getServices');
+  }
+
+  public getAservice(id): Observable<any> {
+    return this.http.get('/api/getService/'+id);
   }
 
   public LibelleOfServices(idType): Observable<any>{
@@ -78,4 +105,18 @@ export class ServicesService {
     )
   }
 
+  public delete(name, image): Observable<any> {
+    if(image !== 'assets/images/service.jpg'){
+      const storageRef = firebase.storage().refFromURL(image)
+      storageRef.delete().then(
+        () => {
+          console.log('Image removed')
+        },
+        (error) => {
+          console.log('Could not remove photo! : ' + error)
+        }
+      )
+    }
+    return this.http.delete('/api/deleteServices/'+name)
+  }
 }

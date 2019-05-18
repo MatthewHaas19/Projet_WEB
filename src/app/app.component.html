@@ -12,7 +12,7 @@
       <button mat-menu-item routerLink="worker-login" *ngIf="!isAuth() && !isWorker()">Worker Login</button>
       <button mat-menu-item routerLink="register" *ngIf="!isAuth() && !isWorker()">Register</button>
       <button mat-menu-item (click)="Logout() " *ngIf="isAuth()">Logout</button>
-      <button mat-menu-item routerLink="" *ngIf="isAuth()">Services</button>
+      <button mat-menu-item routerLink="">Services</button>
       <button mat-menu-item routerLink="profile" *ngIf="isAuth()">Profile</button>
       <button mat-menu-item routerLink="services" *ngIf="isAuth() && isAdmin()">Add Services</button>
 

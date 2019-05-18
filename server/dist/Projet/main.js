@@ -219,7 +219,7 @@ var AppRoutingModule = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<!-- Header -->\n  <mat-toolbar color={{color}}>\n  <mat-toolbar-row>\n  <span>MyServices</span>\n  <span class=\"spacer\"></span>\n    <button mat-icon-button routerLink=\"cart\" *ngIf=\"isAuth()\">\n      <mat-icon matBadge = {{OrderNumber}} >near_me</mat-icon>\n    </button>\n    <button mat-button [matMenuTriggerFor]=\"menu\"><mat-icon class=\"icon\">menu</mat-icon></button>\n    <mat-menu #menu=\"matMenu\" xPosition=\"before\">\n      <button mat-menu-item routerLink=\"login\" *ngIf=\"!isAuth() && !isWorker()\">Login</button>\n      <button mat-menu-item routerLink=\"worker-login\" *ngIf=\"!isAuth() && !isWorker()\">Worker Login</button>\n      <button mat-menu-item routerLink=\"register\" *ngIf=\"!isAuth() && !isWorker()\">Register</button>\n      <button mat-menu-item (click)=\"Logout() \" *ngIf=\"isAuth()\">Logout</button>\n      <button mat-menu-item routerLink=\"\" *ngIf=\"isAuth()\">Services</button>\n      <button mat-menu-item routerLink=\"profile\" *ngIf=\"isAuth()\">Profile</button>\n      <button mat-menu-item routerLink=\"services\" *ngIf=\"isAuth() && isAdmin()\">Add Services</button>\n\n      <button mat-menu-item (click)=\"LogoutWorker()\" *ngIf=\"isWorker()\">Logout</button>\n      <button mat-menu-item routerLink=\"order-pending\" *ngIf=\"isWorker()\">Orders-Pending</button>\n      <button mat-menu-item routerLink=\"worker-profile\" *ngIf=\"isWorker()\">Profile</button>\n    </mat-menu>\n  </mat-toolbar-row>\n</mat-toolbar>\n\n<!-- Router outlet corresponding to the uri -->\n<router-outlet></router-outlet>\n\n"
+module.exports = "<!-- Header -->\n  <mat-toolbar color={{color}}>\n  <mat-toolbar-row>\n  <span>MyServices</span>\n  <span class=\"spacer\"></span>\n    <button mat-icon-button routerLink=\"cart\" *ngIf=\"isAuth()\">\n      <mat-icon matBadge = {{OrderNumber}} >near_me</mat-icon>\n    </button>\n    <button mat-button [matMenuTriggerFor]=\"menu\"><mat-icon class=\"icon\">menu</mat-icon></button>\n    <mat-menu #menu=\"matMenu\" xPosition=\"before\">\n      <button mat-menu-item routerLink=\"login\" *ngIf=\"!isAuth() && !isWorker()\">Login</button>\n      <button mat-menu-item routerLink=\"worker-login\" *ngIf=\"!isAuth() && !isWorker()\">Worker Login</button>\n      <button mat-menu-item routerLink=\"register\" *ngIf=\"!isAuth() && !isWorker()\">Register</button>\n      <button mat-menu-item (click)=\"Logout() \" *ngIf=\"isAuth()\">Logout</button>\n      <button mat-menu-item routerLink=\"\">Services</button>\n      <button mat-menu-item routerLink=\"profile\" *ngIf=\"isAuth()\">Profile</button>\n      <button mat-menu-item routerLink=\"services\" *ngIf=\"isAuth() && isAdmin()\">Add Services</button>\n\n      <button mat-menu-item (click)=\"LogoutWorker()\" *ngIf=\"isWorker()\">Logout</button>\n      <button mat-menu-item routerLink=\"order-pending\" *ngIf=\"isWorker()\">Orders-Pending</button>\n      <button mat-menu-item routerLink=\"worker-profile\" *ngIf=\"isWorker()\">Profile</button>\n    </mat-menu>\n  </mat-toolbar-row>\n</mat-toolbar>\n\n<!-- Router outlet corresponding to the uri -->\n<router-outlet></router-outlet>\n\n"
 
 /***/ }),
 
@@ -268,8 +268,12 @@ var AppComponent = /** @class */ (function () {
         this.worker = worker;
         this.location = location;
         this.color = 'accent';
+        this.Auth = false;
+        this.Admin = false;
+        this.Worker = false;
         this.OrderNumber = 0;
         router.events.subscribe(function (val) {
+            _this.ngOnInit();
             if (location.path() === '/worker-login' ||
                 location.path() === '/worker-register' ||
                 location.path() === '/worker-profile' ||
@@ -278,16 +282,16 @@ var AppComponent = /** @class */ (function () {
             }
             else {
                 _this.color = 'accent';
-                if (_this.auth.isLoggedIn()) {
-                    _this.OrderCount();
-                }
             }
         });
     }
     AppComponent.prototype.ngOnInit = function () {
-        if (this.isAuth()) {
+        if (this.auth.isLoggedIn()) {
             this.OrderCount();
+            this.Auth = true;
+            this.Admin = this.auth.isAdmin();
         }
+        this.Worker = this.worker.isLoggedIn();
     };
     AppComponent.prototype.Login = function () {
         this.router.navigate(['/login']);
@@ -296,19 +300,20 @@ var AppComponent = /** @class */ (function () {
         this.router.navigate(['/profile']);
     };
     AppComponent.prototype.isAuth = function () {
-        return this.auth.isLoggedIn();
+        return this.Auth;
     };
     AppComponent.prototype.isWorker = function () {
-        return this.worker.isLoggedIn();
+        return this.Worker;
     };
     AppComponent.prototype.isAdmin = function () {
-        return this.auth.isAdmin();
+        return this.Admin;
     };
     AppComponent.prototype.Services = function () {
         this.router.navigate(['']);
     };
     AppComponent.prototype.Logout = function () {
         this.auth.logout();
+        this.Auth = false;
         this.router.navigate(['']);
     };
     AppComponent.prototype.Register = function () {
@@ -316,6 +321,7 @@ var AppComponent = /** @class */ (function () {
     };
     AppComponent.prototype.LogoutWorker = function () {
         this.worker.logout();
+        this.Worker = false;
         this.router.navigate(['/worker-login']);
     };
     // We count the number of order of a client
@@ -385,6 +391,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _worker_register_worker_register_component__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ./worker-register/worker-register.component */ "./src/app/worker-register/worker-register.component.ts");
 /* harmony import */ var _worker_profile_worker_profile_component__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ./worker-profile/worker-profile.component */ "./src/app/worker-profile/worker-profile.component.ts");
 /* harmony import */ var _order_pending_order_pending_component__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! ./order-pending/order-pending.component */ "./src/app/order-pending/order-pending.component.ts");
+/* harmony import */ var _services_modify_services_modify_component__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! ./services-modify/services-modify.component */ "./src/app/services-modify/services-modify.component.ts");
+
 
 
 
@@ -418,6 +426,7 @@ var appRoutes = [
     { path: 'home', component: _home_home_component__WEBPACK_IMPORTED_MODULE_12__["HomeComponent"] },
     { path: 'login', component: _login_login_component__WEBPACK_IMPORTED_MODULE_6__["LoginComponent"] },
     { path: 'services', component: _services_services_component__WEBPACK_IMPORTED_MODULE_16__["ServicesComponent"], canActivate: [_admin_guard_service__WEBPACK_IMPORTED_MODULE_19__["AdminGuardService"]] },
+    { path: 'services-modify/:id', component: _services_modify_services_modify_component__WEBPACK_IMPORTED_MODULE_27__["ServicesModifyComponent"], canActivate: [_admin_guard_service__WEBPACK_IMPORTED_MODULE_19__["AdminGuardService"]] },
     { path: 'profile', component: _profile_profile_component__WEBPACK_IMPORTED_MODULE_13__["ProfileComponent"], canActivate: [_auth_guard_service__WEBPACK_IMPORTED_MODULE_15__["AuthGuardService"]] },
     { path: 'cart', component: _cart_cart_component__WEBPACK_IMPORTED_MODULE_21__["CartComponent"], canActivate: [_auth_guard_service__WEBPACK_IMPORTED_MODULE_15__["AuthGuardService"]] },
     { path: 'worker-login', component: _worker_login_worker_login_component__WEBPACK_IMPORTED_MODULE_22__["WorkerLoginComponent"] },
@@ -447,7 +456,8 @@ var AppModule = /** @class */ (function () {
                 _order_pending_order_pending_component__WEBPACK_IMPORTED_MODULE_26__["OrderPendingComponent"],
                 _worker_profile_worker_profile_component__WEBPACK_IMPORTED_MODULE_25__["OrderInfoDialogComponent"],
                 _profile_profile_component__WEBPACK_IMPORTED_MODULE_13__["UploadProfileComponent"],
-                _worker_profile_worker_profile_component__WEBPACK_IMPORTED_MODULE_25__["UploadWorkerProfileComponent"]
+                _worker_profile_worker_profile_component__WEBPACK_IMPORTED_MODULE_25__["UploadWorkerProfileComponent"],
+                _services_modify_services_modify_component__WEBPACK_IMPORTED_MODULE_27__["ServicesModifyComponent"]
             ],
             imports: [
                 _angular_platform_browser__WEBPACK_IMPORTED_MODULE_1__["BrowserModule"],
@@ -1239,7 +1249,7 @@ var RegisterComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<!-- HTML For the service list, we display all of the infos for each services using the directive ngFor -->\n<div class=\"search\">\n  <mat-form-field appearance=\"outline\" color=\"accent\" >\n    <mat-label>Find a service</mat-label>\n    <input matInput placeholder=\"...\" type=\"text\" #myInput [(ngModel)]=\"name\" (input)=\"Search()\" >\n    <mat-icon matSuffix>search</mat-icon>\n  </mat-form-field>\n</div>\n<div class=\"content\">\n  <div class=\"container\"*ngFor=\"let service of this.MyServices\">\n    <div class=\"service\" >\n      <mat-card>\n        <div class=\"top\">\n          <h2>{{service.name}}</h2>\n          <h4>{{service.idType}}</h4>\n        </div>\n        <div class=\"img-container\">\n          <img id=\"img1\" [src]=\"service.image\">\n        </div>\n        <div class=\"bottom\">\n          <p>{{service.price}} €</p>\n          <p>{{service.desc}}</p>\n          <button mat-raised-button color=\"accent\" type=\"submit\" (click)=\"OrderOne(service.name)\">Order</button>\n        </div>\n      </mat-card>\n    </div>\n  </div>\n\n</div>\n"
+module.exports = "<!-- HTML For the service list, we display all of the infos for each services using the directive ngFor -->\n<div class=\"search\">\n  <mat-form-field appearance=\"outline\" color=\"accent\" >\n    <mat-label>Find a service</mat-label>\n    <input matInput placeholder=\"...\" type=\"text\" #myInput [(ngModel)]=\"name\" (input)=\"Search()\" >\n    <mat-icon matSuffix>search</mat-icon>\n  </mat-form-field>\n</div>\n<div class=\"content\">\n  <div class=\"container\"*ngFor=\"let service of this.MyServices\">\n    <div class=\"service\" >\n      <mat-card>\n        <div class=\"top\">\n          <h2>{{service.name}}</h2>\n          <h4>{{service.idType}}</h4>\n        </div>\n        <div class=\"img-container\">\n          <img id=\"img1\" [src]=\"service.image\">\n          <div class=\"middle\" *ngIf=\"isAdmin()\">\n            <div class=\"buttons\">\n              <button mat-raised-button color=\"primary\" [routerLink]=\"['/services-modify',service.name]\">Modifier</button>\n              <button mat-raised-button color=\"warn\" (click)=\"onDelete(service.name, service.image)\">Supprimer</button>\n            </div>\n          </div>\n        </div>\n        <div class=\"bottom\">\n          <div class=\"bottom-container\">\n            <p>{{service.price}} €</p>\n            <p>{{service.desc}}</p>\n          </div>\n          <div class=\"bottom-button\">\n            <button id=\"buttonS\" mat-raised-button color=\"accent\" type=\"submit\" (click)=\"OrderOne(service.name)\">Order</button>\n          </div>\n        </div>\n      </mat-card>\n    </div>\n  </div>\n\n</div>\n"
 
 /***/ }),
 
@@ -1250,7 +1260,7 @@ module.exports = "<!-- HTML For the service list, we display all of the infos fo
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "/* CSS for services-list */\n#img1 {\n  width: 100%;\n  height: 100%;\n  text-align: center;\n  display: block; }\n.search {\n  margin-top: 20px;\n  width: 100%;\n  height: 10%;\n  text-align: center;\n  display: block; }\n.search .mat-form-field {\n    padding-top: 10px;\n    padding-bottom: 10px; }\n.content {\n  width: 100%;\n  height: 90%;\n  text-align: center;\n  display: block; }\n.content .container {\n    min-width: 75px;\n    max-width: 250px;\n    width: 100%;\n    height: 485px;\n    margin: 0 auto;\n    margin-top: 50px;\n    text-align: center;\n    display: inline-block;\n    margin-left: 30px;\n    margin-right: 30px; }\n.content .container .service {\n      width: 100%;\n      float: left;\n      text-align: center;\n      display: block;\n      box-shadow: 0 0 25px rgba(0, 0, 0, 0.2); }\n.content .container .service .mat-card {\n        height: 485px; }\n.content .container .service .mat-card .top {\n          height: 20%;\n          display: inline-block;\n          vertical-align: top; }\n.content .container .service .mat-card .img-container {\n          height: 50%;\n          display: inline-block;\n          vertical-align: middle; }\n.content .container .service .mat-card .img-container .img {\n            margin: 0 auto;\n            display: inline-block;\n            vertical-align: middle; }\n.content .container .service .mat-card .bottom {\n          height: 30%;\n          display: inline-block;\n          vertical-align: bottom; }\n.content .container .service .mat-card .bottom .p {\n            padding: 5px; }\n.content .container .service .mat-card .bottom .button {\n            padding: 5px; }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvc2VydmljZXMtbGlzdC9DOlxcVXNlcnNcXE1hdHRoZXdcXERlc2t0b3BcXFByb2pldF9XRUIvc3JjXFxhcHBcXHNlcnZpY2VzLWxpc3RcXHNlcnZpY2VzLWxpc3QuY29tcG9uZW50LnNjc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsMEJBQUE7QUFFQTtFQUNFLFdBQVc7RUFDWCxZQUFZO0VBQ1osa0JBQWtCO0VBQ2xCLGNBQWMsRUFBQTtBQUdoQjtFQUNFLGdCQUFnQjtFQUNoQixXQUFXO0VBQ1gsV0FBVztFQUNYLGtCQUFrQjtFQUNsQixjQUFjLEVBQUE7QUFMaEI7SUFPSSxpQkFBaUI7SUFDakIsb0JBQW9CLEVBQUE7QUFHeEI7RUFDRSxXQUFXO0VBQ1gsV0FBVztFQUNYLGtCQUFrQjtFQUNsQixjQUFjLEVBQUE7QUFKaEI7SUFPSSxlQUFlO0lBQ2YsZ0JBQWdCO0lBQ2hCLFdBQVc7SUFDWCxhQUFhO0lBQ2IsY0FBYztJQUNkLGdCQUFnQjtJQUNoQixrQkFBa0I7SUFDbEIscUJBQXFCO0lBQ3JCLGlCQUFpQjtJQUNqQixrQkFBa0IsRUFBQTtBQWhCdEI7TUFtQk0sV0FBVztNQUNYLFdBQVc7TUFDWCxrQkFBa0I7TUFDbEIsY0FBYztNQUNkLHVDQUE4QixFQUFBO0FBdkJwQztRQTBCUSxhQUFhLEVBQUE7QUExQnJCO1VBNkJVLFdBQVc7VUFDWCxxQkFBcUI7VUFDckIsbUJBQW1CLEVBQUE7QUEvQjdCO1VBbUNVLFdBQVc7VUFDWCxxQkFBcUI7VUFDckIsc0JBQXNCLEVBQUE7QUFyQ2hDO1lBd0NZLGNBQWM7WUFDZCxxQkFBcUI7WUFDckIsc0JBQXNCLEVBQUE7QUExQ2xDO1VBK0NVLFdBQVc7VUFDWCxxQkFBcUI7VUFDckIsc0JBQXNCLEVBQUE7QUFqRGhDO1lBb0RZLFlBQVksRUFBQTtBQXBEeEI7WUF3RFksWUFBWSxFQUFBIiwiZmlsZSI6InNyYy9hcHAvc2VydmljZXMtbGlzdC9zZXJ2aWNlcy1saXN0LmNvbXBvbmVudC5zY3NzIiwic291cmNlc0NvbnRlbnQiOlsiLyogQ1NTIGZvciBzZXJ2aWNlcy1saXN0ICovXHJcblxyXG4jaW1nMXtcclxuICB3aWR0aDogMTAwJTtcclxuICBoZWlnaHQ6IDEwMCU7XHJcbiAgdGV4dC1hbGlnbjogY2VudGVyO1xyXG4gIGRpc3BsYXk6IGJsb2NrO1xyXG59XHJcblxyXG4uc2VhcmNoe1xyXG4gIG1hcmdpbi10b3A6IDIwcHg7XHJcbiAgd2lkdGg6IDEwMCU7XHJcbiAgaGVpZ2h0OiAxMCU7XHJcbiAgdGV4dC1hbGlnbjogY2VudGVyO1xyXG4gIGRpc3BsYXk6IGJsb2NrO1xyXG4gIC5tYXQtZm9ybS1maWVsZHtcclxuICAgIHBhZGRpbmctdG9wOiAxMHB4O1xyXG4gICAgcGFkZGluZy1ib3R0b206IDEwcHg7XHJcbiAgfVxyXG59XHJcbi5jb250ZW50IHtcclxuICB3aWR0aDogMTAwJTtcclxuICBoZWlnaHQ6IDkwJTtcclxuICB0ZXh0LWFsaWduOiBjZW50ZXI7XHJcbiAgZGlzcGxheTogYmxvY2s7XHJcblxyXG4gIC5jb250YWluZXIge1xyXG4gICAgbWluLXdpZHRoOiA3NXB4O1xyXG4gICAgbWF4LXdpZHRoOiAyNTBweDtcclxuICAgIHdpZHRoOiAxMDAlO1xyXG4gICAgaGVpZ2h0OiA0ODVweDtcclxuICAgIG1hcmdpbjogMCBhdXRvO1xyXG4gICAgbWFyZ2luLXRvcDogNTBweDtcclxuICAgIHRleHQtYWxpZ246IGNlbnRlcjtcclxuICAgIGRpc3BsYXk6IGlubGluZS1ibG9jaztcclxuICAgIG1hcmdpbi1sZWZ0OiAzMHB4O1xyXG4gICAgbWFyZ2luLXJpZ2h0OiAzMHB4O1xyXG5cclxuICAgIC5zZXJ2aWNlIHtcclxuICAgICAgd2lkdGg6IDEwMCU7XHJcbiAgICAgIGZsb2F0OiBsZWZ0O1xyXG4gICAgICB0ZXh0LWFsaWduOiBjZW50ZXI7XHJcbiAgICAgIGRpc3BsYXk6IGJsb2NrO1xyXG4gICAgICBib3gtc2hhZG93OiAwIDAgMjVweCByZ2JhKCMwMDAsIDAuMik7XHJcblxyXG4gICAgICAubWF0LWNhcmQge1xyXG4gICAgICAgIGhlaWdodDogNDg1cHg7XHJcblxyXG4gICAgICAgIC50b3Age1xyXG4gICAgICAgICAgaGVpZ2h0OiAyMCU7XHJcbiAgICAgICAgICBkaXNwbGF5OiBpbmxpbmUtYmxvY2s7XHJcbiAgICAgICAgICB2ZXJ0aWNhbC1hbGlnbjogdG9wO1xyXG4gICAgICAgIH1cclxuXHJcbiAgICAgICAgLmltZy1jb250YWluZXIge1xyXG4gICAgICAgICAgaGVpZ2h0OiA1MCU7XHJcbiAgICAgICAgICBkaXNwbGF5OiBpbmxpbmUtYmxvY2s7XHJcbiAgICAgICAgICB2ZXJ0aWNhbC1hbGlnbjogbWlkZGxlO1xyXG5cclxuICAgICAgICAgIC5pbWcge1xyXG4gICAgICAgICAgICBtYXJnaW46IDAgYXV0bztcclxuICAgICAgICAgICAgZGlzcGxheTogaW5saW5lLWJsb2NrO1xyXG4gICAgICAgICAgICB2ZXJ0aWNhbC1hbGlnbjogbWlkZGxlO1xyXG4gICAgICAgICAgfVxyXG4gICAgICAgIH1cclxuXHJcbiAgICAgICAgLmJvdHRvbSB7XHJcbiAgICAgICAgICBoZWlnaHQ6IDMwJTtcclxuICAgICAgICAgIGRpc3BsYXk6IGlubGluZS1ibG9jaztcclxuICAgICAgICAgIHZlcnRpY2FsLWFsaWduOiBib3R0b207XHJcblxyXG4gICAgICAgICAgLnAge1xyXG4gICAgICAgICAgICBwYWRkaW5nOiA1cHg7XHJcbiAgICAgICAgICB9XHJcblxyXG4gICAgICAgICAgLmJ1dHRvbiB7XHJcbiAgICAgICAgICAgIHBhZGRpbmc6IDVweDtcclxuICAgICAgICAgIH1cclxuICAgICAgICB9XHJcbiAgICAgIH1cclxuICAgIH1cclxuICB9XHJcbn1cclxuIl19 */"
+module.exports = "/* CSS for services-list */\n#img1 {\n  width: 100%;\n  height: 100%;\n  text-align: center;\n  display: block; }\n.search {\n  margin-top: 20px;\n  width: 100%;\n  height: 10%;\n  text-align: center;\n  display: block; }\n.search .mat-form-field {\n    padding-top: 10px;\n    padding-bottom: 10px; }\n.content {\n  width: 100%;\n  height: 90%;\n  text-align: center;\n  display: block; }\n.content .container {\n    min-width: 75px;\n    max-width: 250px;\n    width: 100%;\n    height: 485px;\n    margin: 0 auto;\n    margin-top: 50px;\n    text-align: center;\n    display: inline-block;\n    margin-left: 30px;\n    margin-right: 30px; }\n.content .container .service {\n      width: 100%;\n      float: left;\n      text-align: center;\n      display: block;\n      box-shadow: 0 0 25px rgba(0, 0, 0, 0.2); }\n.content .container .service .mat-card {\n        height: 485px; }\n.content .container .service .mat-card .top {\n          height: 20%;\n          display: inline-block;\n          vertical-align: top; }\n.content .container .service .mat-card .img-container {\n          height: 50%;\n          display: inline-block;\n          vertical-align: middle; }\n.content .container .service .mat-card .img-container .img {\n            margin: 0 auto;\n            display: inline-block;\n            vertical-align: middle; }\n.content .container .service .mat-card .bottom {\n          height: 30%;\n          display: inline-block;\n          vertical-align: bottom; }\n.content .container .service .mat-card .bottom .bottom-container {\n            height: 66%;\n            display: inline-block;\n            vertical-align: bottom; }\n.content .container .service .mat-card .bottom .bottom-container .p {\n              padding: 5px;\n              display: inline-block;\n              vertical-align: bottom; }\n.content .container .service .mat-card .bottom .bottom-button {\n            height: 33%;\n            display: inline-block;\n            vertical-align: bottom; }\n#buttonS {\n  display: inline-block;\n  vertical-align: bottom;\n  margin: 16px; }\n.middle {\n  transition: .5s ease;\n  opacity: 0;\n  position: absolute;\n  top: 50%;\n  left: 50%;\n  -webkit-transform: translate(-50%, -50%);\n          transform: translate(-50%, -50%);\n  -ms-transform: translate(-50%, -50%);\n  text-align: center; }\n.img-container:hover .img {\n  opacity: 0.3; }\n.img-container:hover .middle {\n  opacity: 1; }\n.buttons {\n  padding: 16px 32px; }\n.buttons .mat-raised-button {\n    margin: 20px; }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvc2VydmljZXMtbGlzdC9DOlxcVXNlcnNcXE1hdHRoZXdcXERlc2t0b3BcXFByb2pldF9XRUIvc3JjXFxhcHBcXHNlcnZpY2VzLWxpc3RcXHNlcnZpY2VzLWxpc3QuY29tcG9uZW50LnNjc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsMEJBQUE7QUFFQTtFQUNFLFdBQVc7RUFDWCxZQUFZO0VBQ1osa0JBQWtCO0VBQ2xCLGNBQWMsRUFBQTtBQUdoQjtFQUNFLGdCQUFnQjtFQUNoQixXQUFXO0VBQ1gsV0FBVztFQUNYLGtCQUFrQjtFQUNsQixjQUFjLEVBQUE7QUFMaEI7SUFPSSxpQkFBaUI7SUFDakIsb0JBQW9CLEVBQUE7QUFHeEI7RUFDRSxXQUFXO0VBQ1gsV0FBVztFQUNYLGtCQUFrQjtFQUNsQixjQUFjLEVBQUE7QUFKaEI7SUFPSSxlQUFlO0lBQ2YsZ0JBQWdCO0lBQ2hCLFdBQVc7SUFDWCxhQUFhO0lBQ2IsY0FBYztJQUNkLGdCQUFnQjtJQUNoQixrQkFBa0I7SUFDbEIscUJBQXFCO0lBQ3JCLGlCQUFpQjtJQUNqQixrQkFBa0IsRUFBQTtBQWhCdEI7TUFtQk0sV0FBVztNQUNYLFdBQVc7TUFDWCxrQkFBa0I7TUFDbEIsY0FBYztNQUNkLHVDQUE4QixFQUFBO0FBdkJwQztRQTBCUSxhQUFhLEVBQUE7QUExQnJCO1VBNkJVLFdBQVc7VUFDWCxxQkFBcUI7VUFDckIsbUJBQW1CLEVBQUE7QUEvQjdCO1VBbUNVLFdBQVc7VUFDWCxxQkFBcUI7VUFDckIsc0JBQXNCLEVBQUE7QUFyQ2hDO1lBd0NZLGNBQWM7WUFDZCxxQkFBcUI7WUFDckIsc0JBQXNCLEVBQUE7QUExQ2xDO1VBK0NVLFdBQVc7VUFDWCxxQkFBcUI7VUFDckIsc0JBQXNCLEVBQUE7QUFqRGhDO1lBbURZLFdBQVc7WUFDWCxxQkFBcUI7WUFDckIsc0JBQXNCLEVBQUE7QUFyRGxDO2NBd0RjLFlBQVk7Y0FDWixxQkFBcUI7Y0FDckIsc0JBQXNCLEVBQUE7QUExRHBDO1lBOERZLFdBQVc7WUFDWCxxQkFBcUI7WUFDckIsc0JBQXNCLEVBQUE7QUFTbEM7RUFDRSxxQkFBcUI7RUFDckIsc0JBQXNCO0VBQ3RCLFlBQVksRUFBQTtBQUdkO0VBQ0Usb0JBQW9CO0VBQ3BCLFVBQVU7RUFDVixrQkFBa0I7RUFDbEIsUUFBUTtFQUNSLFNBQVM7RUFDVCx3Q0FBK0I7VUFBL0IsZ0NBQStCO0VBQy9CLG9DQUFtQztFQUNuQyxrQkFBa0IsRUFBQTtBQUdwQjtFQUNFLFlBQVksRUFBQTtBQUdkO0VBQ0UsVUFBVSxFQUFBO0FBSVo7RUFDRSxrQkFBa0IsRUFBQTtBQURwQjtJQUdJLFlBQVksRUFBQSIsImZpbGUiOiJzcmMvYXBwL3NlcnZpY2VzLWxpc3Qvc2VydmljZXMtbGlzdC5jb21wb25lbnQuc2NzcyIsInNvdXJjZXNDb250ZW50IjpbIi8qIENTUyBmb3Igc2VydmljZXMtbGlzdCAqL1xyXG5cclxuI2ltZzF7XHJcbiAgd2lkdGg6IDEwMCU7XHJcbiAgaGVpZ2h0OiAxMDAlO1xyXG4gIHRleHQtYWxpZ246IGNlbnRlcjtcclxuICBkaXNwbGF5OiBibG9jaztcclxufVxyXG5cclxuLnNlYXJjaHtcclxuICBtYXJnaW4tdG9wOiAyMHB4O1xyXG4gIHdpZHRoOiAxMDAlO1xyXG4gIGhlaWdodDogMTAlO1xyXG4gIHRleHQtYWxpZ246IGNlbnRlcjtcclxuICBkaXNwbGF5OiBibG9jaztcclxuICAubWF0LWZvcm0tZmllbGR7XHJcbiAgICBwYWRkaW5nLXRvcDogMTBweDtcclxuICAgIHBhZGRpbmctYm90dG9tOiAxMHB4O1xyXG4gIH1cclxufVxyXG4uY29udGVudCB7XHJcbiAgd2lkdGg6IDEwMCU7XHJcbiAgaGVpZ2h0OiA5MCU7XHJcbiAgdGV4dC1hbGlnbjogY2VudGVyO1xyXG4gIGRpc3BsYXk6IGJsb2NrO1xyXG5cclxuICAuY29udGFpbmVyIHtcclxuICAgIG1pbi13aWR0aDogNzVweDtcclxuICAgIG1heC13aWR0aDogMjUwcHg7XHJcbiAgICB3aWR0aDogMTAwJTtcclxuICAgIGhlaWdodDogNDg1cHg7XHJcbiAgICBtYXJnaW46IDAgYXV0bztcclxuICAgIG1hcmdpbi10b3A6IDUwcHg7XHJcbiAgICB0ZXh0LWFsaWduOiBjZW50ZXI7XHJcbiAgICBkaXNwbGF5OiBpbmxpbmUtYmxvY2s7XHJcbiAgICBtYXJnaW4tbGVmdDogMzBweDtcclxuICAgIG1hcmdpbi1yaWdodDogMzBweDtcclxuXHJcbiAgICAuc2VydmljZSB7XHJcbiAgICAgIHdpZHRoOiAxMDAlO1xyXG4gICAgICBmbG9hdDogbGVmdDtcclxuICAgICAgdGV4dC1hbGlnbjogY2VudGVyO1xyXG4gICAgICBkaXNwbGF5OiBibG9jaztcclxuICAgICAgYm94LXNoYWRvdzogMCAwIDI1cHggcmdiYSgjMDAwLCAwLjIpO1xyXG5cclxuICAgICAgLm1hdC1jYXJkIHtcclxuICAgICAgICBoZWlnaHQ6IDQ4NXB4O1xyXG5cclxuICAgICAgICAudG9wIHtcclxuICAgICAgICAgIGhlaWdodDogMjAlO1xyXG4gICAgICAgICAgZGlzcGxheTogaW5saW5lLWJsb2NrO1xyXG4gICAgICAgICAgdmVydGljYWwtYWxpZ246IHRvcDtcclxuICAgICAgICB9XHJcblxyXG4gICAgICAgIC5pbWctY29udGFpbmVyIHtcclxuICAgICAgICAgIGhlaWdodDogNTAlO1xyXG4gICAgICAgICAgZGlzcGxheTogaW5saW5lLWJsb2NrO1xyXG4gICAgICAgICAgdmVydGljYWwtYWxpZ246IG1pZGRsZTtcclxuXHJcbiAgICAgICAgICAuaW1nIHtcclxuICAgICAgICAgICAgbWFyZ2luOiAwIGF1dG87XHJcbiAgICAgICAgICAgIGRpc3BsYXk6IGlubGluZS1ibG9jaztcclxuICAgICAgICAgICAgdmVydGljYWwtYWxpZ246IG1pZGRsZTtcclxuICAgICAgICAgIH1cclxuICAgICAgICB9XHJcblxyXG4gICAgICAgIC5ib3R0b20ge1xyXG4gICAgICAgICAgaGVpZ2h0OiAzMCU7XHJcbiAgICAgICAgICBkaXNwbGF5OiBpbmxpbmUtYmxvY2s7XHJcbiAgICAgICAgICB2ZXJ0aWNhbC1hbGlnbjogYm90dG9tO1xyXG4gICAgICAgICAgLmJvdHRvbS1jb250YWluZXJ7XHJcbiAgICAgICAgICAgIGhlaWdodDogNjYlO1xyXG4gICAgICAgICAgICBkaXNwbGF5OiBpbmxpbmUtYmxvY2s7XHJcbiAgICAgICAgICAgIHZlcnRpY2FsLWFsaWduOiBib3R0b207XHJcblxyXG4gICAgICAgICAgICAucCB7XHJcbiAgICAgICAgICAgICAgcGFkZGluZzogNXB4O1xyXG4gICAgICAgICAgICAgIGRpc3BsYXk6IGlubGluZS1ibG9jaztcclxuICAgICAgICAgICAgICB2ZXJ0aWNhbC1hbGlnbjogYm90dG9tO1xyXG4gICAgICAgICAgICB9XHJcbiAgICAgICAgICB9XHJcbiAgICAgICAgICAuYm90dG9tLWJ1dHRvbntcclxuICAgICAgICAgICAgaGVpZ2h0OiAzMyU7XHJcbiAgICAgICAgICAgIGRpc3BsYXk6IGlubGluZS1ibG9jaztcclxuICAgICAgICAgICAgdmVydGljYWwtYWxpZ246IGJvdHRvbTtcclxuICAgICAgICAgIH1cclxuICAgICAgICB9XHJcbiAgICAgIH1cclxuICAgIH1cclxuICB9XHJcbn1cclxuXHJcblxyXG4jYnV0dG9uUyB7XHJcbiAgZGlzcGxheTogaW5saW5lLWJsb2NrO1xyXG4gIHZlcnRpY2FsLWFsaWduOiBib3R0b207XHJcbiAgbWFyZ2luOiAxNnB4O1xyXG59XHJcblxyXG4ubWlkZGxlIHtcclxuICB0cmFuc2l0aW9uOiAuNXMgZWFzZTtcclxuICBvcGFjaXR5OiAwO1xyXG4gIHBvc2l0aW9uOiBhYnNvbHV0ZTtcclxuICB0b3A6IDUwJTtcclxuICBsZWZ0OiA1MCU7XHJcbiAgdHJhbnNmb3JtOiB0cmFuc2xhdGUoLTUwJSwtNTAlKTtcclxuICAtbXMtdHJhbnNmb3JtOiB0cmFuc2xhdGUoLTUwJSwtNTAlKTtcclxuICB0ZXh0LWFsaWduOiBjZW50ZXI7XHJcbn1cclxuXHJcbi5pbWctY29udGFpbmVyOmhvdmVyIC5pbWcge1xyXG4gIG9wYWNpdHk6IDAuMztcclxufVxyXG5cclxuLmltZy1jb250YWluZXI6aG92ZXIgLm1pZGRsZSB7XHJcbiAgb3BhY2l0eTogMTtcclxufVxyXG5cclxuXHJcbi5idXR0b25zIHtcclxuICBwYWRkaW5nOiAxNnB4IDMycHg7XHJcbiAgLm1hdC1yYWlzZWQtYnV0dG9uIHtcclxuICAgIG1hcmdpbjogMjBweDtcclxuICB9XHJcbn1cclxuXHJcbiJdfQ== */"
 
 /***/ }),
 
@@ -1299,6 +1309,15 @@ var ServicesListComponent = /** @class */ (function () {
         }, function (err) {
             console.error((err));
         });
+    };
+    ServicesListComponent.prototype.onDelete = function (name, image) {
+        var _this = this;
+        this.services.delete(name, image).subscribe(function () {
+            _this.ngOnInit();
+        });
+    };
+    ServicesListComponent.prototype.isAdmin = function () {
+        return this.auth.isLoggedIn() && this.auth.isAdmin();
     };
     // We get the libelle of a service type with his id
     ServicesListComponent.prototype.GetLibelle = function (type, i) {
@@ -1352,6 +1371,160 @@ var ServicesListComponent = /** @class */ (function () {
             _angular_router__WEBPACK_IMPORTED_MODULE_6__["Router"]])
     ], ServicesListComponent);
     return ServicesListComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/services-modify/services-modify.component.html":
+/*!****************************************************************!*\
+  !*** ./src/app/services-modify/services-modify.component.html ***!
+  \****************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<!-- We use two way data binding to display the preview of the form while the user is entering the data -->\n\n<!-- Form side -->\n<div class=\"container\">\n  <div class=\"form\">\n    <mat-card>\n      <h1>Form</h1>\n      <form [formGroup]=\"serviceForm\" (ngSubmit)=\"onSubmitForm()\">\n        <button mat-icon-button type=\"submit\" (click)=\"openDialog()\"> <!-- Open the dialog page for the download of a file -->\n          <mat-icon color=\"accent\">cloud_upload</mat-icon>\n        </button>\n        <mat-form-field appearance=\"outline\">\n          <mat-label>Service name</mat-label>\n          <input matInput placeholder=\"Enter service name\" formControlName=\"name\" >\n        </mat-form-field>\n        <mat-form-field>\n          <mat-label>Services Types</mat-label>\n          <mat-select formControlName=\"type\">\n            <mat-option>-- None --</mat-option>\n            <mat-optgroup *ngFor=\"let group of TypesGroups\" [label]=\"group.name\"\n                          [disabled]=\"group.disabled\">\n              <mat-option *ngFor=\"let type of group.type\" [value]=\"type\">\n                {{type.libelle}}\n              </mat-option>\n            </mat-optgroup>\n          </mat-select>\n        </mat-form-field>\n        <mat-slider [max]=\"50\" [min]=\"0\" [step]=\"0.5\" [thumbLabel]=\"true\" formControlName=\"price\" ></mat-slider>\n        <mat-form-field class=\"example-full-width\">\n          <textarea matInput #message maxlength=\"42\" placeholder=\"Description\" formControlName=\"desc\" ></textarea>\n          <mat-hint align=\"start\"><strong>Describe the service</strong> </mat-hint>\n          <mat-hint align=\"end\">{{message.value.length}} / 42</mat-hint>\n        </mat-form-field>\n        <button id=\"button1\" mat-raised-button color=\"accent\" type=\"submit\" [disabled]=\"serviceForm.invalid\">Submit</button>\n      </form>\n    </mat-card>\n  </div>\n\n  <!-- Preview side -->\n  <div class=\"preview\">\n    <mat-card>\n      <h1>Preview</h1>\n\n      <h2>{{serviceForm.value['name']}}</h2>\n      <h4>{{serviceForm.value['type'].libelle}}</h4>\n      <img id=\"img1\" [src]=\"infos.image\">\n      <h4>{{serviceForm.value['price']}} €</h4>\n      <p>{{serviceForm.value['desc']}}</p>\n    </mat-card>\n  </div>\n</div>\n\n"
+
+/***/ }),
+
+/***/ "./src/app/services-modify/services-modify.component.scss":
+/*!****************************************************************!*\
+  !*** ./src/app/services-modify/services-modify.component.scss ***!
+  \****************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "/* CSS for services component */\n#button1 {\n  margin-top: 30px;\n  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); }\n#img1 {\n  width: 90%;\n  text-align: center;\n  display: block; }\nimg {\n  margin: 0 auto;\n  display: block; }\n.container {\n  min-width: 150px;\n  max-width: 500px;\n  width: 100%;\n  height: 485px;\n  margin: 0 auto;\n  margin-top: 50px;\n  text-align: center; }\n.container .form {\n    width: 50%;\n    float: left;\n    text-align: center;\n    display: block;\n    box-shadow: 0 0 25px rgba(0, 0, 0, 0.2); }\n.container .form .button {\n      margin-top: 50px; }\n.container .form .mat-icon {\n      font-size: 64px;\n      margin: 0 auto;\n      height: 64px;\n      width: 64px;\n      margin-bottom: 30px; }\n.container .form .mat-icon:hover {\n        opacity: 0.8; }\n.container .form .textarea {\n      margin-top: 30px; }\n.container .form .mat-slider {\n      width: 90%; }\n.container .preview {\n    width: 50%;\n    float: left;\n    text-align: center;\n    display: block;\n    box-shadow: 0 0 25px rgba(0, 0, 0, 0.2); }\n.container .preview .h1 {\n      padding-top: 5px; }\n.container .preview .h1 .h2 {\n        padding-top: 5px; }\nmat-icon {\n  font-size: 64px;\n  margin: 0 auto;\n  height: 64px;\n  width: 64px; }\nmat-icon:hover {\n    opacity: 0.8; }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvc2VydmljZXMtbW9kaWZ5L0M6XFxVc2Vyc1xcTWF0dGhld1xcRGVza3RvcFxcUHJvamV0X1dFQi9zcmNcXGFwcFxcc2VydmljZXMtbW9kaWZ5XFxzZXJ2aWNlcy1tb2RpZnkuY29tcG9uZW50LnNjc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsK0JBQUE7QUFDQTtFQUNFLGdCQUFnQjtFQUNoQix1Q0FBOEIsRUFBQTtBQUVoQztFQUNFLFVBQVU7RUFDVixrQkFBa0I7RUFDbEIsY0FBYyxFQUFBO0FBR2hCO0VBQ0UsY0FBYztFQUNkLGNBQWMsRUFBQTtBQUdoQjtFQUNFLGdCQUFnQjtFQUNoQixnQkFBZ0I7RUFDaEIsV0FBWTtFQUNaLGFBQWE7RUFDYixjQUFjO0VBQ2QsZ0JBQWdCO0VBQ2hCLGtCQUFrQixFQUFBO0FBUHBCO0lBVUksVUFBVTtJQUNWLFdBQVc7SUFDWCxrQkFBa0I7SUFDbEIsY0FBYztJQUNkLHVDQUE4QixFQUFBO0FBZGxDO01BZ0JNLGdCQUFlLEVBQUE7QUFoQnJCO01BbUJNLGVBQWU7TUFDZixjQUFjO01BQ2QsWUFBWTtNQUNaLFdBQVc7TUFDWCxtQkFBbUIsRUFBQTtBQXZCekI7UUF5QlEsWUFBWSxFQUFBO0FBekJwQjtNQTZCTSxnQkFBZ0IsRUFBQTtBQTdCdEI7TUFnQ00sVUFBVSxFQUFBO0FBaENoQjtJQW9DSSxVQUFVO0lBQ1YsV0FBVztJQUNYLGtCQUFrQjtJQUNsQixjQUFjO0lBQ2QsdUNBQThCLEVBQUE7QUF4Q2xDO01BMENNLGdCQUFnQixFQUFBO0FBMUN0QjtRQTRDUSxnQkFBZ0IsRUFBQTtBQU14QjtFQUNFLGVBQWU7RUFDZixjQUFjO0VBQ2QsWUFBWTtFQUNaLFdBQVcsRUFBQTtBQUpiO0lBTUksWUFBWSxFQUFBIiwiZmlsZSI6InNyYy9hcHAvc2VydmljZXMtbW9kaWZ5L3NlcnZpY2VzLW1vZGlmeS5jb21wb25lbnQuc2NzcyIsInNvdXJjZXNDb250ZW50IjpbIi8qIENTUyBmb3Igc2VydmljZXMgY29tcG9uZW50ICovXHJcbiNidXR0b24xe1xyXG4gIG1hcmdpbi10b3A6IDMwcHg7XHJcbiAgYm94LXNoYWRvdzogMCAwIDEwcHggcmdiYSgjMDAwLCAwLjIpO1xyXG59XHJcbiNpbWcxe1xyXG4gIHdpZHRoOiA5MCU7XHJcbiAgdGV4dC1hbGlnbjogY2VudGVyO1xyXG4gIGRpc3BsYXk6IGJsb2NrO1xyXG59XHJcblxyXG5pbWd7XHJcbiAgbWFyZ2luOiAwIGF1dG87XHJcbiAgZGlzcGxheTogYmxvY2s7XHJcbn1cclxuXHJcbi5jb250YWluZXIge1xyXG4gIG1pbi13aWR0aDogMTUwcHg7XHJcbiAgbWF4LXdpZHRoOiA1MDBweDtcclxuICB3aWR0aDogMTAwJSA7XHJcbiAgaGVpZ2h0OiA0ODVweDtcclxuICBtYXJnaW46IDAgYXV0bztcclxuICBtYXJnaW4tdG9wOiA1MHB4O1xyXG4gIHRleHQtYWxpZ246IGNlbnRlcjtcclxuXHJcbiAgLmZvcm0ge1xyXG4gICAgd2lkdGg6IDUwJTtcclxuICAgIGZsb2F0OiBsZWZ0O1xyXG4gICAgdGV4dC1hbGlnbjogY2VudGVyO1xyXG4gICAgZGlzcGxheTogYmxvY2s7XHJcbiAgICBib3gtc2hhZG93OiAwIDAgMjVweCByZ2JhKCMwMDAsIDAuMik7XHJcbiAgICAuYnV0dG9ue1xyXG4gICAgICBtYXJnaW4tdG9wOjUwcHg7XHJcbiAgICB9XHJcbiAgICAubWF0LWljb257XHJcbiAgICAgIGZvbnQtc2l6ZTogNjRweDtcclxuICAgICAgbWFyZ2luOiAwIGF1dG87XHJcbiAgICAgIGhlaWdodDogNjRweDtcclxuICAgICAgd2lkdGg6IDY0cHg7XHJcbiAgICAgIG1hcmdpbi1ib3R0b206IDMwcHg7XHJcbiAgICAgICY6aG92ZXJ7XHJcbiAgICAgICAgb3BhY2l0eTogMC44O1xyXG4gICAgICB9XHJcbiAgICB9XHJcbiAgICAudGV4dGFyZWF7XHJcbiAgICAgIG1hcmdpbi10b3A6IDMwcHg7XHJcbiAgICB9XHJcbiAgICAubWF0LXNsaWRlcntcclxuICAgICAgd2lkdGg6IDkwJTtcclxuICAgIH1cclxuICB9XHJcbiAgLnByZXZpZXcge1xyXG4gICAgd2lkdGg6IDUwJTtcclxuICAgIGZsb2F0OiBsZWZ0O1xyXG4gICAgdGV4dC1hbGlnbjogY2VudGVyO1xyXG4gICAgZGlzcGxheTogYmxvY2s7XHJcbiAgICBib3gtc2hhZG93OiAwIDAgMjVweCByZ2JhKCMwMDAsIDAuMik7XHJcbiAgICAuaDF7XHJcbiAgICAgIHBhZGRpbmctdG9wOiA1cHg7XHJcbiAgICAgIC5oMntcclxuICAgICAgICBwYWRkaW5nLXRvcDogNXB4O1xyXG4gICAgICB9XHJcbiAgICB9XHJcbiAgfVxyXG59XHJcblxyXG5tYXQtaWNvbntcclxuICBmb250LXNpemU6IDY0cHg7XHJcbiAgbWFyZ2luOiAwIGF1dG87XHJcbiAgaGVpZ2h0OiA2NHB4O1xyXG4gIHdpZHRoOiA2NHB4O1xyXG4gICY6aG92ZXJ7XHJcbiAgICBvcGFjaXR5OiAwLjg7XHJcbiAgfVxyXG59XHJcbiJdfQ== */"
+
+/***/ }),
+
+/***/ "./src/app/services-modify/services-modify.component.ts":
+/*!**************************************************************!*\
+  !*** ./src/app/services-modify/services-modify.component.ts ***!
+  \**************************************************************/
+/*! exports provided: ServicesModifyComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ServicesModifyComponent", function() { return ServicesModifyComponent; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
+/* harmony import */ var _services_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../services.service */ "./src/services.service.ts");
+/* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm5/forms.js");
+/* harmony import */ var _services_services_component__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../services/services.component */ "./src/app/services/services.component.ts");
+/* harmony import */ var _angular_material__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/material */ "./node_modules/@angular/material/esm5/material.es5.js");
+
+
+
+
+
+
+
+var ServicesModifyComponent = /** @class */ (function () {
+    function ServicesModifyComponent(route, router, services, dialog, formBuilder) {
+        this.route = route;
+        this.router = router;
+        this.services = services;
+        this.dialog = dialog;
+        this.formBuilder = formBuilder;
+        this.TypesGroups = [];
+        // We store the infos of the service that we will create
+        this.infos = {
+            name: '',
+            type: '',
+            desc: '',
+            price: 0,
+            image: 'assets/images/service.jpg',
+        };
+        this.SubmitBlocked = false;
+    }
+    ServicesModifyComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.initForm();
+        this.services.getTypes().subscribe(function (service) {
+            var add = {
+                name: 'Ménager',
+                type: service
+            };
+            console.log(add);
+            _this.TypesGroups.push(add);
+        }, function (err) {
+            console.error((err));
+        });
+        var id = this.route.snapshot.paramMap.get('id');
+        this.services.getAservice(id).subscribe(function (service) {
+            _this.infos.image = service.image;
+            _this.OldImage = service.image;
+            console.log(service);
+            _this.idService = service.idService;
+            _this.serviceForm.patchValue({
+                name: service.name,
+                type: { libelle: service.libelle,
+                    idType: service.idType },
+                desc: service.desc,
+                price: service.price
+            });
+        });
+    };
+    // we verify that all the infos of the form are entered
+    ServicesModifyComponent.prototype.initForm = function () {
+        this.serviceForm = this.formBuilder.group({
+            name: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_4__["Validators"].required],
+            type: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_4__["Validators"].required],
+            desc: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_4__["Validators"].required],
+            price: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_4__["Validators"].required]
+        });
+    };
+    // We collect the info of the service and then we submit them to the server and then we navigate the admin to the service list
+    ServicesModifyComponent.prototype.onSubmitForm = function () {
+        var _this = this;
+        var formValue = this.serviceForm.value;
+        this.infos.name = formValue.name;
+        this.infos.type = formValue.type.idType;
+        this.infos.desc = formValue.desc;
+        this.infos.price = formValue.price;
+        if (this.fileUrl && this.fileUrl !== '') {
+            this.infos.image = this.fileUrl;
+        }
+        if (!this.SubmitBlocked) {
+            this.services.modifyService(this.OldImage, this.infos, this.idService).then(function (res) {
+                _this.router.navigate(['']);
+            });
+        }
+    };
+    // If the admin click on the upload button if open a dialog page in which he will be able to download an image for the order
+    ServicesModifyComponent.prototype.openDialog = function () {
+        var _this = this;
+        this.SubmitBlocked = true;
+        var dialogRef = this.dialog.open(_services_services_component__WEBPACK_IMPORTED_MODULE_5__["UploadServiceComponent"], {
+            width: '250px',
+            data: { file: this.fileUrl }
+        });
+        // we store the image url which was upload by the admin
+        dialogRef.afterClosed().subscribe(function (result) {
+            _this.SubmitBlocked = false;
+            console.log('The dialog was closed');
+            if (result) {
+                _this.infos.image = result;
+            }
+        });
+    };
+    ServicesModifyComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+            selector: 'app-services-modify',
+            template: __webpack_require__(/*! ./services-modify.component.html */ "./src/app/services-modify/services-modify.component.html"),
+            styles: [__webpack_require__(/*! ./services-modify.component.scss */ "./src/app/services-modify/services-modify.component.scss")]
+        }),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_angular_router__WEBPACK_IMPORTED_MODULE_2__["ActivatedRoute"],
+            _angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"],
+            _services_service__WEBPACK_IMPORTED_MODULE_3__["ServicesService"],
+            _angular_material__WEBPACK_IMPORTED_MODULE_6__["MatDialog"],
+            _angular_forms__WEBPACK_IMPORTED_MODULE_4__["FormBuilder"]])
+    ], ServicesModifyComponent);
+    return ServicesModifyComponent;
 }());
 
 
@@ -1456,7 +1629,7 @@ var ServicesComponent = /** @class */ (function () {
         }
         if (this.infos.name && this.infos.type && this.infos.desc && this.infos.type) {
             this.services.addService2(this.infos).then(function (res) {
-                _this.router.navigate(['/services-list']);
+                _this.router.navigate(['']);
             });
         }
     };
@@ -2376,11 +2549,32 @@ var ServicesService = /** @class */ (function () {
             });
         });
     };
+    ServicesService.prototype.modifyService = function (image, service, id) {
+        var _this = this;
+        if (image !== 'assets/images/service.jpg') {
+            var storageRef = firebase__WEBPACK_IMPORTED_MODULE_4__["storage"]().refFromURL(image);
+            storageRef.delete().then(function () {
+                console.log('Last image removed');
+            }, function (error) {
+                console.log('Could not remove photo! : ' + error);
+            });
+        }
+        return new Promise(function (resolve) {
+            console.log(service);
+            _this.http.put('/api/modifyService/' + id, service).subscribe(function () {
+                console.log('service modified');
+                resolve();
+            });
+        });
+    };
     ServicesService.prototype.getTypes = function () {
         return this.http.get('/api/typeServices');
     };
     ServicesService.prototype.getServices = function () {
         return this.http.get('/api/getServices');
+    };
+    ServicesService.prototype.getAservice = function (id) {
+        return this.http.get('/api/getService/' + id);
     };
     ServicesService.prototype.LibelleOfServices = function (idType) {
         return this.http.get('/api/LibelleOfServices/' + idType);
@@ -2400,6 +2594,17 @@ var ServicesService = /** @class */ (function () {
                 resolve(upload.snapshot.ref.getDownloadURL());
             });
         });
+    };
+    ServicesService.prototype.delete = function (name, image) {
+        if (image !== 'assets/images/service.jpg') {
+            var storageRef = firebase__WEBPACK_IMPORTED_MODULE_4__["storage"]().refFromURL(image);
+            storageRef.delete().then(function () {
+                console.log('Image removed');
+            }, function (error) {
+                console.log('Could not remove photo! : ' + error);
+            });
+        }
+        return this.http.delete('/api/deleteServices/' + name);
     };
     ServicesService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])(),

@@ -16,11 +16,21 @@
         </div>
         <div class="img-container">
           <img id="img1" [src]="service.image">
+          <div class="middle" *ngIf="isAdmin()">
+            <div class="buttons">
+              <button mat-raised-button color="primary" [routerLink]="['/services-modify',service.name]">Modifier</button>
+              <button mat-raised-button color="warn" (click)="onDelete(service.name, service.image)">Supprimer</button>
+            </div>
+          </div>
         </div>
         <div class="bottom">
-          <p>{{service.price}} €</p>
-          <p>{{service.desc}}</p>
-          <button mat-raised-button color="accent" type="submit" (click)="OrderOne(service.name)">Order</button>
+          <div class="bottom-container">
+            <p>{{service.price}} €</p>
+            <p>{{service.desc}}</p>
+          </div>
+          <div class="bottom-button">
+            <button id="buttonS" mat-raised-button color="accent" type="submit" (click)="OrderOne(service.name)">Order</button>
+          </div>
         </div>
       </mat-card>
     </div>

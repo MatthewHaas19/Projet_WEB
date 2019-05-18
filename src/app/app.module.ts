@@ -36,12 +36,14 @@ import { WorkerRegisterComponent } from './worker-register/worker-register.compo
 import {OrderInfoDialogComponent, UploadWorkerProfileComponent, WorkerProfileComponent} from './worker-profile/worker-profile.component';
 import { OrderPendingComponent } from './order-pending/order-pending.component';
 import {MatSnackBarModule} from '@angular/material';
+import { ServicesModifyComponent } from './services-modify/services-modify.component';
 
 const appRoutes: Routes = [
   { path: 'register', component: RegisterComponent},
   { path: 'home', component: HomeComponent},
   { path: 'login', component: LoginComponent},
   { path: 'services', component: ServicesComponent, canActivate: [AdminGuardService]},
+  { path: 'services-modify/:id', component: ServicesModifyComponent, canActivate: [AdminGuardService]},
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuardService]},
   { path: 'cart', component: CartComponent, canActivate: [AuthGuardService]},
   { path: 'worker-login', component: WorkerLoginComponent},
@@ -69,7 +71,8 @@ const appRoutes: Routes = [
     OrderPendingComponent,
     OrderInfoDialogComponent,
     UploadProfileComponent,
-    UploadWorkerProfileComponent
+    UploadWorkerProfileComponent,
+    ServicesModifyComponent
   ],
   imports: [
     BrowserModule,

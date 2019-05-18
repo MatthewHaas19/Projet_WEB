@@ -92,7 +92,7 @@ export class ServicesComponent implements OnInit {
 
     if (this.infos.name && this.infos.type && this.infos.desc && this.infos.type) {
       this.services.addService2(this.infos).then((res) => {
-        this.router.navigate(['/services-list']);
+        this.router.navigate(['']);
       });
     }
 
