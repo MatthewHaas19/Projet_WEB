@@ -1,14 +1,29 @@
 <!-- HTML For the service list, we display all of the infos for each services using the directive ngFor -->
-
-<div class="container">
-  <div class="service" *ngFor="let service of this.MyServices">
-    <mat-card>
-      <h2>{{service.name}}</h2>
-      <h4>{{service.idType}}</h4>
-      <img id="img1" [src]="service.image">
-      <p>{{service.price}} €</p>
-      <p>{{service.desc}}</p>
-      <button mat-raised-button color="accent" type="submit" (click)="OrderOne(service.name)">Order</button>
-    </mat-card>
+<div class="search">
+  <mat-form-field appearance="outline" color="accent" >
+    <mat-label>Find a service</mat-label>
+    <input matInput placeholder="..." type="text" #myInput [(ngModel)]="name" (input)="Search()" >
+    <mat-icon matSuffix>search</mat-icon>
+  </mat-form-field>
+</div>
+<div class="content">
+  <div class="container"*ngFor="let service of this.MyServices">
+    <div class="service" >
+      <mat-card>
+        <div class="top">
+          <h2>{{service.name}}</h2>
+          <h4>{{service.idType}}</h4>
+        </div>
+        <div class="img-container">
+          <img id="img1" [src]="service.image">
+        </div>
+        <div class="bottom">
+          <p>{{service.price}} €</p>
+          <p>{{service.desc}}</p>
+          <button mat-raised-button color="accent" type="submit" (click)="OrderOne(service.name)">Order</button>
+        </div>
+      </mat-card>
+    </div>
   </div>
+
 </div>

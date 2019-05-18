@@ -1,0 +1,174 @@
+#
+# There is insufficient memory for the Java Runtime Environment to continue.
+# Native memory allocation (malloc) failed to allocate 32744 bytes for ChunkPool::allocate
+# Possible reasons:
+#   The system is out of physical RAM or swap space
+#   The process is running with CompressedOops enabled, and the Java Heap may be blocking the growth of the native heap
+# Possible solutions:
+#   Reduce memory load on the system
+#   Increase physical memory or swap space
+#   Check if swap backing store is full
+#   Decrease Java heap size (-Xmx/-Xms)
+#   Decrease number of Java threads
+#   Decrease Java thread stack sizes (-Xss)
+#   Set larger code cache with -XX:ReservedCodeCacheSize=
+#   JVM is running with Unscaled Compressed Oops mode in which the Java heap is
+#     placed in the first 4GB address space. The Java Heap base address is the
+#     maximum limit for the native heap growth. Please use -XX:HeapBaseMinAddress
+#     to set the Java Heap base and to place the Java Heap above 4GB virtual address.
+# This output file may be truncated or incomplete.
+#
+#  Out of Memory Error (allocation.cpp:272), pid=5996, tid=0x0000000000001e90
+#
+# JRE version: OpenJDK Runtime Environment (8.0_202-b44) (build 1.8.0_202-release-1483-b44)
+# Java VM: OpenJDK 64-Bit Server VM (25.202-b44 mixed mode windows-amd64 compressed oops)
+# Failed to write core dump. Minidumps are not enabled by default on client versions of Windows
+#
+
+---------------  T H R E A D  ---------------
+
+Current thread (0x000000001436e800):  JavaThread "C2 CompilerThread0" daemon [_thread_in_vm, id=7824, stack(0x00000000159e0000,0x0000000015ae0000)]
+
+Stack: [0x00000000159e0000,0x0000000015ae0000]
+[error occurred during error reporting (printing stack bounds), id 0xc0000005]
+
+Native frames: (J=compiled Java code, j=interpreted, Vv=VM code, C=native code)
+
+
+---------------  P R O C E S S  ---------------
+
+Java Threads: ( => current thread )
+  0x0000000014372000 JavaThread "C2 CompilerThread1" daemon [_thread_blocked, id=9492, stack(0x0000000015ae0000,0x0000000015be0000)]
+=>0x000000001436e800 JavaThread "C2 CompilerThread0" daemon [_thread_in_vm, id=7824, stack(0x00000000159e0000,0x0000000015ae0000)]
+  0x000000001436a800 JavaThread "Attach Listener" daemon [_thread_blocked, id=11124, stack(0x00000000158e0000,0x00000000159e0000)]
+  0x0000000014369000 JavaThread "Signal Dispatcher" daemon [_thread_blocked, id=10016, stack(0x00000000157e0000,0x00000000158e0000)]
+  0x000000000300b800 JavaThread "Finalizer" daemon [_thread_blocked, id=7720, stack(0x00000000155d0000,0x00000000156d0000)]
+  0x0000000014359000 JavaThread "Reference Handler" daemon [_thread_blocked, id=4896, stack(0x00000000154d0000,0x00000000155d0000)]
+  0x00000000030de000 JavaThread "main" [_thread_in_vm, id=8756, stack(0x0000000002db0000,0x0000000002eb0000)]
+
+Other Threads:
+  0x0000000014336800 VMThread [stack: 0x00000000153d0000,0x00000000154d0000] [id=10520]
+
+VM state:not at safepoint (normal execution)
+
+VM Mutex/Monitor currently owned by a thread: None
+
+heap address: 0x00000000e1a00000, size: 486 MB, Compressed Oops mode: 32-bit
+Narrow klass base: 0x0000000000000000, Narrow klass shift: 3
+Compressed class space size: 1073741824 Address: 0x0000000100000000
+
+Heap:
+ PSYoungGen      total 9728K, used 365K [0x00000000f5e00000, 0x00000000f6880000, 0x0000000100000000)
+  eden space 8704K, 4% used [0x00000000f5e00000,0x00000000f5e5b478,0x00000000f6680000)
+  from space 1024K, 0% used [0x00000000f6780000,0x00000000f6780000,0x00000000f6880000)
+  to   space 1024K, 0% used [0x00000000f6680000,0x00000000f6680000,0x00000000f6780000)
+ ParOldGen       total 22016K, used 0K [0x00000000e1a00000, 0x00000000e2f80000, 0x00000000f5e00000)
+  object space 22016K, 0% used [0x00000000e1a00000,0x00000000e1a00000,0x00000000e2f80000)
+ Metaspace       used 2079K, capacity 4480K, committed 4480K, reserved 1056768K
+  class space    used 222K, capacity 384K, committed 384K, reserved 1048576K
+
+Card table byte_map: [0x00000000124a0000,0x00000000125a0000] byte_map_base: 0x0000000011d93000
+
+Marking Bits: (ParMarkBitMap*) 0x0000000075d39f30
+ Begin Bits: [0x00000000129a0000, 0x0000000013138000)
+ End Bits:   [0x0000000013138000, 0x00000000138d0000)
+
+Polling page: 0x0000000001330000
+
+CodeCache: size=245760Kb used=434Kb max_used=445Kb free=245325Kb
+ bounds [0x00000000030e0000, 0x0000000003350000, 0x00000000120e0000]
+ total_blobs=169 nmethods=0 adapters=127
+ compilation: enabled
+
+Compilation events (0 events):
+No events
+
+GC Heap History (0 events):
+No events
+
+Deoptimization events (0 events):
+No events
+
+Classes redefined (0 events):
+No events
+
+Internal exceptions (2 events):
+Event: 0.411 Thread 0x00000000030de000 Exception <a 'java/lang/NoSuchMethodError': Method sun.misc.Unsafe.defineClass(Ljava/lang/String;[BII)Ljava/lang/Class; name or signature does not match> (0x00000000f5e07cb0) thrown at [C:\BuildAgent\work\d169a5271ee8d3d2\hotspot\src\share\vm\prims\jni.cp
+Event: 0.412 Thread 0x00000000030de000 Exception <a 'java/lang/NoSuchMethodError': Method sun.misc.Unsafe.prefetchRead(Ljava/lang/Object;J)V name or signature does not match> (0x00000000f5e07f98) thrown at [C:\BuildAgent\work\d169a5271ee8d3d2\hotspot\src\share\vm\prims\jni.cpp, line 4012]
+
+Events (10 events):
+Event: 0.721 loading class sun/net/www/protocol/jar/Handler
+Event: 0.722 loading class sun/net/www/protocol/jar/Handler done
+Event: 0.724 loading class sun/misc/Launcher$AppClassLoader$1
+Event: 0.724 loading class sun/misc/Launcher$AppClassLoader$1 done
+Event: 0.750 loading class java/lang/SystemClassLoaderAction
+Event: 0.750 loading class java/lang/SystemClassLoaderAction done
+Event: 0.751 Thread 0x0000000014369000 Thread added: 0x0000000014369000
+Event: 0.751 Thread 0x000000001436a800 Thread added: 0x000000001436a800
+Event: 0.752 Thread 0x000000001436e800 Thread added: 0x000000001436e800
+Event: 0.755 Thread 0x0000000014372000 Thread added: 0x0000000014372000
+
+
+Dynamic libraries:
+0x00007ff6be880000 - 0x00007ff6be8b1000 	C:\Program Files\JetBrains\WebStorm 2019.1.1\jre64\bin\java.exe
+0x00007ff987ff0000 - 0x00007ff9881b1000 	C:\Windows\SYSTEM32\ntdll.dll
+0x00007ff985c40000 - 0x00007ff985ced000 	C:\Windows\system32\KERNEL32.DLL
+0x00007ff984d50000 - 0x00007ff984f38000 	C:\Windows\system32\KERNELBASE.dll
+0x00007ff985ad0000 - 0x00007ff985b77000 	C:\Windows\system32\ADVAPI32.dll
+0x00007ff985cf0000 - 0x00007ff985d8d000 	C:\Windows\system32\msvcrt.dll
+0x00007ff985b90000 - 0x00007ff985beb000 	C:\Windows\system32\sechost.dll
+0x00007ff987ed0000 - 0x00007ff987fed000 	C:\Windows\system32\RPCRT4.dll
+0x00007ff9863b0000 - 0x00007ff986506000 	C:\Windows\system32\USER32.dll
+0x00007ff985940000 - 0x00007ff985ac7000 	C:\Windows\system32\GDI32.dll
+0x00007ff978890000 - 0x00007ff978b04000 	C:\Windows\WinSxS\amd64_microsoft.windows.common-controls_6595b64144ccf1df_6.0.10586.839_none_a2ddba30a539a2ae\COMCTL32.dll
+0x00007ff986520000 - 0x00007ff98679e000 	C:\Windows\system32\combase.dll
+0x00007ff985380000 - 0x00007ff9853ea000 	C:\Windows\system32\bcryptPrimitives.dll
+0x00007ff985c00000 - 0x00007ff985c3b000 	C:\Windows\system32\IMM32.DLL
+0x0000000075e70000 - 0x0000000075f42000 	C:\Program Files\JetBrains\WebStorm 2019.1.1\jre64\bin\msvcr100.dll
+0x0000000075570000 - 0x0000000075db6000 	C:\Program Files\JetBrains\WebStorm 2019.1.1\jre64\bin\server\jvm.dll
+0x00007ff985b80000 - 0x00007ff985b88000 	C:\Windows\system32\PSAPI.DLL
+0x00007ff97ffa0000 - 0x00007ff97ffa9000 	C:\Windows\SYSTEM32\WSOCK32.dll
+0x00007ff985d90000 - 0x00007ff985dfb000 	C:\Windows\system32\WS2_32.dll
+0x00007ff982920000 - 0x00007ff982943000 	C:\Windows\SYSTEM32\WINMM.dll
+0x00007ff976a70000 - 0x00007ff976a7a000 	C:\Windows\SYSTEM32\VERSION.dll
+0x00007ff9828f0000 - 0x00007ff98291c000 	C:\Windows\SYSTEM32\WINMMBASE.dll
+0x00007ff985330000 - 0x00007ff985373000 	C:\Windows\system32\cfgmgr32.dll
+0x00007ff97bc40000 - 0x00007ff97bc4f000 	C:\Program Files\JetBrains\WebStorm 2019.1.1\jre64\bin\verify.dll
+0x00007ff96aba0000 - 0x00007ff96abc9000 	C:\Program Files\JetBrains\WebStorm 2019.1.1\jre64\bin\java.dll
+0x00007ff974230000 - 0x00007ff974246000 	C:\Program Files\JetBrains\WebStorm 2019.1.1\jre64\bin\zip.dll
+0x00007ff9867a0000 - 0x00007ff987cfc000 	C:\Windows\system32\SHELL32.dll
+0x00007ff9846a0000 - 0x00007ff984ce5000 	C:\Windows\system32\windows.storage.dll
+0x00007ff9858e0000 - 0x00007ff985932000 	C:\Windows\system32\shlwapi.dll
+0x00007ff984680000 - 0x00007ff98468f000 	C:\Windows\system32\kernel.appcore.dll
+0x00007ff9850a0000 - 0x00007ff985155000 	C:\Windows\system32\shcore.dll
+0x00007ff984630000 - 0x00007ff98467b000 	C:\Windows\system32\powrprof.dll
+0x00007ff984610000 - 0x00007ff984624000 	C:\Windows\system32\profapi.dll
+
+VM Arguments:
+java_command: org.jetbrains.git4idea.http.GitAskPassApp Username for 'https://github.com': 
+java_class_path (initial): C:/Program Files/JetBrains/WebStorm 2019.1.1/plugins/git4idea/lib/git4idea-rt.jar;C:/Program Files/JetBrains/WebStorm 2019.1.1/lib/xmlrpc-2.0.1.jar;C:/Program Files/JetBrains/WebStorm 2019.1.1/lib/commons-codec-1.10.jar;C:/Program Files/JetBrains/WebStorm 2019.1.1/lib/util.jar
+Launcher Type: SUN_STANDARD
+
+Environment Variables:
+PATH=C:/Program Files/Git/mingw64/libexec/git-core;C:/Program Files/Git/mingw64/libexec/git-core;C:\Program Files\Git\mingw64\bin;C:\Program Files\Git\usr\bin;C:\Users\Matthew\bin;C:\Program Files (x86)\Intel\TXE Components\TCS\;C:\Program Files\Intel\TXE Components\TCS\;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Program Files\Intel\TXE Components\DAL\;C:\Program Files (x86)\Intel\TXE Components\DAL\;C:\Program Files\Intel\TXE Components\IPT\;C:\Program Files (x86)\Intel\TXE Components\IPT\;C:\Program Files\nodejs\;C:\Program Files\Git\cmd;C:\Program Files\MySQL\MySQL Shell 8.0\bin\;C:\Program Files\heroku\bin
+USERNAME=Matthew
+DISPLAY=:0.0
+OS=Windows_NT
+PROCESSOR_IDENTIFIER=Intel64 Family 6 Model 76 Stepping 3, GenuineIntel
+
+
+
+---------------  S Y S T E M  ---------------
+
+OS: Windows 10.0 , 64 bit Build 10586 (10.0.10586.589)
+
+CPU:total 4 (initial active 4) (4 cores per cpu, 1 threads per core) family 6 model 76 stepping 3, cmov, cx8, fxsr, mmx, sse, sse2, sse3, ssse3, sse4.1, sse4.2, popcnt, aes, clmul, erms, 3dnowpref, tsc, tscinvbit
+
+Memory: 4k page, physical 1987284k(87788k free), swap 5704784k(844k free)
+
+vm_info: OpenJDK 64-Bit Server VM (25.202-b44) for windows-amd64 JRE (1.8.0_202-release-1483-b44), built on Mar 29 2019 17:15:10 by "builduser" with MS VC++ 10.0 (VS2010)
+
+time: Fri May 17 23:20:29 2019
+timezone: Paris, Madrid (heure d’été)
+elapsed time: 0 seconds (0d 0h 0m 0s)
+

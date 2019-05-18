@@ -33,22 +33,22 @@ import { CartComponent } from './cart/cart.component';
 import { WorkerLoginComponent } from './worker-login/worker-login.component';
 import {WorkerAuthService} from '../WorkerAuth.service';
 import { WorkerRegisterComponent } from './worker-register/worker-register.component';
-import {OrderInfoDialogComponent, WorkerProfileComponent} from './worker-profile/worker-profile.component';
+import {OrderInfoDialogComponent, UploadWorkerProfileComponent, WorkerProfileComponent} from './worker-profile/worker-profile.component';
 import { OrderPendingComponent } from './order-pending/order-pending.component';
 import {MatSnackBarModule} from '@angular/material';
 
 const appRoutes: Routes = [
   { path: 'register', component: RegisterComponent},
   { path: 'home', component: HomeComponent},
+  { path: 'login', component: LoginComponent},
   { path: 'services', component: ServicesComponent, canActivate: [AdminGuardService]},
-  { path: 'services-list', component: ServicesListComponent},
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuardService]},
   { path: 'cart', component: CartComponent, canActivate: [AuthGuardService]},
   { path: 'worker-login', component: WorkerLoginComponent},
   { path: 'worker-register', component: WorkerRegisterComponent},
   { path: 'worker-profile', component: WorkerProfileComponent},
   { path: 'order-pending', component: OrderPendingComponent},
-  { path: '', component: LoginComponent}
+  { path: '', component: ServicesListComponent}
 ]
 
 
@@ -68,7 +68,8 @@ const appRoutes: Routes = [
     WorkerProfileComponent,
     OrderPendingComponent,
     OrderInfoDialogComponent,
-    UploadProfileComponent
+    UploadProfileComponent,
+    UploadWorkerProfileComponent
   ],
   imports: [
     BrowserModule,
@@ -97,7 +98,7 @@ const appRoutes: Routes = [
     MatListModule,
     MatBadgeModule,
   ],
-  entryComponents : [UploadServiceComponent, OrderInfoDialogComponent, UploadProfileComponent],
+  entryComponents : [UploadWorkerProfileComponent, UploadServiceComponent, OrderInfoDialogComponent, UploadProfileComponent],
   providers: [AuthGuardService, AuthentificationService, ServicesService, AdminGuardService, OrderService, WorkerAuthService],
   bootstrap: [AppComponent]
 })

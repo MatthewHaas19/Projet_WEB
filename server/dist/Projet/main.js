@@ -117,6 +117,9 @@ var WorkerAuthService = /** @class */ (function () {
     WorkerAuthService.prototype.addReview = function (review) {
         return this.http.post('/api/worker-review', review);
     };
+    WorkerAuthService.prototype.modify = function (id, image) {
+        return this.http.put('/api/modify-worker/' + id, { img: image });
+    };
     WorkerAuthService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])(),
         tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"], _angular_router__WEBPACK_IMPORTED_MODULE_4__["Router"]])
@@ -216,7 +219,7 @@ var AppRoutingModule = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<!-- Header -->\n  <mat-toolbar color={{color}}>\n  <mat-toolbar-row>\n  <span>MyServices</span>\n  <span class=\"spacer\"></span>\n    <button mat-icon-button (click)=\"Cart()\" *ngIf=\"isAuth()\">\n      <mat-icon matBadge = {{OrderNumber}} >near_me</mat-icon>\n    </button>\n    <button mat-button [matMenuTriggerFor]=\"menu\"><mat-icon class=\"icon\">menu</mat-icon></button>\n    <mat-menu #menu=\"matMenu\" xPosition=\"before\">\n      <button mat-menu-item (click)=\"Login()\" *ngIf=\"!isAuth() && !isWorker()\">Login</button>\n      <button mat-menu-item (click)=\"WorkerLogin()\" *ngIf=\"!isAuth() && !isWorker()\">Worker Login</button>\n      <button mat-menu-item (click)=\"Register()\" *ngIf=\"!isAuth() && !isWorker()\">Register</button>\n      <button mat-menu-item (click)=\"Logout() \" *ngIf=\"isAuth()\">Logout</button>\n      <button mat-menu-item (click)=\"Services() \" *ngIf=\"isAuth()\">Services</button>\n      <button mat-menu-item (click)=\"Profile() \" *ngIf=\"isAuth()\">Profile</button>\n      <button mat-menu-item (click)=\"AddServices() \" *ngIf=\"isAuth() && isAdmin()\">Add Services</button>\n\n      <button mat-menu-item (click)=\"LogoutWorker() \" *ngIf=\"isWorker()\">Logout</button>\n      <button mat-menu-item (click)=\"OrdersPending() \" *ngIf=\"isWorker()\">Orders-Pending</button>\n      <button mat-menu-item (click)=\"ProfileWorker() \" *ngIf=\"isWorker()\">Profile</button>\n    </mat-menu>\n  </mat-toolbar-row>\n</mat-toolbar>\n\n<!-- Router outlet corresponding to the uri -->\n<router-outlet></router-outlet>\n\n"
+module.exports = "<!-- Header -->\n  <mat-toolbar color={{color}}>\n  <mat-toolbar-row>\n  <span>MyServices</span>\n  <span class=\"spacer\"></span>\n    <button mat-icon-button routerLink=\"cart\" *ngIf=\"isAuth()\">\n      <mat-icon matBadge = {{OrderNumber}} >near_me</mat-icon>\n    </button>\n    <button mat-button [matMenuTriggerFor]=\"menu\"><mat-icon class=\"icon\">menu</mat-icon></button>\n    <mat-menu #menu=\"matMenu\" xPosition=\"before\">\n      <button mat-menu-item routerLink=\"login\" *ngIf=\"!isAuth() && !isWorker()\">Login</button>\n      <button mat-menu-item routerLink=\"worker-login\" *ngIf=\"!isAuth() && !isWorker()\">Worker Login</button>\n      <button mat-menu-item routerLink=\"register\" *ngIf=\"!isAuth() && !isWorker()\">Register</button>\n      <button mat-menu-item (click)=\"Logout() \" *ngIf=\"isAuth()\">Logout</button>\n      <button mat-menu-item routerLink=\"\" *ngIf=\"isAuth()\">Services</button>\n      <button mat-menu-item routerLink=\"profile\" *ngIf=\"isAuth()\">Profile</button>\n      <button mat-menu-item routerLink=\"services\" *ngIf=\"isAuth() && isAdmin()\">Add Services</button>\n\n      <button mat-menu-item (click)=\"LogoutWorker()\" *ngIf=\"isWorker()\">Logout</button>\n      <button mat-menu-item routerLink=\"order-pending\" *ngIf=\"isWorker()\">Orders-Pending</button>\n      <button mat-menu-item routerLink=\"worker-profile\" *ngIf=\"isWorker()\">Profile</button>\n    </mat-menu>\n  </mat-toolbar-row>\n</mat-toolbar>\n\n<!-- Router outlet corresponding to the uri -->\n<router-outlet></router-outlet>\n\n"
 
 /***/ }),
 
@@ -286,11 +289,8 @@ var AppComponent = /** @class */ (function () {
             this.OrderCount();
         }
     };
-    AppComponent.prototype.Cart = function () {
-        this.router.navigate(['/cart']);
-    };
     AppComponent.prototype.Login = function () {
-        this.router.navigate(['']);
+        this.router.navigate(['/login']);
     };
     AppComponent.prototype.Profile = function () {
         this.router.navigate(['/profile']);
@@ -305,10 +305,7 @@ var AppComponent = /** @class */ (function () {
         return this.auth.isAdmin();
     };
     AppComponent.prototype.Services = function () {
-        this.router.navigate(['/services-list']);
-    };
-    AppComponent.prototype.AddServices = function () {
-        this.router.navigate(['/services']);
+        this.router.navigate(['']);
     };
     AppComponent.prototype.Logout = function () {
         this.auth.logout();
@@ -317,17 +314,8 @@ var AppComponent = /** @class */ (function () {
     AppComponent.prototype.Register = function () {
         this.router.navigate(['register']);
     };
-    AppComponent.prototype.ProfileWorker = function () {
-        this.router.navigate(['/worker-profile']);
-    };
     AppComponent.prototype.LogoutWorker = function () {
         this.worker.logout();
-        this.router.navigate(['/worker-login']);
-    };
-    AppComponent.prototype.OrdersPending = function () {
-        this.router.navigate(['/order-pending']);
-    };
-    AppComponent.prototype.WorkerLogin = function () {
         this.router.navigate(['/worker-login']);
     };
     // We count the number of order of a client
@@ -428,15 +416,15 @@ __webpack_require__.r(__webpack_exports__);
 var appRoutes = [
     { path: 'register', component: _register_register_component__WEBPACK_IMPORTED_MODULE_8__["RegisterComponent"] },
     { path: 'home', component: _home_home_component__WEBPACK_IMPORTED_MODULE_12__["HomeComponent"] },
+    { path: 'login', component: _login_login_component__WEBPACK_IMPORTED_MODULE_6__["LoginComponent"] },
     { path: 'services', component: _services_services_component__WEBPACK_IMPORTED_MODULE_16__["ServicesComponent"], canActivate: [_admin_guard_service__WEBPACK_IMPORTED_MODULE_19__["AdminGuardService"]] },
-    { path: 'services-list', component: _services_list_services_list_component__WEBPACK_IMPORTED_MODULE_17__["ServicesListComponent"] },
     { path: 'profile', component: _profile_profile_component__WEBPACK_IMPORTED_MODULE_13__["ProfileComponent"], canActivate: [_auth_guard_service__WEBPACK_IMPORTED_MODULE_15__["AuthGuardService"]] },
     { path: 'cart', component: _cart_cart_component__WEBPACK_IMPORTED_MODULE_21__["CartComponent"], canActivate: [_auth_guard_service__WEBPACK_IMPORTED_MODULE_15__["AuthGuardService"]] },
     { path: 'worker-login', component: _worker_login_worker_login_component__WEBPACK_IMPORTED_MODULE_22__["WorkerLoginComponent"] },
     { path: 'worker-register', component: _worker_register_worker_register_component__WEBPACK_IMPORTED_MODULE_24__["WorkerRegisterComponent"] },
     { path: 'worker-profile', component: _worker_profile_worker_profile_component__WEBPACK_IMPORTED_MODULE_25__["WorkerProfileComponent"] },
     { path: 'order-pending', component: _order_pending_order_pending_component__WEBPACK_IMPORTED_MODULE_26__["OrderPendingComponent"] },
-    { path: '', component: _login_login_component__WEBPACK_IMPORTED_MODULE_6__["LoginComponent"] }
+    { path: '', component: _services_list_services_list_component__WEBPACK_IMPORTED_MODULE_17__["ServicesListComponent"] }
 ];
 var AppModule = /** @class */ (function () {
     function AppModule() {
@@ -458,7 +446,8 @@ var AppModule = /** @class */ (function () {
                 _worker_profile_worker_profile_component__WEBPACK_IMPORTED_MODULE_25__["WorkerProfileComponent"],
                 _order_pending_order_pending_component__WEBPACK_IMPORTED_MODULE_26__["OrderPendingComponent"],
                 _worker_profile_worker_profile_component__WEBPACK_IMPORTED_MODULE_25__["OrderInfoDialogComponent"],
-                _profile_profile_component__WEBPACK_IMPORTED_MODULE_13__["UploadProfileComponent"]
+                _profile_profile_component__WEBPACK_IMPORTED_MODULE_13__["UploadProfileComponent"],
+                _worker_profile_worker_profile_component__WEBPACK_IMPORTED_MODULE_25__["UploadWorkerProfileComponent"]
             ],
             imports: [
                 _angular_platform_browser__WEBPACK_IMPORTED_MODULE_1__["BrowserModule"],
@@ -487,7 +476,7 @@ var AppModule = /** @class */ (function () {
                 _angular_material__WEBPACK_IMPORTED_MODULE_3__["MatListModule"],
                 _angular_material__WEBPACK_IMPORTED_MODULE_3__["MatBadgeModule"],
             ],
-            entryComponents: [_services_services_component__WEBPACK_IMPORTED_MODULE_16__["UploadServiceComponent"], _worker_profile_worker_profile_component__WEBPACK_IMPORTED_MODULE_25__["OrderInfoDialogComponent"], _profile_profile_component__WEBPACK_IMPORTED_MODULE_13__["UploadProfileComponent"]],
+            entryComponents: [_worker_profile_worker_profile_component__WEBPACK_IMPORTED_MODULE_25__["UploadWorkerProfileComponent"], _services_services_component__WEBPACK_IMPORTED_MODULE_16__["UploadServiceComponent"], _worker_profile_worker_profile_component__WEBPACK_IMPORTED_MODULE_25__["OrderInfoDialogComponent"], _profile_profile_component__WEBPACK_IMPORTED_MODULE_13__["UploadProfileComponent"]],
             providers: [_auth_guard_service__WEBPACK_IMPORTED_MODULE_15__["AuthGuardService"], _authentification_service__WEBPACK_IMPORTED_MODULE_14__["AuthentificationService"], _services_service__WEBPACK_IMPORTED_MODULE_18__["ServicesService"], _admin_guard_service__WEBPACK_IMPORTED_MODULE_19__["AdminGuardService"], _order_service__WEBPACK_IMPORTED_MODULE_20__["OrderService"], _WorkerAuth_service__WEBPACK_IMPORTED_MODULE_23__["WorkerAuthService"]],
             bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_5__["AppComponent"]]
         })
@@ -506,7 +495,7 @@ var AppModule = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<!-- We use mat-table from Angular material to display the current orders of the client -->\n<!-- All our data is stored in the array 'dataSource' -->\n<table mat-table [dataSource]=\"dataSource\" multiTemplateDataRows class=\"mat-elevation-z8\" >\n\n  <!-- in 'element' there is all the infos of a client order  -->\n  <ng-container matColumnDef=\"{{column}}\" *ngFor=\"let column of displayedColumns\"> <!--  we use the directive ngFor to display all the columns -->\n    <th mat-header-cell *matHeaderCellDef>{{column}}</th> <!--  we define the header of the table -->\n    <td mat-cell *matCellDef=\"let element\" [style.color]=\"getColor(element[column])\"> {{element[column]}} </td>\n  </ng-container>\n\n  <!-- We define the detail that will expanded when clicking on the order -->\n  <ng-container matColumnDef=\"expandedDetail\">\n    <td mat-cell *matCellDef=\"let element\" [attr.colspan]=\"displayedColumns.length\">\n      <div class=\"example-element-detail\" [@detailExpand]=\"element == expandedElement ? 'expanded' : 'collapsed'\">\n        <div class=\"example-element-description\">\n          <img id=\"img1\" src=\"assets/images/service.jpg\">\n          <span>{{element.desc}} -- </span>\n          <span>{{element.price}} €</span>\n          <span *ngIf=\"element.idWorker\">{{element.firstname}} {{element.lastname}}</span>\n        </div>\n      </div>\n    </td>\n  </ng-container>\n\n\n  <!-- we tell the table which columns will be rendered in the header and data rows -->\n  <tr mat-header-row *matHeaderRowDef=\"displayedColumns\"></tr>\n  <tr mat-row *matRowDef=\"let element; columns: displayedColumns;\"\n      class=\"example-element-row\"\n      [class.example-expanded-row]=\"expandedElement === element\"\n      (click)=\"expandedElement = expandedElement === element ? null : element\">\n  </tr>\n  <tr mat-row *matRowDef=\"let row; columns: ['expandedDetail']\" class=\"example-detail-row\"></tr>\n</table>\n\n"
+module.exports = "<!-- We use mat-table from Angular material to display the current orders of the client -->\n<!-- All our data is stored in the array 'dataSource' -->\n<table mat-table [dataSource]=\"dataSource\" multiTemplateDataRows class=\"mat-elevation-z8\" >\n\n  <!-- in 'element' there is all the infos of a client order  -->\n  <ng-container matColumnDef=\"{{column}}\" *ngFor=\"let column of displayedColumns\"> <!--  we use the directive ngFor to display all the columns -->\n    <th mat-header-cell *matHeaderCellDef>{{column}}</th> <!--  we define the header of the table -->\n    <td mat-cell *matCellDef=\"let element\" [style.color]=\"getColor(element[column])\"> {{element[column]}} </td>\n  </ng-container>\n\n  <!-- We define the detail that will expanded when clicking on the order -->\n  <ng-container matColumnDef=\"expandedDetail\">\n    <td mat-cell *matCellDef=\"let element\" [attr.colspan]=\"displayedColumns.length\">\n      <div class=\"example-element-detail\" [@detailExpand]=\"element == expandedElement ? 'expanded' : 'collapsed'\">\n        <div class=\"example-element-description\">\n          <div class=\"order-container\">\n            <img id=\"img1\" [src]=\"element.image\">\n            <h3>{{element.price}} €</h3>\n            <h4>{{element.desc}}</h4>\n          </div>\n          <div class=\"worker-container\" *ngIf=\"element.idWorker\">\n            <h3>Ta commande sera réalisée par :</h3>\n            <h2>{{element.firstname}} {{element.lastname}}</h2>\n            <img id=\"img1\" [src]=\"element.imageWorker\">\n          </div>\n        </div>\n      </div>\n    </td>\n  </ng-container>\n\n\n  <!-- we tell the table which columns will be rendered in the header and data rows -->\n  <tr mat-header-row *matHeaderRowDef=\"displayedColumns\"></tr>\n  <tr mat-row *matRowDef=\"let element; columns: displayedColumns;\"\n      class=\"example-element-row\"\n      [class.example-expanded-row]=\"expandedElement === element\"\n      (click)=\"expandedElement = expandedElement === element ? null : element\">\n  </tr>\n  <tr mat-row *matRowDef=\"let row; columns: ['expandedDetail']\" class=\"example-detail-row\"></tr>\n</table>\n\n"
 
 /***/ }),
 
@@ -517,7 +506,7 @@ module.exports = "<!-- We use mat-table from Angular material to display the cur
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "/*  CSS of the cart component */\ntable {\n  min-width: 150px;\n  max-width: 500px;\n  width: 100%;\n  margin: 0 auto;\n  margin-top: 10%;\n  margin-bottom: 10%; }\ntr.example-detail-row {\n  height: 0; }\ntr.example-element-row:not(.example-expanded-row):hover {\n  background: #f5f5f5; }\ntr.example-element-row:not(.example-expanded-row):active {\n  background: #efefef; }\n.example-element-row td {\n  border-bottom-width: 0; }\n.example-element-detail {\n  overflow: hidden;\n  display: flex; }\n.example-element-symbol {\n  font-weight: bold;\n  font-size: 40px;\n  line-height: normal; }\n.example-element-description {\n  padding: 16px; }\n.example-element-description-attribution {\n  opacity: 0.5; }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvY2FydC9DOlxcVXNlcnNcXE1hdHRoZXdcXERlc2t0b3BcXFByb2pldF9XRUIvc3JjXFxhcHBcXGNhcnRcXGNhcnQuY29tcG9uZW50LnNjc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsK0JBQUE7QUFFQTtFQUNFLGdCQUFnQjtFQUNoQixnQkFBZ0I7RUFDaEIsV0FBWTtFQUNaLGNBQWM7RUFDZCxlQUFlO0VBQ2Ysa0JBQWtCLEVBQUE7QUFHcEI7RUFDRSxTQUFTLEVBQUE7QUFHWDtFQUNFLG1CQUFtQixFQUFBO0FBR3JCO0VBQ0UsbUJBQW1CLEVBQUE7QUFHckI7RUFDRSxzQkFBc0IsRUFBQTtBQUd4QjtFQUNFLGdCQUFnQjtFQUNoQixhQUFhLEVBQUE7QUFLZjtFQUNFLGlCQUFpQjtFQUNqQixlQUFlO0VBQ2YsbUJBQW1CLEVBQUE7QUFHckI7RUFDRSxhQUFhLEVBQUE7QUFHZjtFQUNFLFlBQVksRUFBQSIsImZpbGUiOiJzcmMvYXBwL2NhcnQvY2FydC5jb21wb25lbnQuc2NzcyIsInNvdXJjZXNDb250ZW50IjpbIi8qICBDU1Mgb2YgdGhlIGNhcnQgY29tcG9uZW50ICovXHJcblxyXG50YWJsZXtcclxuICBtaW4td2lkdGg6IDE1MHB4O1xyXG4gIG1heC13aWR0aDogNTAwcHg7XHJcbiAgd2lkdGg6IDEwMCUgO1xyXG4gIG1hcmdpbjogMCBhdXRvO1xyXG4gIG1hcmdpbi10b3A6IDEwJTtcclxuICBtYXJnaW4tYm90dG9tOiAxMCU7XHJcbn1cclxuXHJcbnRyLmV4YW1wbGUtZGV0YWlsLXJvdyB7XHJcbiAgaGVpZ2h0OiAwO1xyXG59XHJcblxyXG50ci5leGFtcGxlLWVsZW1lbnQtcm93Om5vdCguZXhhbXBsZS1leHBhbmRlZC1yb3cpOmhvdmVyIHtcclxuICBiYWNrZ3JvdW5kOiAjZjVmNWY1O1xyXG59XHJcblxyXG50ci5leGFtcGxlLWVsZW1lbnQtcm93Om5vdCguZXhhbXBsZS1leHBhbmRlZC1yb3cpOmFjdGl2ZSB7XHJcbiAgYmFja2dyb3VuZDogI2VmZWZlZjtcclxufVxyXG5cclxuLmV4YW1wbGUtZWxlbWVudC1yb3cgdGQge1xyXG4gIGJvcmRlci1ib3R0b20td2lkdGg6IDA7XHJcbn1cclxuXHJcbi5leGFtcGxlLWVsZW1lbnQtZGV0YWlsIHtcclxuICBvdmVyZmxvdzogaGlkZGVuO1xyXG4gIGRpc3BsYXk6IGZsZXg7XHJcbn1cclxuXHJcblxyXG5cclxuLmV4YW1wbGUtZWxlbWVudC1zeW1ib2wge1xyXG4gIGZvbnQtd2VpZ2h0OiBib2xkO1xyXG4gIGZvbnQtc2l6ZTogNDBweDtcclxuICBsaW5lLWhlaWdodDogbm9ybWFsO1xyXG59XHJcblxyXG4uZXhhbXBsZS1lbGVtZW50LWRlc2NyaXB0aW9uIHtcclxuICBwYWRkaW5nOiAxNnB4O1xyXG59XHJcblxyXG4uZXhhbXBsZS1lbGVtZW50LWRlc2NyaXB0aW9uLWF0dHJpYnV0aW9uIHtcclxuICBvcGFjaXR5OiAwLjU7XHJcbn1cclxuIl19 */"
+module.exports = "/*  CSS of the cart component */\n#img1 {\n  min-width: 100px;\n  max-width: 200px;\n  width: 100%;\n  margin: 0 auto;\n  margin-top: 10%;\n  margin-bottom: 10%; }\ntable {\n  min-width: 150px;\n  max-width: 500px;\n  width: 100%;\n  margin: 0 auto;\n  margin-top: 10%;\n  margin-bottom: 10%; }\ntable .example-element-description {\n    padding: 16px;\n    width: 100%;\n    text-align: center;\n    display: block;\n    float: left; }\ntable .example-element-description .order-container {\n      width: 50%;\n      display: block;\n      float: left; }\ntable .example-element-description .worker-container {\n      width: 50%;\n      display: block;\n      float: left; }\ntr.example-detail-row {\n  height: 0; }\ntr.example-element-row:not(.example-expanded-row):hover {\n  background: #f5f5f5; }\ntr.example-element-row:not(.example-expanded-row):active {\n  background: #efefef; }\n.example-element-row td {\n  border-bottom-width: 0; }\n.example-element-detail {\n  overflow: hidden;\n  display: flex; }\n.example-element-symbol {\n  font-weight: bold;\n  font-size: 40px;\n  line-height: normal; }\n.example-element-description-attribution {\n  opacity: 0.5; }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvY2FydC9DOlxcVXNlcnNcXE1hdHRoZXdcXERlc2t0b3BcXFByb2pldF9XRUIvc3JjXFxhcHBcXGNhcnRcXGNhcnQuY29tcG9uZW50LnNjc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsK0JBQUE7QUFFQTtFQUNFLGdCQUFnQjtFQUNoQixnQkFBZ0I7RUFDaEIsV0FBWTtFQUNaLGNBQWM7RUFDZCxlQUFlO0VBQ2Ysa0JBQWtCLEVBQUE7QUFHcEI7RUFDRSxnQkFBZ0I7RUFDaEIsZ0JBQWdCO0VBQ2hCLFdBQVk7RUFDWixjQUFjO0VBQ2QsZUFBZTtFQUNmLGtCQUFrQixFQUFBO0FBTnBCO0lBUUksYUFBYTtJQUNiLFdBQVc7SUFDWCxrQkFBa0I7SUFDbEIsY0FBYztJQUNkLFdBQVcsRUFBQTtBQVpmO01BY00sVUFBVTtNQUNWLGNBQWM7TUFDZCxXQUFXLEVBQUE7QUFoQmpCO01BbUJNLFVBQVU7TUFDVixjQUFjO01BQ2QsV0FBVyxFQUFBO0FBS2pCO0VBQ0UsU0FBUyxFQUFBO0FBR1g7RUFDRSxtQkFBbUIsRUFBQTtBQUdyQjtFQUNFLG1CQUFtQixFQUFBO0FBR3JCO0VBQ0Usc0JBQXNCLEVBQUE7QUFHeEI7RUFDRSxnQkFBZ0I7RUFDaEIsYUFBYSxFQUFBO0FBS2Y7RUFDRSxpQkFBaUI7RUFDakIsZUFBZTtFQUNmLG1CQUFtQixFQUFBO0FBS3JCO0VBQ0UsWUFBWSxFQUFBIiwiZmlsZSI6InNyYy9hcHAvY2FydC9jYXJ0LmNvbXBvbmVudC5zY3NzIiwic291cmNlc0NvbnRlbnQiOlsiLyogIENTUyBvZiB0aGUgY2FydCBjb21wb25lbnQgKi9cclxuXHJcbiNpbWcxe1xyXG4gIG1pbi13aWR0aDogMTAwcHg7XHJcbiAgbWF4LXdpZHRoOiAyMDBweDtcclxuICB3aWR0aDogMTAwJSA7XHJcbiAgbWFyZ2luOiAwIGF1dG87XHJcbiAgbWFyZ2luLXRvcDogMTAlO1xyXG4gIG1hcmdpbi1ib3R0b206IDEwJTtcclxufVxyXG5cclxudGFibGV7XHJcbiAgbWluLXdpZHRoOiAxNTBweDtcclxuICBtYXgtd2lkdGg6IDUwMHB4O1xyXG4gIHdpZHRoOiAxMDAlIDtcclxuICBtYXJnaW46IDAgYXV0bztcclxuICBtYXJnaW4tdG9wOiAxMCU7XHJcbiAgbWFyZ2luLWJvdHRvbTogMTAlO1xyXG4gIC5leGFtcGxlLWVsZW1lbnQtZGVzY3JpcHRpb24ge1xyXG4gICAgcGFkZGluZzogMTZweDtcclxuICAgIHdpZHRoOiAxMDAlO1xyXG4gICAgdGV4dC1hbGlnbjogY2VudGVyO1xyXG4gICAgZGlzcGxheTogYmxvY2s7XHJcbiAgICBmbG9hdDogbGVmdDtcclxuICAgIC5vcmRlci1jb250YWluZXJ7XHJcbiAgICAgIHdpZHRoOiA1MCU7XHJcbiAgICAgIGRpc3BsYXk6IGJsb2NrO1xyXG4gICAgICBmbG9hdDogbGVmdDtcclxuICAgIH1cclxuICAgIC53b3JrZXItY29udGFpbmVye1xyXG4gICAgICB3aWR0aDogNTAlO1xyXG4gICAgICBkaXNwbGF5OiBibG9jaztcclxuICAgICAgZmxvYXQ6IGxlZnQ7XHJcbiAgICB9XHJcbiAgfVxyXG59XHJcblxyXG50ci5leGFtcGxlLWRldGFpbC1yb3cge1xyXG4gIGhlaWdodDogMDtcclxufVxyXG5cclxudHIuZXhhbXBsZS1lbGVtZW50LXJvdzpub3QoLmV4YW1wbGUtZXhwYW5kZWQtcm93KTpob3ZlciB7XHJcbiAgYmFja2dyb3VuZDogI2Y1ZjVmNTtcclxufVxyXG5cclxudHIuZXhhbXBsZS1lbGVtZW50LXJvdzpub3QoLmV4YW1wbGUtZXhwYW5kZWQtcm93KTphY3RpdmUge1xyXG4gIGJhY2tncm91bmQ6ICNlZmVmZWY7XHJcbn1cclxuXHJcbi5leGFtcGxlLWVsZW1lbnQtcm93IHRkIHtcclxuICBib3JkZXItYm90dG9tLXdpZHRoOiAwO1xyXG59XHJcblxyXG4uZXhhbXBsZS1lbGVtZW50LWRldGFpbCB7XHJcbiAgb3ZlcmZsb3c6IGhpZGRlbjtcclxuICBkaXNwbGF5OiBmbGV4O1xyXG59XHJcblxyXG5cclxuXHJcbi5leGFtcGxlLWVsZW1lbnQtc3ltYm9sIHtcclxuICBmb250LXdlaWdodDogYm9sZDtcclxuICBmb250LXNpemU6IDQwcHg7XHJcbiAgbGluZS1oZWlnaHQ6IG5vcm1hbDtcclxufVxyXG5cclxuXHJcblxyXG4uZXhhbXBsZS1lbGVtZW50LWRlc2NyaXB0aW9uLWF0dHJpYnV0aW9uIHtcclxuICBvcGFjaXR5OiAwLjU7XHJcbn1cclxuIl19 */"
 
 /***/ }),
 
@@ -599,6 +588,7 @@ var CartComponent = /** @class */ (function () {
                     firstname: '',
                     lastname: '',
                     image: '',
+                    imageWorker: ''
                 };
                 aOrder.idOrder = order.idOrder;
                 aOrder.orderStatus = order.orderStatus;
@@ -614,6 +604,7 @@ var CartComponent = /** @class */ (function () {
                     _this.worker.workerById(order.idWorker).subscribe(function (worker) {
                         aOrder.firstname = worker.firstname;
                         aOrder.lastname = worker.lastname;
+                        aOrder.imageWorker = worker.image;
                         _this.Orders.push(aOrder);
                         _this.dataSource = new _angular_material__WEBPACK_IMPORTED_MODULE_4__["MatTableDataSource"](_this.Orders);
                     });
@@ -767,7 +758,9 @@ var LoginComponent = /** @class */ (function () {
         };
     }
     LoginComponent.prototype.ngOnInit = function () {
-        this.auth.logout();
+        if (this.auth.isLoggedIn()) {
+            this.auth.logout();
+        }
         this.initForm();
     };
     // We Init the form with the validators
@@ -819,7 +812,7 @@ var LoginComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<!-- We use mat-table from Angular material to display all the pending orders -->\n<!-- All our data is stored in the array 'dataSource' -->\n<table mat-table [dataSource]=\"dataSource\" multiTemplateDataRows class=\"mat-elevation-z8\" >\n\n  <!-- in 'element' there is all the infos of a client order  -->\n  <ng-container matColumnDef=\"{{column}}\" *ngFor=\"let column of displayedColumns\">\n    <th mat-header-cell *matHeaderCellDef>{{column}}</th>\n    <td mat-cell *matCellDef=\"let element\"> {{element[column]}} </td>\n  </ng-container>\n\n  <!-- We define the detail that will expanded when clicking on the order -->\n  <ng-container matColumnDef=\"expandedDetail\">\n    <td mat-cell *matCellDef=\"let element\" [attr.colspan]=\"displayedColumns.length\">\n      <div class=\"example-element-detail\" [@detailExpand]=\"element == expandedElement ? 'expanded' : 'collapsed'\">\n        <div class=\"example-element-description\">\n          {{element.name}}\n          {{element.desc}}\n          {{element.price}}\n          {{element.firstname}}\n          {{element.lastname}}\n          <button mat-raised-button type=\"submit\" color=\"primary\" (click)=\"PickAnOrder(element)\">Pick this one</button>\n        </div>\n      </div>\n    </td>\n  </ng-container>\n\n\n  <!-- we tell the table which columns will be rendered in the header and data rows -->\n  <tr mat-header-row *matHeaderRowDef=\"displayedColumns\"></tr>\n  <tr mat-row *matRowDef=\"let element; columns: displayedColumns;\"\n      class=\"example-element-row\"\n      [class.example-expanded-row]=\"expandedElement === element\"\n      (click)=\"expandedElement = expandedElement === element ? null : element\">\n  </tr>\n  <tr mat-row *matRowDef=\"let row; columns: ['expandedDetail']\" class=\"example-detail-row\"></tr>\n</table>\n\n"
+module.exports = "<!-- We use mat-table from Angular material to display all the pending orders -->\n<!-- All our data is stored in the array 'dataSource' -->\n<table mat-table [dataSource]=\"dataSource\" multiTemplateDataRows class=\"mat-elevation-z8\" >\n\n  <!-- in 'element' there is all the infos of a client order  -->\n  <ng-container matColumnDef=\"{{column}}\" *ngFor=\"let column of displayedColumns\">\n    <th mat-header-cell *matHeaderCellDef>{{column}}</th>\n    <td mat-cell *matCellDef=\"let element\"> {{element[column]}} </td>\n  </ng-container>\n\n  <!-- We define the detail that will expanded when clicking on the order -->\n  <ng-container matColumnDef=\"expandedDetail\">\n    <td mat-cell *matCellDef=\"let element\" [attr.colspan]=\"displayedColumns.length\">\n      <div class=\"example-element-detail\" [@detailExpand]=\"element == expandedElement ? 'expanded' : 'collapsed'\">\n        <div class=\"example-element-description\">\n          <div class=\"order-container\">\n            <img id=\"img1\" [src]=\"element.image\">\n            <h3>{{element.firstname}} {{element.lastname}}</h3>\n          </div>\n          <div class=\"worker-container\">\n            <h2>Recompense: {{element.price}} €</h2>\n            <h3>Description: {{element.desc}}</h3>\n            <button mat-raised-button type=\"submit\" color=\"primary\" (click)=\"PickAnOrder(element)\">Pick this one</button>\n          </div>\n        </div>\n      </div>\n    </td>\n  </ng-container>\n\n\n  <!-- we tell the table which columns will be rendered in the header and data rows -->\n  <tr mat-header-row *matHeaderRowDef=\"displayedColumns\"></tr>\n  <tr mat-row *matRowDef=\"let element; columns: displayedColumns;\"\n      class=\"example-element-row\"\n      [class.example-expanded-row]=\"expandedElement === element\"\n      (click)=\"expandedElement = expandedElement === element ? null : element\">\n  </tr>\n  <tr mat-row *matRowDef=\"let row; columns: ['expandedDetail']\" class=\"example-detail-row\"></tr>\n</table>\n\n"
 
 /***/ }),
 
@@ -830,7 +823,7 @@ module.exports = "<!-- We use mat-table from Angular material to display all the
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "/* CSS of order-pending */\ntable {\n  min-width: 150px;\n  max-width: 500px;\n  width: 100%;\n  margin: 0 auto;\n  margin-top: 10%;\n  margin-bottom: 10%; }\ntr.example-detail-row {\n  height: 0; }\ntr.example-element-row:not(.example-expanded-row):hover {\n  background: #f5f5f5; }\ntr.example-element-row:not(.example-expanded-row):active {\n  background: #efefef; }\n.example-element-row td {\n  border-bottom-width: 0; }\n.example-element-detail {\n  overflow: hidden;\n  display: flex; }\n.example-element-diagram {\n  min-width: 80px;\n  border: 2px solid black;\n  padding: 8px;\n  font-weight: lighter;\n  margin: 8px 0;\n  height: 104px; }\n.example-element-symbol {\n  font-weight: bold;\n  font-size: 40px;\n  line-height: normal; }\n.example-element-description {\n  padding: 16px; }\n.example-element-description-attribution {\n  opacity: 0.5; }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvb3JkZXItcGVuZGluZy9DOlxcVXNlcnNcXE1hdHRoZXdcXERlc2t0b3BcXFByb2pldF9XRUIvc3JjXFxhcHBcXG9yZGVyLXBlbmRpbmdcXG9yZGVyLXBlbmRpbmcuY29tcG9uZW50LnNjc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEseUJBQUE7QUFFQTtFQUNFLGdCQUFnQjtFQUNoQixnQkFBZ0I7RUFDaEIsV0FBWTtFQUNaLGNBQWM7RUFDZCxlQUFlO0VBQ2Ysa0JBQWtCLEVBQUE7QUFHcEI7RUFDRSxTQUFTLEVBQUE7QUFHWDtFQUNFLG1CQUFtQixFQUFBO0FBR3JCO0VBQ0UsbUJBQW1CLEVBQUE7QUFHckI7RUFDRSxzQkFBc0IsRUFBQTtBQUd4QjtFQUNFLGdCQUFnQjtFQUNoQixhQUFhLEVBQUE7QUFHZjtFQUNFLGVBQWU7RUFDZix1QkFBdUI7RUFDdkIsWUFBWTtFQUNaLG9CQUFvQjtFQUNwQixhQUFhO0VBQ2IsYUFBYSxFQUFBO0FBR2Y7RUFDRSxpQkFBaUI7RUFDakIsZUFBZTtFQUNmLG1CQUFtQixFQUFBO0FBR3JCO0VBQ0UsYUFBYSxFQUFBO0FBR2Y7RUFDRSxZQUFZLEVBQUEiLCJmaWxlIjoic3JjL2FwcC9vcmRlci1wZW5kaW5nL29yZGVyLXBlbmRpbmcuY29tcG9uZW50LnNjc3MiLCJzb3VyY2VzQ29udGVudCI6WyIvKiBDU1Mgb2Ygb3JkZXItcGVuZGluZyAqL1xyXG5cclxudGFibGV7XHJcbiAgbWluLXdpZHRoOiAxNTBweDtcclxuICBtYXgtd2lkdGg6IDUwMHB4O1xyXG4gIHdpZHRoOiAxMDAlIDtcclxuICBtYXJnaW46IDAgYXV0bztcclxuICBtYXJnaW4tdG9wOiAxMCU7XHJcbiAgbWFyZ2luLWJvdHRvbTogMTAlO1xyXG59XHJcblxyXG50ci5leGFtcGxlLWRldGFpbC1yb3cge1xyXG4gIGhlaWdodDogMDtcclxufVxyXG5cclxudHIuZXhhbXBsZS1lbGVtZW50LXJvdzpub3QoLmV4YW1wbGUtZXhwYW5kZWQtcm93KTpob3ZlciB7XHJcbiAgYmFja2dyb3VuZDogI2Y1ZjVmNTtcclxufVxyXG5cclxudHIuZXhhbXBsZS1lbGVtZW50LXJvdzpub3QoLmV4YW1wbGUtZXhwYW5kZWQtcm93KTphY3RpdmUge1xyXG4gIGJhY2tncm91bmQ6ICNlZmVmZWY7XHJcbn1cclxuXHJcbi5leGFtcGxlLWVsZW1lbnQtcm93IHRkIHtcclxuICBib3JkZXItYm90dG9tLXdpZHRoOiAwO1xyXG59XHJcblxyXG4uZXhhbXBsZS1lbGVtZW50LWRldGFpbCB7XHJcbiAgb3ZlcmZsb3c6IGhpZGRlbjtcclxuICBkaXNwbGF5OiBmbGV4O1xyXG59XHJcblxyXG4uZXhhbXBsZS1lbGVtZW50LWRpYWdyYW0ge1xyXG4gIG1pbi13aWR0aDogODBweDtcclxuICBib3JkZXI6IDJweCBzb2xpZCBibGFjaztcclxuICBwYWRkaW5nOiA4cHg7XHJcbiAgZm9udC13ZWlnaHQ6IGxpZ2h0ZXI7XHJcbiAgbWFyZ2luOiA4cHggMDtcclxuICBoZWlnaHQ6IDEwNHB4O1xyXG59XHJcblxyXG4uZXhhbXBsZS1lbGVtZW50LXN5bWJvbCB7XHJcbiAgZm9udC13ZWlnaHQ6IGJvbGQ7XHJcbiAgZm9udC1zaXplOiA0MHB4O1xyXG4gIGxpbmUtaGVpZ2h0OiBub3JtYWw7XHJcbn1cclxuXHJcbi5leGFtcGxlLWVsZW1lbnQtZGVzY3JpcHRpb24ge1xyXG4gIHBhZGRpbmc6IDE2cHg7XHJcbn1cclxuXHJcbi5leGFtcGxlLWVsZW1lbnQtZGVzY3JpcHRpb24tYXR0cmlidXRpb24ge1xyXG4gIG9wYWNpdHk6IDAuNTtcclxufVxyXG4iXX0= */"
+module.exports = "/* CSS of order-pending */\n#img1 {\n  min-width: 100px;\n  max-width: 200px;\n  width: 100%;\n  margin: 0 auto;\n  margin-top: 10%;\n  margin-bottom: 10%; }\ntable {\n  min-width: 150px;\n  max-width: 500px;\n  width: 100%;\n  margin: 0 auto;\n  margin-top: 10%;\n  margin-bottom: 10%; }\ntable .example-element-description {\n    padding: 16px;\n    width: 100%;\n    text-align: center;\n    display: block;\n    float: left; }\ntable .example-element-description .order-container {\n      width: 50%;\n      display: block;\n      float: left; }\ntable .example-element-description .worker-container {\n      width: 50%;\n      display: block;\n      float: left; }\ntr.example-detail-row {\n  height: 0; }\ntr.example-element-row:not(.example-expanded-row):hover {\n  background: #f5f5f5; }\ntr.example-element-row:not(.example-expanded-row):active {\n  background: #efefef; }\n.example-element-row td {\n  border-bottom-width: 0; }\n.example-element-detail {\n  overflow: hidden;\n  display: flex; }\n.example-element-diagram {\n  min-width: 80px;\n  border: 2px solid black;\n  padding: 8px;\n  font-weight: lighter;\n  margin: 8px 0;\n  height: 104px; }\n.example-element-symbol {\n  font-weight: bold;\n  font-size: 40px;\n  line-height: normal; }\n.example-element-description-attribution {\n  opacity: 0.5; }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvb3JkZXItcGVuZGluZy9DOlxcVXNlcnNcXE1hdHRoZXdcXERlc2t0b3BcXFByb2pldF9XRUIvc3JjXFxhcHBcXG9yZGVyLXBlbmRpbmdcXG9yZGVyLXBlbmRpbmcuY29tcG9uZW50LnNjc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEseUJBQUE7QUFFQTtFQUNFLGdCQUFnQjtFQUNoQixnQkFBZ0I7RUFDaEIsV0FBWTtFQUNaLGNBQWM7RUFDZCxlQUFlO0VBQ2Ysa0JBQWtCLEVBQUE7QUFJcEI7RUFDRSxnQkFBZ0I7RUFDaEIsZ0JBQWdCO0VBQ2hCLFdBQVk7RUFDWixjQUFjO0VBQ2QsZUFBZTtFQUNmLGtCQUFrQixFQUFBO0FBTnBCO0lBUUksYUFBYTtJQUNiLFdBQVc7SUFDWCxrQkFBa0I7SUFDbEIsY0FBYztJQUNkLFdBQVcsRUFBQTtBQVpmO01BY00sVUFBVTtNQUNWLGNBQWM7TUFDZCxXQUFXLEVBQUE7QUFoQmpCO01BbUJNLFVBQVU7TUFDVixjQUFjO01BQ2QsV0FBVyxFQUFBO0FBS2pCO0VBQ0UsU0FBUyxFQUFBO0FBR1g7RUFDRSxtQkFBbUIsRUFBQTtBQUdyQjtFQUNFLG1CQUFtQixFQUFBO0FBR3JCO0VBQ0Usc0JBQXNCLEVBQUE7QUFHeEI7RUFDRSxnQkFBZ0I7RUFDaEIsYUFBYSxFQUFBO0FBR2Y7RUFDRSxlQUFlO0VBQ2YsdUJBQXVCO0VBQ3ZCLFlBQVk7RUFDWixvQkFBb0I7RUFDcEIsYUFBYTtFQUNiLGFBQWEsRUFBQTtBQUdmO0VBQ0UsaUJBQWlCO0VBQ2pCLGVBQWU7RUFDZixtQkFBbUIsRUFBQTtBQUdyQjtFQUNFLFlBQVksRUFBQSIsImZpbGUiOiJzcmMvYXBwL29yZGVyLXBlbmRpbmcvb3JkZXItcGVuZGluZy5jb21wb25lbnQuc2NzcyIsInNvdXJjZXNDb250ZW50IjpbIi8qIENTUyBvZiBvcmRlci1wZW5kaW5nICovXHJcblxyXG4jaW1nMXtcclxuICBtaW4td2lkdGg6IDEwMHB4O1xyXG4gIG1heC13aWR0aDogMjAwcHg7XHJcbiAgd2lkdGg6IDEwMCUgO1xyXG4gIG1hcmdpbjogMCBhdXRvO1xyXG4gIG1hcmdpbi10b3A6IDEwJTtcclxuICBtYXJnaW4tYm90dG9tOiAxMCU7XHJcbn1cclxuXHJcblxyXG50YWJsZXtcclxuICBtaW4td2lkdGg6IDE1MHB4O1xyXG4gIG1heC13aWR0aDogNTAwcHg7XHJcbiAgd2lkdGg6IDEwMCUgO1xyXG4gIG1hcmdpbjogMCBhdXRvO1xyXG4gIG1hcmdpbi10b3A6IDEwJTtcclxuICBtYXJnaW4tYm90dG9tOiAxMCU7XHJcbiAgLmV4YW1wbGUtZWxlbWVudC1kZXNjcmlwdGlvbiB7XHJcbiAgICBwYWRkaW5nOiAxNnB4O1xyXG4gICAgd2lkdGg6IDEwMCU7XHJcbiAgICB0ZXh0LWFsaWduOiBjZW50ZXI7XHJcbiAgICBkaXNwbGF5OiBibG9jaztcclxuICAgIGZsb2F0OiBsZWZ0O1xyXG4gICAgLm9yZGVyLWNvbnRhaW5lcntcclxuICAgICAgd2lkdGg6IDUwJTtcclxuICAgICAgZGlzcGxheTogYmxvY2s7XHJcbiAgICAgIGZsb2F0OiBsZWZ0O1xyXG4gICAgfVxyXG4gICAgLndvcmtlci1jb250YWluZXJ7XHJcbiAgICAgIHdpZHRoOiA1MCU7XHJcbiAgICAgIGRpc3BsYXk6IGJsb2NrO1xyXG4gICAgICBmbG9hdDogbGVmdDtcclxuICAgIH1cclxuICB9XHJcbn1cclxuXHJcbnRyLmV4YW1wbGUtZGV0YWlsLXJvdyB7XHJcbiAgaGVpZ2h0OiAwO1xyXG59XHJcblxyXG50ci5leGFtcGxlLWVsZW1lbnQtcm93Om5vdCguZXhhbXBsZS1leHBhbmRlZC1yb3cpOmhvdmVyIHtcclxuICBiYWNrZ3JvdW5kOiAjZjVmNWY1O1xyXG59XHJcblxyXG50ci5leGFtcGxlLWVsZW1lbnQtcm93Om5vdCguZXhhbXBsZS1leHBhbmRlZC1yb3cpOmFjdGl2ZSB7XHJcbiAgYmFja2dyb3VuZDogI2VmZWZlZjtcclxufVxyXG5cclxuLmV4YW1wbGUtZWxlbWVudC1yb3cgdGQge1xyXG4gIGJvcmRlci1ib3R0b20td2lkdGg6IDA7XHJcbn1cclxuXHJcbi5leGFtcGxlLWVsZW1lbnQtZGV0YWlsIHtcclxuICBvdmVyZmxvdzogaGlkZGVuO1xyXG4gIGRpc3BsYXk6IGZsZXg7XHJcbn1cclxuXHJcbi5leGFtcGxlLWVsZW1lbnQtZGlhZ3JhbSB7XHJcbiAgbWluLXdpZHRoOiA4MHB4O1xyXG4gIGJvcmRlcjogMnB4IHNvbGlkIGJsYWNrO1xyXG4gIHBhZGRpbmc6IDhweDtcclxuICBmb250LXdlaWdodDogbGlnaHRlcjtcclxuICBtYXJnaW46IDhweCAwO1xyXG4gIGhlaWdodDogMTA0cHg7XHJcbn1cclxuXHJcbi5leGFtcGxlLWVsZW1lbnQtc3ltYm9sIHtcclxuICBmb250LXdlaWdodDogYm9sZDtcclxuICBmb250LXNpemU6IDQwcHg7XHJcbiAgbGluZS1oZWlnaHQ6IG5vcm1hbDtcclxufVxyXG5cclxuLmV4YW1wbGUtZWxlbWVudC1kZXNjcmlwdGlvbi1hdHRyaWJ1dGlvbiB7XHJcbiAgb3BhY2l0eTogMC41O1xyXG59XHJcbiJdfQ== */"
 
 /***/ }),
 
@@ -867,7 +860,7 @@ var OrderPendingComponent = /** @class */ (function () {
         // We will us this array to store the response of the http request
         this.Orders = [];
         // We define in which order we will display the column
-        this.displayedColumns = ['idOrder', 'orderStatus', 'orderDate'];
+        this.displayedColumns = ['idOrder', 'name', 'orderDate'];
     }
     // ngOnInit() is the function that will be executed at the start of the script
     OrderPendingComponent.prototype.ngOnInit = function () {
@@ -911,7 +904,8 @@ var OrderPendingComponent = /** @class */ (function () {
                     desc: '',
                     price: 0,
                     firstname: '',
-                    lastname: ''
+                    lastname: '',
+                    image: ''
                 };
                 aOrder.idOrder = order.idOrder;
                 aOrder.orderStatus = order.orderStatus;
@@ -924,6 +918,7 @@ var OrderPendingComponent = /** @class */ (function () {
                 _this.auth.userById(order.idUser).subscribe(function (user) {
                     aOrder.firstname = user.firstname;
                     aOrder.lastname = user.lastname;
+                    aOrder.image = user.image;
                     _this.Orders.push(aOrder);
                     _this.dataSource = new _angular_material__WEBPACK_IMPORTED_MODULE_3__["MatTableDataSource"](_this.Orders);
                 });
@@ -965,7 +960,7 @@ var OrderPendingComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<!-- HTML Page for the user profile -->\n\n<div class=\"profile-container\">\n  <div class=\"profile-menu\">\n    <div class=\"image-container\">\n      <img [src]=\"details?.image\" alt=\"\">\n    </div>\n    <ul>\n      <li class=\"active\">Profile</li>\n      <li>Private Informations</li>\n      <li>Edit Profile</li>\n      <li>Logout</li>\n    </ul>\n  </div>\n  <div class=\"profile-content\">\n    <div class=\"actions\">\n      <button mat-icon-button (click)=\"openDialog()\">\n        <mat-icon class=\"icon\">add_a_photo</mat-icon>\n      </button>\n      <button mat-icon-button (click)=\"openDialog()\">\n        <mat-icon class=\"icon\">create</mat-icon>\n      </button>\n    </div>\n    <div class=\"pic\">\n      <img [src]=\"details?.image\" alt=\"\">\n      <h2>{{details?.firstname}} {{details?.lastname}}</h2>\n      <span>{{details?.email}}</span>\n    </div>\n    <div class=\"summary\">\n      <div class=\"content\">\n        <span>0</span>\n        <span>Services</span>\n      </div>\n      <div class=\"content\">\n        <span>0</span>\n        <span>Review posted</span>\n      </div>\n    </div>\n    <div class=\"profile-details\">\n      <mat-list role=\"list\" *ngFor=\"let rev of review\">\n        <mat-list-item role=\"listitem\"><h4>{{rev.Content}}</h4></mat-list-item>\n      </mat-list>\n    </div>\n  </div>\n</div>\n"
+module.exports = "<!-- HTML Page for the user profile -->\n\n<div class=\"profile-container\">\n  <div class=\"profile-menu\">\n    <div class=\"image-container\">\n      <img [src]=\"details?.image\" alt=\"\">\n    </div>\n    <ul>\n      <li class=\"active\">Profile</li>\n      <li>Private Informations</li>\n      <li>Edit Profile</li>\n      <li>Logout</li>\n    </ul>\n  </div>\n  <div class=\"profile-content\">\n    <div class=\"actions\">\n      <button mat-icon-button (click)=\"openDialog()\">\n        <mat-icon class=\"icon\">add_a_photo</mat-icon>\n      </button>\n      <button mat-icon-button (click)=\"openDialog()\">\n        <mat-icon class=\"icon\">create</mat-icon>\n      </button>\n    </div>\n    <div class=\"pic\">\n      <img [src]=\"details?.image\" alt=\"\">\n      <h2>{{details?.firstname}} {{details?.lastname}}</h2>\n      <span>{{details?.email}}</span>\n    </div>\n    <div class=\"summary\">\n      <div class=\"content\">\n        <span>0</span>\n        <span>Services</span>\n      </div>\n      <div class=\"content\">\n        <span>0</span>\n        <span>Review posted</span>\n      </div>\n    </div>\n    <div class=\"profile-details\">\n      <table mat-table [dataSource]=\"dataSource\" multiTemplateDataRows class=\"mat-elevation-z8\" >\n        <ng-container matColumnDef=\"{{column}}\" *ngFor=\"let column of displayedColumns\" >\n          <th mat-header-cell *matHeaderCellDef ><h2 id=\"The\">Derniers avis reçus</h2></th>\n          <td mat-cell *matCellDef=\"let element\" > {{element[column]}} </td>\n        </ng-container>\n        <tr mat-header-row *matHeaderRowDef=\"displayedColumns; sticky: true;\"></tr>\n        <tr mat-row *matRowDef=\"let element; columns: displayedColumns;\"></tr>\n      </table>\n    </div>\n  </div>\n</div>\n"
 
 /***/ }),
 
@@ -976,7 +971,7 @@ module.exports = "<!-- HTML Page for the user profile -->\n\n<div class=\"profil
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "/* CSS of the user profile */\n.profile-container {\n  width: 485px;\n  height: 485px;\n  margin: 0 auto;\n  margin-top: 50px; }\n.profile-container .profile-menu {\n    float: left;\n    width: 37%;\n    height: 482px;\n    background: #fff;\n    box-shadow: 0 0 25px rgba(0, 0, 0, 0.2); }\n.profile-container .profile-menu .image-container {\n      width: 70px;\n      height: 70px;\n      margin: 60px; }\n.profile-container .profile-menu .image-container img {\n        max-width: 100%;\n        height: auto;\n        border-radius: 50%; }\n.profile-container .profile-menu .image-container img:hover {\n          opacity: 0.8; }\n.profile-container .profile-menu ul {\n      list-style: none;\n      margin: 0;\n      padding: 0; }\n.profile-container .profile-menu ul li {\n        padding: 10px 20px;\n        font-size: 13px; }\n.profile-container .profile-menu ul li:hover, .profile-container .profile-menu ul li.active {\n          background: #f7f7f7;\n          border-left: 5px solid  #ff3c8a; }\n.profile-container .profile-menu ul li:last-child {\n          margin-top: 50px; }\n.profile-container .profile-content {\n    width: 63%;\n    float: right;\n    background: #fff;\n    box-shadow: 0 0 25px rgba(0, 0, 0, 0.2); }\n.profile-container .profile-content .actions {\n      width: 100%;\n      background: linear-gradient(to right, #ff3c8a 0%, #ffbcd7 100%);\n      height: 40px;\n      line-height: 40;\n      color: #fff;\n      padding: 20px 0 0 0; }\n.profile-container .profile-content .actions button {\n        padding-left: 20px;\n        float: left; }\n.profile-container .profile-content .actions button:hover {\n          opacity: 0.8; }\n.profile-container .profile-content .actions button + button {\n        padding-right: 20px;\n        float: right; }\n.profile-container .profile-content .pic {\n      background: linear-gradient(to right, #ff3c8a 0%, #ffbcd7 100%);\n      text-align: center;\n      color: #fff;\n      padding: 0 0 20px 0; }\n.profile-container .profile-content .pic img {\n        width: 90px;\n        height: auto;\n        border-radius: 50%; }\n.profile-container .profile-content .pic img:hover {\n          opacity: 0.8; }\n.profile-container .profile-content .pic h2 {\n        font-size: 17px;\n        padding: 0;\n        margin: 0;\n        font-weight: 400; }\n.profile-container .profile-content .pic span {\n        font-size: 15px;\n        font-weight: 300; }\n.profile-container .profile-content .summary {\n      color: #fff; }\n.profile-container .profile-content .summary .content {\n        width: 50%;\n        float: left;\n        text-align: center;\n        display: block;\n        background: linear-gradient(to right, #ff3c8a 0%, #ffbcd7 100%);\n        padding: 10px 0; }\n.profile-container .profile-content .summary .content span {\n          display: block;\n          font-size: 15px;\n          font-weight: 500; }\n.profile-container .profile-content .profile-details {\n      padding: 0;\n      margin: 0;\n      color: #929292;\n      height: auto; }\n.profile-container .profile-content .profile-details .mat-list-item {\n        margin: 10px; }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvcHJvZmlsZS9DOlxcVXNlcnNcXE1hdHRoZXdcXERlc2t0b3BcXFByb2pldF9XRUIvc3JjXFxhcHBcXHByb2ZpbGVcXHByb2ZpbGUuY29tcG9uZW50LnNjc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsNEJBQUE7QUFFQTtFQUNFLFlBQVk7RUFDWixhQUFhO0VBQ2IsY0FBYztFQUNkLGdCQUFnQixFQUFBO0FBSmxCO0lBTUksV0FBVztJQUNYLFVBQVU7SUFDVixhQUFhO0lBQ2IsZ0JBQWdCO0lBQ2hCLHVDQUE4QixFQUFBO0FBVmxDO01BWU0sV0FBVztNQUNYLFlBQVk7TUFDWixZQUFZLEVBQUE7QUFkbEI7UUFnQlEsZUFBZTtRQUNmLFlBQVk7UUFDWixrQkFBaUIsRUFBQTtBQWxCekI7VUFvQlUsWUFBWSxFQUFBO0FBcEJ0QjtNQXlCTSxnQkFBZ0I7TUFDaEIsU0FBUztNQUNULFVBQVUsRUFBQTtBQTNCaEI7UUE2QlEsa0JBQWtCO1FBQ2xCLGVBQWUsRUFBQTtBQTlCdkI7VUFnQ1UsbUJBQW1CO1VBQ25CLCtCQUErQixFQUFBO0FBakN6QztVQW9DVSxnQkFBZ0IsRUFBQTtBQXBDMUI7SUEwQ0ksVUFBVTtJQUNWLFlBQVk7SUFDWixnQkFBZ0I7SUFDaEIsdUNBQThCLEVBQUE7QUE3Q2xDO01BK0NNLFdBQVc7TUFDWCwrREFBK0Q7TUFDL0QsWUFBWTtNQUNaLGVBQWU7TUFDZixXQUFXO01BQ1gsbUJBQW1CLEVBQUE7QUFwRHpCO1FBc0RRLGtCQUFrQjtRQUNsQixXQUFXLEVBQUE7QUF2RG5CO1VBeURVLFlBQVksRUFBQTtBQXpEdEI7UUE2RFEsbUJBQW1CO1FBQ25CLFlBQVksRUFBQTtBQTlEcEI7TUFrRU0sK0RBQStEO01BQy9ELGtCQUFrQjtNQUNsQixXQUFXO01BQ1gsbUJBQW1CLEVBQUE7QUFyRXpCO1FBdUVRLFdBQVc7UUFDWCxZQUFZO1FBQ1osa0JBQWtCLEVBQUE7QUF6RTFCO1VBMkVVLFlBQVksRUFBQTtBQTNFdEI7UUErRVEsZUFBZTtRQUNmLFVBQVU7UUFDVixTQUFTO1FBQ1QsZ0JBQWdCLEVBQUE7QUFsRnhCO1FBcUZRLGVBQWU7UUFDZixnQkFBZ0IsRUFBQTtBQXRGeEI7TUEwRk0sV0FBVyxFQUFBO0FBMUZqQjtRQTRGUSxVQUFVO1FBQ1YsV0FBVztRQUNYLGtCQUFrQjtRQUNsQixjQUFjO1FBQ2QsK0RBQWdFO1FBQ2hFLGVBQWUsRUFBQTtBQWpHdkI7VUFtR1UsY0FBYztVQUNkLGVBQWU7VUFDZixnQkFBZ0IsRUFBQTtBQXJHMUI7TUEwR00sVUFBVTtNQUNWLFNBQVM7TUFDVCxjQUFjO01BQ2QsWUFBWSxFQUFBO0FBN0dsQjtRQStHUSxZQUNGLEVBQUEiLCJmaWxlIjoic3JjL2FwcC9wcm9maWxlL3Byb2ZpbGUuY29tcG9uZW50LnNjc3MiLCJzb3VyY2VzQ29udGVudCI6WyIvKiBDU1Mgb2YgdGhlIHVzZXIgcHJvZmlsZSAqL1xyXG5cclxuLnByb2ZpbGUtY29udGFpbmVye1xyXG4gIHdpZHRoOiA0ODVweDtcclxuICBoZWlnaHQ6IDQ4NXB4O1xyXG4gIG1hcmdpbjogMCBhdXRvO1xyXG4gIG1hcmdpbi10b3A6IDUwcHg7XHJcbiAgLnByb2ZpbGUtbWVudXtcclxuICAgIGZsb2F0OiBsZWZ0O1xyXG4gICAgd2lkdGg6IDM3JTtcclxuICAgIGhlaWdodDogNDgycHg7XHJcbiAgICBiYWNrZ3JvdW5kOiAjZmZmO1xyXG4gICAgYm94LXNoYWRvdzogMCAwIDI1cHggcmdiYSgjMDAwLCAwLjIpO1xyXG4gICAgLmltYWdlLWNvbnRhaW5lcntcclxuICAgICAgd2lkdGg6IDcwcHg7XHJcbiAgICAgIGhlaWdodDogNzBweDtcclxuICAgICAgbWFyZ2luOiA2MHB4O1xyXG4gICAgICBpbWd7XHJcbiAgICAgICAgbWF4LXdpZHRoOiAxMDAlO1xyXG4gICAgICAgIGhlaWdodDogYXV0bztcclxuICAgICAgICBib3JkZXItcmFkaXVzOjUwJTtcclxuICAgICAgICAmOmhvdmVye1xyXG4gICAgICAgICAgb3BhY2l0eTogMC44O1xyXG4gICAgICAgIH1cclxuICAgICAgfVxyXG4gICAgfVxyXG4gICAgdWx7XHJcbiAgICAgIGxpc3Qtc3R5bGU6IG5vbmU7XHJcbiAgICAgIG1hcmdpbjogMDtcclxuICAgICAgcGFkZGluZzogMDtcclxuICAgICAgbGl7XHJcbiAgICAgICAgcGFkZGluZzogMTBweCAyMHB4O1xyXG4gICAgICAgIGZvbnQtc2l6ZTogMTNweDtcclxuICAgICAgICAmOmhvdmVyLCAmLmFjdGl2ZXtcclxuICAgICAgICAgIGJhY2tncm91bmQ6ICNmN2Y3Zjc7XHJcbiAgICAgICAgICBib3JkZXItbGVmdDogNXB4IHNvbGlkICAjZmYzYzhhO1xyXG4gICAgICAgIH1cclxuICAgICAgICAmOmxhc3QtY2hpbGR7XHJcbiAgICAgICAgICBtYXJnaW4tdG9wOiA1MHB4O1xyXG4gICAgICAgIH1cclxuICAgICAgfVxyXG4gICAgfVxyXG4gIH1cclxuICAucHJvZmlsZS1jb250ZW50e1xyXG4gICAgd2lkdGg6IDYzJTtcclxuICAgIGZsb2F0OiByaWdodDtcclxuICAgIGJhY2tncm91bmQ6ICNmZmY7XHJcbiAgICBib3gtc2hhZG93OiAwIDAgMjVweCByZ2JhKCMwMDAsIDAuMik7XHJcbiAgICAuYWN0aW9uc3tcclxuICAgICAgd2lkdGg6IDEwMCU7XHJcbiAgICAgIGJhY2tncm91bmQ6IGxpbmVhci1ncmFkaWVudCh0byByaWdodCwgI2ZmM2M4YSAwJSwgI2ZmYmNkNyAxMDAlKTtcclxuICAgICAgaGVpZ2h0OiA0MHB4O1xyXG4gICAgICBsaW5lLWhlaWdodDogNDA7XHJcbiAgICAgIGNvbG9yOiAjZmZmO1xyXG4gICAgICBwYWRkaW5nOiAyMHB4IDAgMCAwO1xyXG4gICAgICBidXR0b257XHJcbiAgICAgICAgcGFkZGluZy1sZWZ0OiAyMHB4O1xyXG4gICAgICAgIGZsb2F0OiBsZWZ0O1xyXG4gICAgICAgICY6aG92ZXJ7XHJcbiAgICAgICAgICBvcGFjaXR5OiAwLjg7XHJcbiAgICAgICAgfVxyXG4gICAgICB9XHJcbiAgICAgIGJ1dHRvbitidXR0b257XHJcbiAgICAgICAgcGFkZGluZy1yaWdodDogMjBweDtcclxuICAgICAgICBmbG9hdDogcmlnaHQ7XHJcbiAgICAgIH1cclxuICAgIH1cclxuICAgIC5waWN7XHJcbiAgICAgIGJhY2tncm91bmQ6IGxpbmVhci1ncmFkaWVudCh0byByaWdodCwgI2ZmM2M4YSAwJSwgI2ZmYmNkNyAxMDAlKTtcclxuICAgICAgdGV4dC1hbGlnbjogY2VudGVyO1xyXG4gICAgICBjb2xvcjogI2ZmZjtcclxuICAgICAgcGFkZGluZzogMCAwIDIwcHggMDtcclxuICAgICAgaW1ne1xyXG4gICAgICAgIHdpZHRoOiA5MHB4O1xyXG4gICAgICAgIGhlaWdodDogYXV0bztcclxuICAgICAgICBib3JkZXItcmFkaXVzOiA1MCU7XHJcbiAgICAgICAgJjpob3ZlcntcclxuICAgICAgICAgIG9wYWNpdHk6IDAuODtcclxuICAgICAgICB9XHJcbiAgICAgIH1cclxuICAgICAgaDJ7XHJcbiAgICAgICAgZm9udC1zaXplOiAxN3B4O1xyXG4gICAgICAgIHBhZGRpbmc6IDA7XHJcbiAgICAgICAgbWFyZ2luOiAwO1xyXG4gICAgICAgIGZvbnQtd2VpZ2h0OiA0MDA7XHJcbiAgICAgIH1cclxuICAgICAgc3BhbntcclxuICAgICAgICBmb250LXNpemU6IDE1cHg7XHJcbiAgICAgICAgZm9udC13ZWlnaHQ6IDMwMDtcclxuICAgICAgfVxyXG4gICAgfVxyXG4gICAgLnN1bW1hcnl7XHJcbiAgICAgIGNvbG9yOiAjZmZmO1xyXG4gICAgICAuY29udGVudHtcclxuICAgICAgICB3aWR0aDogNTAlO1xyXG4gICAgICAgIGZsb2F0OiBsZWZ0O1xyXG4gICAgICAgIHRleHQtYWxpZ246IGNlbnRlcjtcclxuICAgICAgICBkaXNwbGF5OiBibG9jaztcclxuICAgICAgICBiYWNrZ3JvdW5kOiBsaW5lYXItZ3JhZGllbnQodG8gcmlnaHQsICAjZmYzYzhhIDAlLCAjZmZiY2Q3IDEwMCUpO1xyXG4gICAgICAgIHBhZGRpbmc6IDEwcHggMDtcclxuICAgICAgICBzcGFue1xyXG4gICAgICAgICAgZGlzcGxheTogYmxvY2s7XHJcbiAgICAgICAgICBmb250LXNpemU6IDE1cHg7XHJcbiAgICAgICAgICBmb250LXdlaWdodDogNTAwO1xyXG4gICAgICAgIH1cclxuICAgICAgfVxyXG4gICAgfVxyXG4gICAgLnByb2ZpbGUtZGV0YWlsc3tcclxuICAgICAgcGFkZGluZzogMDtcclxuICAgICAgbWFyZ2luOiAwO1xyXG4gICAgICBjb2xvcjogIzkyOTI5MjtcclxuICAgICAgaGVpZ2h0OiBhdXRvO1xyXG4gICAgICAubWF0LWxpc3QtaXRlbXtcclxuICAgICAgICBtYXJnaW46IDEwcHhcclxuICAgICAgfVxyXG5cclxuICAgIH1cclxuICB9XHJcbn1cclxuIl19 */"
+module.exports = "/* CSS of the user profile */\n.profile-container {\n  width: 485px;\n  height: 485px;\n  margin: 0 auto;\n  margin-top: 50px; }\n.profile-container .profile-menu {\n    float: left;\n    width: 37%;\n    height: 482px;\n    background: #fff;\n    box-shadow: 0 0 25px rgba(0, 0, 0, 0.2); }\n.profile-container .profile-menu .image-container {\n      width: 70px;\n      height: 70px;\n      margin: 60px; }\n.profile-container .profile-menu .image-container img {\n        max-width: 100%;\n        height: 70px;\n        border-radius: 50%; }\n.profile-container .profile-menu .image-container img:hover {\n          opacity: 0.8; }\n.profile-container .profile-menu ul {\n      list-style: none;\n      margin: 0;\n      padding: 0; }\n.profile-container .profile-menu ul li {\n        padding: 10px 20px;\n        font-size: 13px; }\n.profile-container .profile-menu ul li:hover, .profile-container .profile-menu ul li.active {\n          background: #f7f7f7;\n          border-left: 5px solid  #ff3c8a; }\n.profile-container .profile-menu ul li:last-child {\n          margin-top: 50px; }\n.profile-container .profile-content {\n    width: 63%;\n    float: right;\n    background: #fff;\n    box-shadow: 0 0 25px rgba(0, 0, 0, 0.2); }\n.profile-container .profile-content .actions {\n      width: 100%;\n      background: linear-gradient(to right, #ff3c8a 0%, #ffbcd7 100%);\n      height: 40px;\n      line-height: 40;\n      color: #fff;\n      padding: 20px 0 0 0; }\n.profile-container .profile-content .actions button {\n        padding-left: 20px;\n        float: left; }\n.profile-container .profile-content .actions button:hover {\n          opacity: 0.8; }\n.profile-container .profile-content .actions button + button {\n        padding-right: 40px;\n        float: right; }\n.profile-container .profile-content .pic {\n      background: linear-gradient(to right, #ff3c8a 0%, #ffbcd7 100%);\n      text-align: center;\n      color: #fff;\n      padding: 0 0 20px 0; }\n.profile-container .profile-content .pic img {\n        width: 90px;\n        height: 90px;\n        border-radius: 50%; }\n.profile-container .profile-content .pic img:hover {\n          opacity: 0.8; }\n.profile-container .profile-content .pic h2 {\n        font-size: 17px;\n        padding: 0;\n        margin: 0;\n        font-weight: 400; }\n.profile-container .profile-content .pic span {\n        font-size: 15px;\n        font-weight: 300; }\n.profile-container .profile-content .summary {\n      color: #fff; }\n.profile-container .profile-content .summary .content {\n        width: 50%;\n        float: left;\n        text-align: center;\n        display: block;\n        background: linear-gradient(to right, #ff3c8a 0%, #ffbcd7 100%);\n        padding: 10px 0; }\n.profile-container .profile-content .summary .content span {\n          display: block;\n          font-size: 15px;\n          font-weight: 500; }\n.profile-container .profile-content .profile-details {\n      padding-top: 20px;\n      margin-top: 20px;\n      text-align: center;\n      height: 200px; }\n.profile-container .profile-content .profile-details .table {\n        width: 100%;\n        float: left; }\n#The {\n  color: #000000;\n  text-align: center; }\ntable {\n  height: 200px;\n  width: 100%; }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvcHJvZmlsZS9DOlxcVXNlcnNcXE1hdHRoZXdcXERlc2t0b3BcXFByb2pldF9XRUIvc3JjXFxhcHBcXHByb2ZpbGVcXHByb2ZpbGUuY29tcG9uZW50LnNjc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsNEJBQUE7QUFFQTtFQUNFLFlBQVk7RUFDWixhQUFhO0VBQ2IsY0FBYztFQUNkLGdCQUFnQixFQUFBO0FBSmxCO0lBTUksV0FBVztJQUNYLFVBQVU7SUFDVixhQUFhO0lBQ2IsZ0JBQWdCO0lBQ2hCLHVDQUE4QixFQUFBO0FBVmxDO01BWU0sV0FBVztNQUNYLFlBQVk7TUFDWixZQUFZLEVBQUE7QUFkbEI7UUFnQlEsZUFBZTtRQUNmLFlBQVk7UUFDWixrQkFBaUIsRUFBQTtBQWxCekI7VUFvQlUsWUFBWSxFQUFBO0FBcEJ0QjtNQXlCTSxnQkFBZ0I7TUFDaEIsU0FBUztNQUNULFVBQVUsRUFBQTtBQTNCaEI7UUE2QlEsa0JBQWtCO1FBQ2xCLGVBQWUsRUFBQTtBQTlCdkI7VUFnQ1UsbUJBQW1CO1VBQ25CLCtCQUErQixFQUFBO0FBakN6QztVQW9DVSxnQkFBZ0IsRUFBQTtBQXBDMUI7SUEwQ0ksVUFBVTtJQUNWLFlBQVk7SUFDWixnQkFBZ0I7SUFDaEIsdUNBQThCLEVBQUE7QUE3Q2xDO01BK0NNLFdBQVc7TUFDWCwrREFBK0Q7TUFDL0QsWUFBWTtNQUNaLGVBQWU7TUFDZixXQUFXO01BQ1gsbUJBQW1CLEVBQUE7QUFwRHpCO1FBc0RRLGtCQUFrQjtRQUNsQixXQUFXLEVBQUE7QUF2RG5CO1VBeURVLFlBQVksRUFBQTtBQXpEdEI7UUE2RFEsbUJBQW1CO1FBQ25CLFlBQVksRUFBQTtBQTlEcEI7TUFrRU0sK0RBQStEO01BQy9ELGtCQUFrQjtNQUNsQixXQUFXO01BQ1gsbUJBQW1CLEVBQUE7QUFyRXpCO1FBdUVRLFdBQVc7UUFDWCxZQUFZO1FBQ1osa0JBQWtCLEVBQUE7QUF6RTFCO1VBMkVVLFlBQVksRUFBQTtBQTNFdEI7UUErRVEsZUFBZTtRQUNmLFVBQVU7UUFDVixTQUFTO1FBQ1QsZ0JBQWdCLEVBQUE7QUFsRnhCO1FBcUZRLGVBQWU7UUFDZixnQkFBZ0IsRUFBQTtBQXRGeEI7TUEwRk0sV0FBVyxFQUFBO0FBMUZqQjtRQTRGUSxVQUFVO1FBQ1YsV0FBVztRQUNYLGtCQUFrQjtRQUNsQixjQUFjO1FBQ2QsK0RBQWdFO1FBQ2hFLGVBQWUsRUFBQTtBQWpHdkI7VUFtR1UsY0FBYztVQUNkLGVBQWU7VUFDZixnQkFBZ0IsRUFBQTtBQXJHMUI7TUEwR00saUJBQWlCO01BQ2pCLGdCQUFnQjtNQUNoQixrQkFBa0I7TUFDbEIsYUFBYSxFQUFBO0FBN0duQjtRQStHUSxXQUFXO1FBQ1gsV0FBVyxFQUFBO0FBTW5CO0VBQ0UsY0FBYztFQUNkLGtCQUFrQixFQUFBO0FBR3BCO0VBQ0UsYUFBYTtFQUNiLFdBQVcsRUFBQSIsImZpbGUiOiJzcmMvYXBwL3Byb2ZpbGUvcHJvZmlsZS5jb21wb25lbnQuc2NzcyIsInNvdXJjZXNDb250ZW50IjpbIi8qIENTUyBvZiB0aGUgdXNlciBwcm9maWxlICovXHJcblxyXG4ucHJvZmlsZS1jb250YWluZXJ7XHJcbiAgd2lkdGg6IDQ4NXB4O1xyXG4gIGhlaWdodDogNDg1cHg7XHJcbiAgbWFyZ2luOiAwIGF1dG87XHJcbiAgbWFyZ2luLXRvcDogNTBweDtcclxuICAucHJvZmlsZS1tZW51e1xyXG4gICAgZmxvYXQ6IGxlZnQ7XHJcbiAgICB3aWR0aDogMzclO1xyXG4gICAgaGVpZ2h0OiA0ODJweDtcclxuICAgIGJhY2tncm91bmQ6ICNmZmY7XHJcbiAgICBib3gtc2hhZG93OiAwIDAgMjVweCByZ2JhKCMwMDAsIDAuMik7XHJcbiAgICAuaW1hZ2UtY29udGFpbmVye1xyXG4gICAgICB3aWR0aDogNzBweDtcclxuICAgICAgaGVpZ2h0OiA3MHB4O1xyXG4gICAgICBtYXJnaW46IDYwcHg7XHJcbiAgICAgIGltZ3tcclxuICAgICAgICBtYXgtd2lkdGg6IDEwMCU7XHJcbiAgICAgICAgaGVpZ2h0OiA3MHB4O1xyXG4gICAgICAgIGJvcmRlci1yYWRpdXM6NTAlO1xyXG4gICAgICAgICY6aG92ZXJ7XHJcbiAgICAgICAgICBvcGFjaXR5OiAwLjg7XHJcbiAgICAgICAgfVxyXG4gICAgICB9XHJcbiAgICB9XHJcbiAgICB1bHtcclxuICAgICAgbGlzdC1zdHlsZTogbm9uZTtcclxuICAgICAgbWFyZ2luOiAwO1xyXG4gICAgICBwYWRkaW5nOiAwO1xyXG4gICAgICBsaXtcclxuICAgICAgICBwYWRkaW5nOiAxMHB4IDIwcHg7XHJcbiAgICAgICAgZm9udC1zaXplOiAxM3B4O1xyXG4gICAgICAgICY6aG92ZXIsICYuYWN0aXZle1xyXG4gICAgICAgICAgYmFja2dyb3VuZDogI2Y3ZjdmNztcclxuICAgICAgICAgIGJvcmRlci1sZWZ0OiA1cHggc29saWQgICNmZjNjOGE7XHJcbiAgICAgICAgfVxyXG4gICAgICAgICY6bGFzdC1jaGlsZHtcclxuICAgICAgICAgIG1hcmdpbi10b3A6IDUwcHg7XHJcbiAgICAgICAgfVxyXG4gICAgICB9XHJcbiAgICB9XHJcbiAgfVxyXG4gIC5wcm9maWxlLWNvbnRlbnR7XHJcbiAgICB3aWR0aDogNjMlO1xyXG4gICAgZmxvYXQ6IHJpZ2h0O1xyXG4gICAgYmFja2dyb3VuZDogI2ZmZjtcclxuICAgIGJveC1zaGFkb3c6IDAgMCAyNXB4IHJnYmEoIzAwMCwgMC4yKTtcclxuICAgIC5hY3Rpb25ze1xyXG4gICAgICB3aWR0aDogMTAwJTtcclxuICAgICAgYmFja2dyb3VuZDogbGluZWFyLWdyYWRpZW50KHRvIHJpZ2h0LCAjZmYzYzhhIDAlLCAjZmZiY2Q3IDEwMCUpO1xyXG4gICAgICBoZWlnaHQ6IDQwcHg7XHJcbiAgICAgIGxpbmUtaGVpZ2h0OiA0MDtcclxuICAgICAgY29sb3I6ICNmZmY7XHJcbiAgICAgIHBhZGRpbmc6IDIwcHggMCAwIDA7XHJcbiAgICAgIGJ1dHRvbntcclxuICAgICAgICBwYWRkaW5nLWxlZnQ6IDIwcHg7XHJcbiAgICAgICAgZmxvYXQ6IGxlZnQ7XHJcbiAgICAgICAgJjpob3ZlcntcclxuICAgICAgICAgIG9wYWNpdHk6IDAuODtcclxuICAgICAgICB9XHJcbiAgICAgIH1cclxuICAgICAgYnV0dG9uK2J1dHRvbntcclxuICAgICAgICBwYWRkaW5nLXJpZ2h0OiA0MHB4O1xyXG4gICAgICAgIGZsb2F0OiByaWdodDtcclxuICAgICAgfVxyXG4gICAgfVxyXG4gICAgLnBpY3tcclxuICAgICAgYmFja2dyb3VuZDogbGluZWFyLWdyYWRpZW50KHRvIHJpZ2h0LCAjZmYzYzhhIDAlLCAjZmZiY2Q3IDEwMCUpO1xyXG4gICAgICB0ZXh0LWFsaWduOiBjZW50ZXI7XHJcbiAgICAgIGNvbG9yOiAjZmZmO1xyXG4gICAgICBwYWRkaW5nOiAwIDAgMjBweCAwO1xyXG4gICAgICBpbWd7XHJcbiAgICAgICAgd2lkdGg6IDkwcHg7XHJcbiAgICAgICAgaGVpZ2h0OiA5MHB4O1xyXG4gICAgICAgIGJvcmRlci1yYWRpdXM6IDUwJTtcclxuICAgICAgICAmOmhvdmVye1xyXG4gICAgICAgICAgb3BhY2l0eTogMC44O1xyXG4gICAgICAgIH1cclxuICAgICAgfVxyXG4gICAgICBoMntcclxuICAgICAgICBmb250LXNpemU6IDE3cHg7XHJcbiAgICAgICAgcGFkZGluZzogMDtcclxuICAgICAgICBtYXJnaW46IDA7XHJcbiAgICAgICAgZm9udC13ZWlnaHQ6IDQwMDtcclxuICAgICAgfVxyXG4gICAgICBzcGFue1xyXG4gICAgICAgIGZvbnQtc2l6ZTogMTVweDtcclxuICAgICAgICBmb250LXdlaWdodDogMzAwO1xyXG4gICAgICB9XHJcbiAgICB9XHJcbiAgICAuc3VtbWFyeXtcclxuICAgICAgY29sb3I6ICNmZmY7XHJcbiAgICAgIC5jb250ZW50e1xyXG4gICAgICAgIHdpZHRoOiA1MCU7XHJcbiAgICAgICAgZmxvYXQ6IGxlZnQ7XHJcbiAgICAgICAgdGV4dC1hbGlnbjogY2VudGVyO1xyXG4gICAgICAgIGRpc3BsYXk6IGJsb2NrO1xyXG4gICAgICAgIGJhY2tncm91bmQ6IGxpbmVhci1ncmFkaWVudCh0byByaWdodCwgICNmZjNjOGEgMCUsICNmZmJjZDcgMTAwJSk7XHJcbiAgICAgICAgcGFkZGluZzogMTBweCAwO1xyXG4gICAgICAgIHNwYW57XHJcbiAgICAgICAgICBkaXNwbGF5OiBibG9jaztcclxuICAgICAgICAgIGZvbnQtc2l6ZTogMTVweDtcclxuICAgICAgICAgIGZvbnQtd2VpZ2h0OiA1MDA7XHJcbiAgICAgICAgfVxyXG4gICAgICB9XHJcbiAgICB9XHJcbiAgICAucHJvZmlsZS1kZXRhaWxze1xyXG4gICAgICBwYWRkaW5nLXRvcDogMjBweDtcclxuICAgICAgbWFyZ2luLXRvcDogMjBweDtcclxuICAgICAgdGV4dC1hbGlnbjogY2VudGVyO1xyXG4gICAgICBoZWlnaHQ6IDIwMHB4O1xyXG4gICAgICAudGFibGV7XHJcbiAgICAgICAgd2lkdGg6IDEwMCU7XHJcbiAgICAgICAgZmxvYXQ6IGxlZnQ7XHJcbiAgICAgIH1cclxuICAgIH1cclxuICB9XHJcbn1cclxuXHJcbiNUaGV7XHJcbiAgY29sb3I6ICMwMDAwMDA7XHJcbiAgdGV4dC1hbGlnbjogY2VudGVyO1xyXG59XHJcblxyXG50YWJsZXtcclxuICBoZWlnaHQ6IDIwMHB4O1xyXG4gIHdpZHRoOiAxMDAlO1xyXG59XHJcbiJdfQ== */"
 
 /***/ }),
 
@@ -1005,7 +1000,9 @@ var ProfileComponent = /** @class */ (function () {
     function ProfileComponent(auth, dialog) {
         this.auth = auth;
         this.dialog = dialog;
+        this.review = [];
         this.fileUrl = '';
+        this.displayedColumns = ['Content'];
     }
     // At the start of the script we initialise the profile by getting the info of the user
     ProfileComponent.prototype.ngOnInit = function () {
@@ -1020,8 +1017,18 @@ var ProfileComponent = /** @class */ (function () {
     ProfileComponent.prototype.GetAllReview = function (idUser) {
         var _this = this;
         this.auth.getReview(idUser).subscribe(function (review) {
-            _this.review = review;
-            console.log(_this.review);
+            console.log(review);
+            for (var _i = 0, review_1 = review; _i < review_1.length; _i++) {
+                var aReview = review_1[_i];
+                var aRev = {
+                    Content: ''
+                };
+                aRev.Content = aReview.Content;
+                _this.review.push(aRev);
+                console.log(aRev);
+                console.log(_this.review);
+                _this.dataSource = new _angular_material__WEBPACK_IMPORTED_MODULE_3__["MatTableDataSource"](_this.review);
+            }
         });
     };
     // If the admin click on the upload button if open a dialog page in which he will be able to download an image for the order
@@ -1232,7 +1239,7 @@ var RegisterComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<!-- HTML For the service list, we display all of the infos for each services using the directive ngFor -->\n\n<div class=\"container\">\n  <div class=\"service\" *ngFor=\"let service of this.MyServices\">\n    <mat-card>\n      <h2>{{service.name}}</h2>\n      <h4>{{service.idType}}</h4>\n      <img id=\"img1\" [src]=\"service.image\">\n      <p>{{service.price}} €</p>\n      <p>{{service.desc}}</p>\n      <button mat-raised-button color=\"accent\" type=\"submit\" (click)=\"OrderOne(service.name)\">Order</button>\n    </mat-card>\n  </div>\n</div>\n"
+module.exports = "<!-- HTML For the service list, we display all of the infos for each services using the directive ngFor -->\n<div class=\"search\">\n  <mat-form-field appearance=\"outline\" color=\"accent\" >\n    <mat-label>Find a service</mat-label>\n    <input matInput placeholder=\"...\" type=\"text\" #myInput [(ngModel)]=\"name\" (input)=\"Search()\" >\n    <mat-icon matSuffix>search</mat-icon>\n  </mat-form-field>\n</div>\n<div class=\"content\">\n  <div class=\"container\"*ngFor=\"let service of this.MyServices\">\n    <div class=\"service\" >\n      <mat-card>\n        <div class=\"top\">\n          <h2>{{service.name}}</h2>\n          <h4>{{service.idType}}</h4>\n        </div>\n        <div class=\"img-container\">\n          <img id=\"img1\" [src]=\"service.image\">\n        </div>\n        <div class=\"bottom\">\n          <p>{{service.price}} €</p>\n          <p>{{service.desc}}</p>\n          <button mat-raised-button color=\"accent\" type=\"submit\" (click)=\"OrderOne(service.name)\">Order</button>\n        </div>\n      </mat-card>\n    </div>\n  </div>\n\n</div>\n"
 
 /***/ }),
 
@@ -1243,7 +1250,7 @@ module.exports = "<!-- HTML For the service list, we display all of the infos fo
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "/* CSS for services-list */\n#img1 {\n  width: 90%;\n  text-align: center;\n  display: block; }\nimg {\n  margin: 0 auto;\n  display: block; }\n.container {\n  min-width: 150px;\n  max-width: 500px;\n  width: 100%;\n  height: 485px;\n  margin: 0 auto;\n  margin-top: 50px;\n  text-align: center; }\n.container .service {\n    width: 50%;\n    float: left;\n    text-align: center;\n    display: block;\n    box-shadow: 0 0 25px rgba(0, 0, 0, 0.2); }\n.container .service .h1 {\n      padding-top: 5px; }\n.container .service .h1 .h2 {\n        padding-top: 5px; }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvc2VydmljZXMtbGlzdC9DOlxcVXNlcnNcXE1hdHRoZXdcXERlc2t0b3BcXFByb2pldF9XRUIvc3JjXFxhcHBcXHNlcnZpY2VzLWxpc3RcXHNlcnZpY2VzLWxpc3QuY29tcG9uZW50LnNjc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsMEJBQUE7QUFFQTtFQUNFLFVBQVU7RUFDVixrQkFBa0I7RUFDbEIsY0FBYyxFQUFBO0FBR2hCO0VBQ0UsY0FBYztFQUNkLGNBQWMsRUFBQTtBQUdoQjtFQUNFLGdCQUFnQjtFQUNoQixnQkFBZ0I7RUFDaEIsV0FBVztFQUNYLGFBQWE7RUFDYixjQUFjO0VBQ2QsZ0JBQWdCO0VBQ2hCLGtCQUFrQixFQUFBO0FBUHBCO0lBVUksVUFBVTtJQUNWLFdBQVc7SUFDWCxrQkFBa0I7SUFDbEIsY0FBYztJQUNkLHVDQUE4QixFQUFBO0FBZGxDO01BaUJNLGdCQUFnQixFQUFBO0FBakJ0QjtRQW9CUSxnQkFBZ0IsRUFBQSIsImZpbGUiOiJzcmMvYXBwL3NlcnZpY2VzLWxpc3Qvc2VydmljZXMtbGlzdC5jb21wb25lbnQuc2NzcyIsInNvdXJjZXNDb250ZW50IjpbIi8qIENTUyBmb3Igc2VydmljZXMtbGlzdCAqL1xyXG5cclxuI2ltZzF7XHJcbiAgd2lkdGg6IDkwJTtcclxuICB0ZXh0LWFsaWduOiBjZW50ZXI7XHJcbiAgZGlzcGxheTogYmxvY2s7XHJcbn1cclxuXHJcbmltZ3tcclxuICBtYXJnaW46IDAgYXV0bztcclxuICBkaXNwbGF5OiBibG9jaztcclxufVxyXG5cclxuLmNvbnRhaW5lciB7XHJcbiAgbWluLXdpZHRoOiAxNTBweDtcclxuICBtYXgtd2lkdGg6IDUwMHB4O1xyXG4gIHdpZHRoOiAxMDAlO1xyXG4gIGhlaWdodDogNDg1cHg7XHJcbiAgbWFyZ2luOiAwIGF1dG87XHJcbiAgbWFyZ2luLXRvcDogNTBweDtcclxuICB0ZXh0LWFsaWduOiBjZW50ZXI7XHJcblxyXG4gIC5zZXJ2aWNlIHtcclxuICAgIHdpZHRoOiA1MCU7XHJcbiAgICBmbG9hdDogbGVmdDtcclxuICAgIHRleHQtYWxpZ246IGNlbnRlcjtcclxuICAgIGRpc3BsYXk6IGJsb2NrO1xyXG4gICAgYm94LXNoYWRvdzogMCAwIDI1cHggcmdiYSgjMDAwLCAwLjIpO1xyXG5cclxuICAgIC5oMSB7XHJcbiAgICAgIHBhZGRpbmctdG9wOiA1cHg7XHJcblxyXG4gICAgICAuaDIge1xyXG4gICAgICAgIHBhZGRpbmctdG9wOiA1cHg7XHJcbiAgICAgIH1cclxuICAgIH1cclxuICB9XHJcbn1cclxuIl19 */"
+module.exports = "/* CSS for services-list */\n#img1 {\n  width: 100%;\n  height: 100%;\n  text-align: center;\n  display: block; }\n.search {\n  margin-top: 20px;\n  width: 100%;\n  height: 10%;\n  text-align: center;\n  display: block; }\n.search .mat-form-field {\n    padding-top: 10px;\n    padding-bottom: 10px; }\n.content {\n  width: 100%;\n  height: 90%;\n  text-align: center;\n  display: block; }\n.content .container {\n    min-width: 75px;\n    max-width: 250px;\n    width: 100%;\n    height: 485px;\n    margin: 0 auto;\n    margin-top: 50px;\n    text-align: center;\n    display: inline-block;\n    margin-left: 30px;\n    margin-right: 30px; }\n.content .container .service {\n      width: 100%;\n      float: left;\n      text-align: center;\n      display: block;\n      box-shadow: 0 0 25px rgba(0, 0, 0, 0.2); }\n.content .container .service .mat-card {\n        height: 485px; }\n.content .container .service .mat-card .top {\n          height: 20%;\n          display: inline-block;\n          vertical-align: top; }\n.content .container .service .mat-card .img-container {\n          height: 50%;\n          display: inline-block;\n          vertical-align: middle; }\n.content .container .service .mat-card .img-container .img {\n            margin: 0 auto;\n            display: inline-block;\n            vertical-align: middle; }\n.content .container .service .mat-card .bottom {\n          height: 30%;\n          display: inline-block;\n          vertical-align: bottom; }\n.content .container .service .mat-card .bottom .p {\n            padding: 5px; }\n.content .container .service .mat-card .bottom .button {\n            padding: 5px; }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvc2VydmljZXMtbGlzdC9DOlxcVXNlcnNcXE1hdHRoZXdcXERlc2t0b3BcXFByb2pldF9XRUIvc3JjXFxhcHBcXHNlcnZpY2VzLWxpc3RcXHNlcnZpY2VzLWxpc3QuY29tcG9uZW50LnNjc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsMEJBQUE7QUFFQTtFQUNFLFdBQVc7RUFDWCxZQUFZO0VBQ1osa0JBQWtCO0VBQ2xCLGNBQWMsRUFBQTtBQUdoQjtFQUNFLGdCQUFnQjtFQUNoQixXQUFXO0VBQ1gsV0FBVztFQUNYLGtCQUFrQjtFQUNsQixjQUFjLEVBQUE7QUFMaEI7SUFPSSxpQkFBaUI7SUFDakIsb0JBQW9CLEVBQUE7QUFHeEI7RUFDRSxXQUFXO0VBQ1gsV0FBVztFQUNYLGtCQUFrQjtFQUNsQixjQUFjLEVBQUE7QUFKaEI7SUFPSSxlQUFlO0lBQ2YsZ0JBQWdCO0lBQ2hCLFdBQVc7SUFDWCxhQUFhO0lBQ2IsY0FBYztJQUNkLGdCQUFnQjtJQUNoQixrQkFBa0I7SUFDbEIscUJBQXFCO0lBQ3JCLGlCQUFpQjtJQUNqQixrQkFBa0IsRUFBQTtBQWhCdEI7TUFtQk0sV0FBVztNQUNYLFdBQVc7TUFDWCxrQkFBa0I7TUFDbEIsY0FBYztNQUNkLHVDQUE4QixFQUFBO0FBdkJwQztRQTBCUSxhQUFhLEVBQUE7QUExQnJCO1VBNkJVLFdBQVc7VUFDWCxxQkFBcUI7VUFDckIsbUJBQW1CLEVBQUE7QUEvQjdCO1VBbUNVLFdBQVc7VUFDWCxxQkFBcUI7VUFDckIsc0JBQXNCLEVBQUE7QUFyQ2hDO1lBd0NZLGNBQWM7WUFDZCxxQkFBcUI7WUFDckIsc0JBQXNCLEVBQUE7QUExQ2xDO1VBK0NVLFdBQVc7VUFDWCxxQkFBcUI7VUFDckIsc0JBQXNCLEVBQUE7QUFqRGhDO1lBb0RZLFlBQVksRUFBQTtBQXBEeEI7WUF3RFksWUFBWSxFQUFBIiwiZmlsZSI6InNyYy9hcHAvc2VydmljZXMtbGlzdC9zZXJ2aWNlcy1saXN0LmNvbXBvbmVudC5zY3NzIiwic291cmNlc0NvbnRlbnQiOlsiLyogQ1NTIGZvciBzZXJ2aWNlcy1saXN0ICovXHJcblxyXG4jaW1nMXtcclxuICB3aWR0aDogMTAwJTtcclxuICBoZWlnaHQ6IDEwMCU7XHJcbiAgdGV4dC1hbGlnbjogY2VudGVyO1xyXG4gIGRpc3BsYXk6IGJsb2NrO1xyXG59XHJcblxyXG4uc2VhcmNoe1xyXG4gIG1hcmdpbi10b3A6IDIwcHg7XHJcbiAgd2lkdGg6IDEwMCU7XHJcbiAgaGVpZ2h0OiAxMCU7XHJcbiAgdGV4dC1hbGlnbjogY2VudGVyO1xyXG4gIGRpc3BsYXk6IGJsb2NrO1xyXG4gIC5tYXQtZm9ybS1maWVsZHtcclxuICAgIHBhZGRpbmctdG9wOiAxMHB4O1xyXG4gICAgcGFkZGluZy1ib3R0b206IDEwcHg7XHJcbiAgfVxyXG59XHJcbi5jb250ZW50IHtcclxuICB3aWR0aDogMTAwJTtcclxuICBoZWlnaHQ6IDkwJTtcclxuICB0ZXh0LWFsaWduOiBjZW50ZXI7XHJcbiAgZGlzcGxheTogYmxvY2s7XHJcblxyXG4gIC5jb250YWluZXIge1xyXG4gICAgbWluLXdpZHRoOiA3NXB4O1xyXG4gICAgbWF4LXdpZHRoOiAyNTBweDtcclxuICAgIHdpZHRoOiAxMDAlO1xyXG4gICAgaGVpZ2h0OiA0ODVweDtcclxuICAgIG1hcmdpbjogMCBhdXRvO1xyXG4gICAgbWFyZ2luLXRvcDogNTBweDtcclxuICAgIHRleHQtYWxpZ246IGNlbnRlcjtcclxuICAgIGRpc3BsYXk6IGlubGluZS1ibG9jaztcclxuICAgIG1hcmdpbi1sZWZ0OiAzMHB4O1xyXG4gICAgbWFyZ2luLXJpZ2h0OiAzMHB4O1xyXG5cclxuICAgIC5zZXJ2aWNlIHtcclxuICAgICAgd2lkdGg6IDEwMCU7XHJcbiAgICAgIGZsb2F0OiBsZWZ0O1xyXG4gICAgICB0ZXh0LWFsaWduOiBjZW50ZXI7XHJcbiAgICAgIGRpc3BsYXk6IGJsb2NrO1xyXG4gICAgICBib3gtc2hhZG93OiAwIDAgMjVweCByZ2JhKCMwMDAsIDAuMik7XHJcblxyXG4gICAgICAubWF0LWNhcmQge1xyXG4gICAgICAgIGhlaWdodDogNDg1cHg7XHJcblxyXG4gICAgICAgIC50b3Age1xyXG4gICAgICAgICAgaGVpZ2h0OiAyMCU7XHJcbiAgICAgICAgICBkaXNwbGF5OiBpbmxpbmUtYmxvY2s7XHJcbiAgICAgICAgICB2ZXJ0aWNhbC1hbGlnbjogdG9wO1xyXG4gICAgICAgIH1cclxuXHJcbiAgICAgICAgLmltZy1jb250YWluZXIge1xyXG4gICAgICAgICAgaGVpZ2h0OiA1MCU7XHJcbiAgICAgICAgICBkaXNwbGF5OiBpbmxpbmUtYmxvY2s7XHJcbiAgICAgICAgICB2ZXJ0aWNhbC1hbGlnbjogbWlkZGxlO1xyXG5cclxuICAgICAgICAgIC5pbWcge1xyXG4gICAgICAgICAgICBtYXJnaW46IDAgYXV0bztcclxuICAgICAgICAgICAgZGlzcGxheTogaW5saW5lLWJsb2NrO1xyXG4gICAgICAgICAgICB2ZXJ0aWNhbC1hbGlnbjogbWlkZGxlO1xyXG4gICAgICAgICAgfVxyXG4gICAgICAgIH1cclxuXHJcbiAgICAgICAgLmJvdHRvbSB7XHJcbiAgICAgICAgICBoZWlnaHQ6IDMwJTtcclxuICAgICAgICAgIGRpc3BsYXk6IGlubGluZS1ibG9jaztcclxuICAgICAgICAgIHZlcnRpY2FsLWFsaWduOiBib3R0b207XHJcblxyXG4gICAgICAgICAgLnAge1xyXG4gICAgICAgICAgICBwYWRkaW5nOiA1cHg7XHJcbiAgICAgICAgICB9XHJcblxyXG4gICAgICAgICAgLmJ1dHRvbiB7XHJcbiAgICAgICAgICAgIHBhZGRpbmc6IDVweDtcclxuICAgICAgICAgIH1cclxuICAgICAgICB9XHJcbiAgICAgIH1cclxuICAgIH1cclxuICB9XHJcbn1cclxuIl19 */"
 
 /***/ }),
 
@@ -1284,8 +1291,10 @@ var ServicesListComponent = /** @class */ (function () {
         var _this = this;
         this.services.getServices().subscribe(function (service) {
             _this.MyServices = service;
+            _this.MyServicesStored = service;
             for (var i = 0; i < _this.MyServices.length; i++) {
                 _this.GetLibelle(_this.MyServices[i].idType, i);
+                _this.GetLibelle(_this.MyServicesStored[i].idType, i);
             }
         }, function (err) {
             console.error((err));
@@ -1296,23 +1305,39 @@ var ServicesListComponent = /** @class */ (function () {
         var _this = this;
         this.services.LibelleOfServices(type).subscribe(function (data) {
             _this.MyServices[i].idType = data.libelle.toString();
-            console.log(_this.MyServices);
+            _this.MyServicesStored[i].idType = data.libelle.toString();
         });
+    };
+    ServicesListComponent.prototype.Search = function () {
+        var _this = this;
+        if (this.name != "") {
+            this.MyServices = this.MyServices.filter(function (res) {
+                return res.name.toLocaleLowerCase().match(_this.name.toLocaleLowerCase());
+            });
+        }
+        else if (this.name === "") {
+            this.MyServices = this.MyServicesStored;
+        }
     };
     // We create an order for the user which order the service
     ServicesListComponent.prototype.OrderOne = function (name) {
         var _this = this;
-        this.auth.profile().subscribe(function (user) {
-            _this.order.OrderOne(name, user.id);
-            _this.snackBar.open('Ty for your order', '!', {
-                duration: 2000,
+        if (this.auth.isLoggedIn()) {
+            this.auth.profile().subscribe(function (user) {
+                _this.order.OrderOne(name, user.id);
+                _this.snackBar.open('Votre demande de service a bien été prise en considération', '!', {
+                    duration: 2000,
+                });
+                // We refresh the router-outlet to actualise the count of pending orders in the navbar
+                _this.router.navigate(['cart']);
+                _this.router.navigate(['']);
+            }, function (err) {
+                console.error((err));
             });
-            // We refresh the router-outlet to actualise the count of pending orders in the navbar
-            _this.router.navigate(['cart']);
-            _this.router.navigate(['services-list']);
-        }, function (err) {
-            console.error((err));
-        });
+        }
+        else {
+            alert('Il faut s\'identifier pour passer commande');
+        }
     };
     ServicesListComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
@@ -1580,6 +1605,7 @@ var WorkerLoginComponent = /** @class */ (function () {
             email: '',
             password: '',
             phone: '',
+            image: '',
         };
     }
     WorkerLoginComponent.prototype.ngOnInit = function () {
@@ -1633,7 +1659,18 @@ var WorkerLoginComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<!-- Dialog page displayed when a worker click on an order he picked -->\r\n\r\n<h1 mat-dialog-title>{{data.firstname}} {{data.lastname}}</h1>\r\n<div mat-dialog-content>{{data.desc}}</div>\r\n\r\n<!-- We let the possibility for the worker to let a review before closing the order -->\r\n<mat-form-field class=\"example-full-width\">\r\n  <input matInput #message maxlength=\"42\" placeholder=\"Review\" [(ngModel)]=\"data.review\">\r\n  <mat-hint align=\"start\"><strong>Don't disclose personal info</strong> </mat-hint>\r\n  <mat-hint align=\"end\">{{message.value.length}} / 42</mat-hint>\r\n</mat-form-field>\r\n\r\n\r\n<div mat-dialog-actions>\r\n  <button mat-button (click)=\"onNoClick()\">Back</button>\r\n  <button mat-button [mat-dialog-close]=\"data.review\">Order has been done</button>\r\n</div>\r\n"
+module.exports = "<!-- Dialog page displayed when a worker click on an order he picked -->\r\n<div class=\"order-dialog\">\r\n\r\n  <h1 mat-dialog-title>{{data.firstname}} {{data.lastname}}</h1>\r\n  <div mat-dialog-content></div>\r\n\r\n  <!-- We let the possibility for the worker to let a review before closing the order -->\r\n  <mat-form-field class=\"example-full-width\">\r\n    <input matInput #message maxlength=\"42\" placeholder=\"Laissez un avis\" [(ngModel)]=\"data.review\">\r\n    <mat-hint align=\"start\"><strong>Facultatif</strong> </mat-hint>\r\n    <mat-hint align=\"end\">{{message.value.length}} / 42</mat-hint>\r\n  </mat-form-field>\r\n\r\n\r\n  <div mat-dialog-actions>\r\n    <div class=\"center\">\r\n      <button mat-button (click)=\"onNoClick()\" color=\"accent\">Retour</button>\r\n      <button mat-button [mat-dialog-close]=\"data.review\" color=\"primary\">Le service a été rendu</button>\r\n    </div>\r\n  </div>\r\n\r\n</div>\r\n\r\n"
+
+/***/ }),
+
+/***/ "./src/app/worker-profile/upload-worker-profile.html":
+/*!***********************************************************!*\
+  !*** ./src/app/worker-profile/upload-worker-profile.html ***!
+  \***********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<div mat-dialog-content>\r\n  <p>Upload File</p>\r\n  <input #file type=\"file\" [hidden]=\"true\" accept=\"image/*\" (change)=\"detectFiles($event)\">\r\n  <p *ngIf=\"fileUploaded\">File uploaded</p>\r\n  <button mat-button (click)= \"file.click()\">\r\n    <mat-icon color=\"accent\">file_upload</mat-icon>\r\n  </button>\r\n</div>\r\n<div mat-dialog-actions>\r\n  <button mat-button (click)=\"onNoClick()\">Back</button>\r\n  <button mat-button (click)=\"UploadValidate()\" [disabled]=\"fileIsUploading\" [mat-dialog-close]=\"data.file\" cdkFocusInitial>Upload</button>\r\n</div>\r\n"
 
 /***/ }),
 
@@ -1644,7 +1681,7 @@ module.exports = "<!-- Dialog page displayed when a worker click on an order he 
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<!-- HTML Page for the worker profile -->\n\n<div class=\"profile-container\">\n  <div class=\"profile-menu\">\n    <div class=\"image-container\">\n      <img src=\"https://pixeltime.ro/profile.jpg\" alt=\"\">\n    </div>\n    <ul>\n      <li class=\"active\">Profile</li>\n      <li>Private Informations</li>\n      <li>Edit Profile</li>\n      <li>Logout</li>\n    </ul>\n  </div>\n  <div class=\"profile-content\">\n    <div class=\"actions\">\n      <mat-icon class=\"icon\">add_a_photo</mat-icon>\n      <mat-icon class=\"icon\">create</mat-icon>\n    </div>\n    <div class=\"pic\">\n      <img src=\"https://pixeltime.ro/profile.jpg\" alt=\"\">\n      <h2>{{details?.firstname}} {{details?.lastname}}</h2>\n      <span>{{details?.email}}</span>\n    </div>\n    <div class=\"summary\">\n      <div class=\"content\">\n        <span>0</span>\n        <span>Services</span>\n      </div>\n      <div class=\"content\">\n        <span>{{reviewPosted}}</span>\n        <span>Review posted</span>\n      </div>\n    </div>\n    <div class=\"profile-details\">\n      <h2>Currents orders</h2>\n      <button mat-button *ngFor=\"let order of Orders\" (click)=\"openDialog(order)\">{{order.idOrder}} --Adress-- {{order.orderDate}} --{{order.name}}</button>\n    </div>\n  </div>\n</div>\n"
+module.exports = "<!-- HTML Page for the worker profile -->\n\n<div class=\"profile-container\">\n  <div class=\"profile-menu\">\n    <div class=\"image-container\">\n      <img [src]=\"details?.image\" alt=\"\">\n    </div>\n    <ul>\n      <li class=\"active\">Profile</li>\n      <li>Private Informations</li>\n      <li>Edit Profile</li>\n      <li>Logout</li>\n    </ul>\n  </div>\n  <div class=\"profile-content\">\n    <div class=\"actions\">\n      <button mat-icon-button (click)=\"openDialog2()\">\n        <mat-icon class=\"icon\">add_a_photo</mat-icon>\n      </button>\n      <button mat-icon-button>\n        <mat-icon class=\"icon\">create</mat-icon>\n      </button>\n    </div>\n    <div class=\"pic\">\n      <img [src]=\"details?.image\" alt=\"\">\n      <h2>{{details?.firstname}} {{details?.lastname}}</h2>\n      <span>{{details?.email}}</span>\n    </div>\n    <div class=\"summary\">\n      <div class=\"content\">\n        <span>0</span>\n        <span>Services</span>\n      </div>\n      <div class=\"content\">\n        <span>{{reviewPosted}}</span>\n        <span>Review posted</span>\n      </div>\n    </div>\n    <div class=\"profile-details\">\n      <table mat-table [dataSource]=\"dataSource\" multiTemplateDataRows class=\"mat-elevation-z8\" >\n        <ng-container matColumnDef=\"choose\">\n          <th mat-header-cell *matHeaderCellDef></th>\n          <th mat-cell *matCellDef=\"let row\">\n            <mat-icon>keyboard_arrow_down</mat-icon>\n          </th>\n        </ng-container>\n        <ng-container matColumnDef=\"{{column}}\" *ngFor=\"let column of displayedColumns2\" >\n          <th mat-header-cell *matHeaderCellDef >{{column}}</th>\n          <td mat-cell *matCellDef=\"let element\" > {{element[column]}} </td>\n        </ng-container>\n        <tr mat-header-row *matHeaderRowDef=\"displayedColumns; sticky: true;\"></tr>\n        <tr mat-row *matRowDef=\"let element; columns: displayedColumns;\" (click)=\"openDialog(element)\"></tr>\n      </table>\n    </div>\n  </div>\n</div>\n"
 
 /***/ }),
 
@@ -1655,7 +1692,7 @@ module.exports = "<!-- HTML Page for the worker profile -->\n\n<div class=\"prof
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "/* CSS of the worker profile */\n.profile-container {\n  width: 485px;\n  height: 485px;\n  margin: 0 auto;\n  margin-top: 50px; }\n.profile-container .profile-menu {\n    float: left;\n    width: 37%;\n    height: 482px;\n    background: #fff;\n    box-shadow: 0 0 25px rgba(0, 0, 0, 0.2); }\n.profile-container .profile-menu .image-container {\n      width: 70px;\n      height: 70px;\n      margin: 60px; }\n.profile-container .profile-menu .image-container img {\n        max-width: 100%;\n        height: auto;\n        border-radius: 50%; }\n.profile-container .profile-menu .image-container img:hover {\n          opacity: 0.8; }\n.profile-container .profile-menu ul {\n      list-style: none;\n      margin: 0;\n      padding: 0; }\n.profile-container .profile-menu ul li {\n        padding: 10px 20px;\n        font-size: 13px; }\n.profile-container .profile-menu ul li:hover, .profile-container .profile-menu ul li.active {\n          background: #f7f7f7;\n          border-left: 5px solid  #053279; }\n.profile-container .profile-menu ul li:last-child {\n          margin-top: 50px; }\n.profile-container .profile-content {\n    width: 63%;\n    float: right;\n    background: #fff;\n    box-shadow: 0 0 25px rgba(0, 0, 0, 0.2); }\n.profile-container .profile-content .actions {\n      width: 100%;\n      background: linear-gradient(to right, #053279 0%, #5994F1 100%);\n      height: 40px;\n      line-height: 40;\n      color: #fff;\n      padding: 20px 0 0 0; }\n.profile-container .profile-content .actions mat-icon {\n        padding-left: 20px;\n        float: left; }\n.profile-container .profile-content .actions mat-icon:hover {\n          opacity: 0.8; }\n.profile-container .profile-content .actions mat-icon + mat-icon {\n        padding-right: 20px;\n        float: right; }\n.profile-container .profile-content .pic {\n      background: linear-gradient(to right, #053279 0%, #5994F1 100%);\n      text-align: center;\n      color: #fff;\n      padding: 0 0 20px 0; }\n.profile-container .profile-content .pic img {\n        width: 90px;\n        height: auto;\n        border-radius: 50%; }\n.profile-container .profile-content .pic img:hover {\n          opacity: 0.8; }\n.profile-container .profile-content .pic h2 {\n        font-size: 17px;\n        padding: 0;\n        margin: 0;\n        font-weight: 400; }\n.profile-container .profile-content .pic span {\n        font-size: 15px;\n        font-weight: 300; }\n.profile-container .profile-content .summary {\n      color: #fff; }\n.profile-container .profile-content .summary .content {\n        width: 50%;\n        float: left;\n        text-align: center;\n        display: block;\n        background: linear-gradient(to right, #053279 0%, #5994F1 100%);\n        padding: 10px 0; }\n.profile-container .profile-content .summary .content span {\n          display: block;\n          font-size: 15px;\n          font-weight: 500; }\n.profile-container .profile-content .profile-details {\n      padding-top: 20px;\n      margin-top: 20px;\n      text-align: center; }\n.profile-container .profile-content .profile-details .h2 {\n        text-align: center; }\n.profile-container .profile-content .profile-details .button {\n        width: 100%;\n        font-size: 28px;\n        margin: 5%; }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvd29ya2VyLXByb2ZpbGUvQzpcXFVzZXJzXFxNYXR0aGV3XFxEZXNrdG9wXFxQcm9qZXRfV0VCL3NyY1xcYXBwXFx3b3JrZXItcHJvZmlsZVxcd29ya2VyLXByb2ZpbGUuY29tcG9uZW50LnNjc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsOEJBQUE7QUFFQTtFQUNFLFlBQVk7RUFDWixhQUFhO0VBQ2IsY0FBYztFQUNkLGdCQUFnQixFQUFBO0FBSmxCO0lBTUksV0FBVztJQUNYLFVBQVU7SUFDVixhQUFhO0lBQ2IsZ0JBQWdCO0lBQ2hCLHVDQUE4QixFQUFBO0FBVmxDO01BWU0sV0FBVztNQUNYLFlBQVk7TUFDWixZQUFZLEVBQUE7QUFkbEI7UUFnQlEsZUFBZTtRQUNmLFlBQVk7UUFDWixrQkFBaUIsRUFBQTtBQWxCekI7VUFvQlUsWUFBWSxFQUFBO0FBcEJ0QjtNQXlCTSxnQkFBZ0I7TUFDaEIsU0FBUztNQUNULFVBQVUsRUFBQTtBQTNCaEI7UUE2QlEsa0JBQWtCO1FBQ2xCLGVBQWUsRUFBQTtBQTlCdkI7VUFnQ1UsbUJBQW1CO1VBQ25CLCtCQUErQixFQUFBO0FBakN6QztVQW9DVSxnQkFBZ0IsRUFBQTtBQXBDMUI7SUEwQ0ksVUFBVTtJQUNWLFlBQVk7SUFDWixnQkFBZ0I7SUFDaEIsdUNBQThCLEVBQUE7QUE3Q2xDO01BK0NNLFdBQVc7TUFDWCwrREFBZ0U7TUFDaEUsWUFBWTtNQUNaLGVBQWU7TUFDZixXQUFXO01BQ1gsbUJBQW1CLEVBQUE7QUFwRHpCO1FBc0RRLGtCQUFrQjtRQUNsQixXQUFXLEVBQUE7QUF2RG5CO1VBeURVLFlBQVksRUFBQTtBQXpEdEI7UUE2RFEsbUJBQW1CO1FBQ25CLFlBQVksRUFBQTtBQTlEcEI7TUFrRU0sK0RBQWdFO01BQ2hFLGtCQUFrQjtNQUNsQixXQUFXO01BQ1gsbUJBQW1CLEVBQUE7QUFyRXpCO1FBdUVRLFdBQVc7UUFDWCxZQUFZO1FBQ1osa0JBQWtCLEVBQUE7QUF6RTFCO1VBMkVVLFlBQVksRUFBQTtBQTNFdEI7UUErRVEsZUFBZTtRQUNmLFVBQVU7UUFDVixTQUFTO1FBQ1QsZ0JBQWdCLEVBQUE7QUFsRnhCO1FBcUZRLGVBQWU7UUFDZixnQkFBZ0IsRUFBQTtBQXRGeEI7TUEwRk0sV0FBVyxFQUFBO0FBMUZqQjtRQTRGUSxVQUFVO1FBQ1YsV0FBVztRQUNYLGtCQUFrQjtRQUNsQixjQUFjO1FBQ2QsK0RBQWdFO1FBQ2hFLGVBQWUsRUFBQTtBQWpHdkI7VUFtR1UsY0FBYztVQUNkLGVBQWU7VUFDZixnQkFBZ0IsRUFBQTtBQXJHMUI7TUEwR00saUJBQWlCO01BQ2pCLGdCQUFnQjtNQUNoQixrQkFBa0IsRUFBQTtBQTVHeEI7UUE4R1Esa0JBQWtCLEVBQUE7QUE5RzFCO1FBaUhRLFdBQVc7UUFDWCxlQUFlO1FBQ2YsVUFBVSxFQUFBIiwiZmlsZSI6InNyYy9hcHAvd29ya2VyLXByb2ZpbGUvd29ya2VyLXByb2ZpbGUuY29tcG9uZW50LnNjc3MiLCJzb3VyY2VzQ29udGVudCI6WyIvKiBDU1Mgb2YgdGhlIHdvcmtlciBwcm9maWxlICovXHJcblxyXG4ucHJvZmlsZS1jb250YWluZXJ7XHJcbiAgd2lkdGg6IDQ4NXB4O1xyXG4gIGhlaWdodDogNDg1cHg7XHJcbiAgbWFyZ2luOiAwIGF1dG87XHJcbiAgbWFyZ2luLXRvcDogNTBweDtcclxuICAucHJvZmlsZS1tZW51e1xyXG4gICAgZmxvYXQ6IGxlZnQ7XHJcbiAgICB3aWR0aDogMzclO1xyXG4gICAgaGVpZ2h0OiA0ODJweDtcclxuICAgIGJhY2tncm91bmQ6ICNmZmY7XHJcbiAgICBib3gtc2hhZG93OiAwIDAgMjVweCByZ2JhKCMwMDAsIDAuMik7XHJcbiAgICAuaW1hZ2UtY29udGFpbmVye1xyXG4gICAgICB3aWR0aDogNzBweDtcclxuICAgICAgaGVpZ2h0OiA3MHB4O1xyXG4gICAgICBtYXJnaW46IDYwcHg7XHJcbiAgICAgIGltZ3tcclxuICAgICAgICBtYXgtd2lkdGg6IDEwMCU7XHJcbiAgICAgICAgaGVpZ2h0OiBhdXRvO1xyXG4gICAgICAgIGJvcmRlci1yYWRpdXM6NTAlO1xyXG4gICAgICAgICY6aG92ZXJ7XHJcbiAgICAgICAgICBvcGFjaXR5OiAwLjg7XHJcbiAgICAgICAgfVxyXG4gICAgICB9XHJcbiAgICB9XHJcbiAgICB1bHtcclxuICAgICAgbGlzdC1zdHlsZTogbm9uZTtcclxuICAgICAgbWFyZ2luOiAwO1xyXG4gICAgICBwYWRkaW5nOiAwO1xyXG4gICAgICBsaXtcclxuICAgICAgICBwYWRkaW5nOiAxMHB4IDIwcHg7XHJcbiAgICAgICAgZm9udC1zaXplOiAxM3B4O1xyXG4gICAgICAgICY6aG92ZXIsICYuYWN0aXZle1xyXG4gICAgICAgICAgYmFja2dyb3VuZDogI2Y3ZjdmNztcclxuICAgICAgICAgIGJvcmRlci1sZWZ0OiA1cHggc29saWQgICMwNTMyNzk7XHJcbiAgICAgICAgfVxyXG4gICAgICAgICY6bGFzdC1jaGlsZHtcclxuICAgICAgICAgIG1hcmdpbi10b3A6IDUwcHg7XHJcbiAgICAgICAgfVxyXG4gICAgICB9XHJcbiAgICB9XHJcbiAgfVxyXG4gIC5wcm9maWxlLWNvbnRlbnR7XHJcbiAgICB3aWR0aDogNjMlO1xyXG4gICAgZmxvYXQ6IHJpZ2h0O1xyXG4gICAgYmFja2dyb3VuZDogI2ZmZjtcclxuICAgIGJveC1zaGFkb3c6IDAgMCAyNXB4IHJnYmEoIzAwMCwgMC4yKTtcclxuICAgIC5hY3Rpb25ze1xyXG4gICAgICB3aWR0aDogMTAwJTtcclxuICAgICAgYmFja2dyb3VuZDogbGluZWFyLWdyYWRpZW50KHRvIHJpZ2h0LCAgIzA1MzI3OSAwJSwgIzU5OTRGMSAxMDAlKTtcclxuICAgICAgaGVpZ2h0OiA0MHB4O1xyXG4gICAgICBsaW5lLWhlaWdodDogNDA7XHJcbiAgICAgIGNvbG9yOiAjZmZmO1xyXG4gICAgICBwYWRkaW5nOiAyMHB4IDAgMCAwO1xyXG4gICAgICBtYXQtaWNvbntcclxuICAgICAgICBwYWRkaW5nLWxlZnQ6IDIwcHg7XHJcbiAgICAgICAgZmxvYXQ6IGxlZnQ7XHJcbiAgICAgICAgJjpob3ZlcntcclxuICAgICAgICAgIG9wYWNpdHk6IDAuODtcclxuICAgICAgICB9XHJcbiAgICAgIH1cclxuICAgICAgbWF0LWljb24rbWF0LWljb257XHJcbiAgICAgICAgcGFkZGluZy1yaWdodDogMjBweDtcclxuICAgICAgICBmbG9hdDogcmlnaHQ7XHJcbiAgICAgIH1cclxuICAgIH1cclxuICAgIC5waWN7XHJcbiAgICAgIGJhY2tncm91bmQ6IGxpbmVhci1ncmFkaWVudCh0byByaWdodCwgICMwNTMyNzkgMCUsICM1OTk0RjEgMTAwJSk7XHJcbiAgICAgIHRleHQtYWxpZ246IGNlbnRlcjtcclxuICAgICAgY29sb3I6ICNmZmY7XHJcbiAgICAgIHBhZGRpbmc6IDAgMCAyMHB4IDA7XHJcbiAgICAgIGltZ3tcclxuICAgICAgICB3aWR0aDogOTBweDtcclxuICAgICAgICBoZWlnaHQ6IGF1dG87XHJcbiAgICAgICAgYm9yZGVyLXJhZGl1czogNTAlO1xyXG4gICAgICAgICY6aG92ZXJ7XHJcbiAgICAgICAgICBvcGFjaXR5OiAwLjg7XHJcbiAgICAgICAgfVxyXG4gICAgICB9XHJcbiAgICAgIGgye1xyXG4gICAgICAgIGZvbnQtc2l6ZTogMTdweDtcclxuICAgICAgICBwYWRkaW5nOiAwO1xyXG4gICAgICAgIG1hcmdpbjogMDtcclxuICAgICAgICBmb250LXdlaWdodDogNDAwO1xyXG4gICAgICB9XHJcbiAgICAgIHNwYW57XHJcbiAgICAgICAgZm9udC1zaXplOiAxNXB4O1xyXG4gICAgICAgIGZvbnQtd2VpZ2h0OiAzMDA7XHJcbiAgICAgIH1cclxuICAgIH1cclxuICAgIC5zdW1tYXJ5e1xyXG4gICAgICBjb2xvcjogI2ZmZjtcclxuICAgICAgLmNvbnRlbnR7XHJcbiAgICAgICAgd2lkdGg6IDUwJTtcclxuICAgICAgICBmbG9hdDogbGVmdDtcclxuICAgICAgICB0ZXh0LWFsaWduOiBjZW50ZXI7XHJcbiAgICAgICAgZGlzcGxheTogYmxvY2s7XHJcbiAgICAgICAgYmFja2dyb3VuZDogbGluZWFyLWdyYWRpZW50KHRvIHJpZ2h0LCAgIzA1MzI3OSAwJSwgIzU5OTRGMSAxMDAlKTtcclxuICAgICAgICBwYWRkaW5nOiAxMHB4IDA7XHJcbiAgICAgICAgc3BhbntcclxuICAgICAgICAgIGRpc3BsYXk6IGJsb2NrO1xyXG4gICAgICAgICAgZm9udC1zaXplOiAxNXB4O1xyXG4gICAgICAgICAgZm9udC13ZWlnaHQ6IDUwMDtcclxuICAgICAgICB9XHJcbiAgICAgIH1cclxuICAgIH1cclxuICAgIC5wcm9maWxlLWRldGFpbHN7XHJcbiAgICAgIHBhZGRpbmctdG9wOiAyMHB4O1xyXG4gICAgICBtYXJnaW4tdG9wOiAyMHB4O1xyXG4gICAgICB0ZXh0LWFsaWduOiBjZW50ZXI7XHJcbiAgICAgIC5oMntcclxuICAgICAgICB0ZXh0LWFsaWduOiBjZW50ZXI7XHJcbiAgICAgIH1cclxuICAgICAgLmJ1dHRvbntcclxuICAgICAgICB3aWR0aDogMTAwJTtcclxuICAgICAgICBmb250LXNpemU6IDI4cHg7XHJcbiAgICAgICAgbWFyZ2luOiA1JTtcclxuICAgICAgfVxyXG4gICAgfVxyXG4gIH1cclxufVxyXG4iXX0= */"
+module.exports = "/* CSS of the worker profile */\n.profile-container {\n  width: 485px;\n  height: 485px;\n  margin: 0 auto;\n  margin-top: 50px; }\n.profile-container .profile-menu {\n    float: left;\n    width: 37%;\n    height: 482px;\n    background: #fff;\n    box-shadow: 0 0 25px rgba(0, 0, 0, 0.2); }\n.profile-container .profile-menu .image-container {\n      width: 70px;\n      height: 70px;\n      margin: 60px; }\n.profile-container .profile-menu .image-container img {\n        max-width: 100%;\n        height: auto;\n        border-radius: 50%; }\n.profile-container .profile-menu .image-container img:hover {\n          opacity: 0.8; }\n.profile-container .profile-menu ul {\n      list-style: none;\n      margin: 0;\n      padding: 0; }\n.profile-container .profile-menu ul li {\n        padding: 10px 20px;\n        font-size: 13px; }\n.profile-container .profile-menu ul li:hover, .profile-container .profile-menu ul li.active {\n          background: #f7f7f7;\n          border-left: 5px solid  #053279; }\n.profile-container .profile-menu ul li:last-child {\n          margin-top: 50px; }\n.profile-container .profile-content {\n    width: 63%;\n    float: right;\n    background: #fff;\n    box-shadow: 0 0 25px rgba(0, 0, 0, 0.2); }\n.profile-container .profile-content .actions {\n      width: 100%;\n      background: linear-gradient(to right, #053279 0%, #5994F1 100%);\n      height: 40px;\n      line-height: 40;\n      color: #fff;\n      padding: 20px 0 0 0; }\n.profile-container .profile-content .actions button {\n        padding-left: 20px;\n        float: left; }\n.profile-container .profile-content .actions button:hover {\n          opacity: 0.8; }\n.profile-container .profile-content .actions button + button {\n        padding-right: 20px;\n        float: right; }\n.profile-container .profile-content .pic {\n      background: linear-gradient(to right, #053279 0%, #5994F1 100%);\n      text-align: center;\n      color: #fff;\n      padding: 0 0 20px 0; }\n.profile-container .profile-content .pic img {\n        width: 90px;\n        height: auto;\n        border-radius: 50%; }\n.profile-container .profile-content .pic img:hover {\n          opacity: 0.8; }\n.profile-container .profile-content .pic h2 {\n        font-size: 17px;\n        padding: 0;\n        margin: 0;\n        font-weight: 400; }\n.profile-container .profile-content .pic span {\n        font-size: 15px;\n        font-weight: 300; }\n.profile-container .profile-content .summary {\n      color: #fff; }\n.profile-container .profile-content .summary .content {\n        width: 50%;\n        float: left;\n        text-align: center;\n        display: block;\n        background: linear-gradient(to right, #053279 0%, #5994F1 100%);\n        padding: 10px 0; }\n.profile-container .profile-content .summary .content span {\n          display: block;\n          font-size: 15px;\n          font-weight: 500; }\n.profile-container .profile-content .profile-details {\n      padding-top: 20px;\n      margin-top: 20px;\n      text-align: center; }\n.profile-container .profile-content .profile-details .table {\n        width: 100%;\n        float: left; }\ntable {\n  width: 100%;\n  height: 200px; }\n.order-dialog {\n  text-align: center;\n  width: 100%;\n  height: 100%;\n  margin: 0 auto; }\n.order-dialog .mat-dialog {\n    text-align: center;\n    margin: 0 auto; }\n.center {\n  padding-top: 8px;\n  text-align: center;\n  margin: 0 auto; }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvd29ya2VyLXByb2ZpbGUvQzpcXFVzZXJzXFxNYXR0aGV3XFxEZXNrdG9wXFxQcm9qZXRfV0VCL3NyY1xcYXBwXFx3b3JrZXItcHJvZmlsZVxcd29ya2VyLXByb2ZpbGUuY29tcG9uZW50LnNjc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsOEJBQUE7QUFFQTtFQUNFLFlBQVk7RUFDWixhQUFhO0VBQ2IsY0FBYztFQUNkLGdCQUFnQixFQUFBO0FBSmxCO0lBTUksV0FBVztJQUNYLFVBQVU7SUFDVixhQUFhO0lBQ2IsZ0JBQWdCO0lBQ2hCLHVDQUE4QixFQUFBO0FBVmxDO01BWU0sV0FBVztNQUNYLFlBQVk7TUFDWixZQUFZLEVBQUE7QUFkbEI7UUFnQlEsZUFBZTtRQUNmLFlBQVk7UUFDWixrQkFBaUIsRUFBQTtBQWxCekI7VUFvQlUsWUFBWSxFQUFBO0FBcEJ0QjtNQXlCTSxnQkFBZ0I7TUFDaEIsU0FBUztNQUNULFVBQVUsRUFBQTtBQTNCaEI7UUE2QlEsa0JBQWtCO1FBQ2xCLGVBQWUsRUFBQTtBQTlCdkI7VUFnQ1UsbUJBQW1CO1VBQ25CLCtCQUErQixFQUFBO0FBakN6QztVQW9DVSxnQkFBZ0IsRUFBQTtBQXBDMUI7SUEwQ0ksVUFBVTtJQUNWLFlBQVk7SUFDWixnQkFBZ0I7SUFDaEIsdUNBQThCLEVBQUE7QUE3Q2xDO01BK0NNLFdBQVc7TUFDWCwrREFBZ0U7TUFDaEUsWUFBWTtNQUNaLGVBQWU7TUFDZixXQUFXO01BQ1gsbUJBQW1CLEVBQUE7QUFwRHpCO1FBc0RRLGtCQUFrQjtRQUNsQixXQUFXLEVBQUE7QUF2RG5CO1VBeURVLFlBQVksRUFBQTtBQXpEdEI7UUE2RFEsbUJBQW1CO1FBQ25CLFlBQVksRUFBQTtBQTlEcEI7TUFrRU0sK0RBQWdFO01BQ2hFLGtCQUFrQjtNQUNsQixXQUFXO01BQ1gsbUJBQW1CLEVBQUE7QUFyRXpCO1FBdUVRLFdBQVc7UUFDWCxZQUFZO1FBQ1osa0JBQWtCLEVBQUE7QUF6RTFCO1VBMkVVLFlBQVksRUFBQTtBQTNFdEI7UUErRVEsZUFBZTtRQUNmLFVBQVU7UUFDVixTQUFTO1FBQ1QsZ0JBQWdCLEVBQUE7QUFsRnhCO1FBcUZRLGVBQWU7UUFDZixnQkFBZ0IsRUFBQTtBQXRGeEI7TUEwRk0sV0FBVyxFQUFBO0FBMUZqQjtRQTRGUSxVQUFVO1FBQ1YsV0FBVztRQUNYLGtCQUFrQjtRQUNsQixjQUFjO1FBQ2QsK0RBQWdFO1FBQ2hFLGVBQWUsRUFBQTtBQWpHdkI7VUFtR1UsY0FBYztVQUNkLGVBQWU7VUFDZixnQkFBZ0IsRUFBQTtBQXJHMUI7TUEwR00saUJBQWlCO01BQ2pCLGdCQUFnQjtNQUNoQixrQkFBa0IsRUFBQTtBQTVHeEI7UUE4R1EsV0FBVztRQUNYLFdBQVcsRUFBQTtBQU1uQjtFQUNFLFdBQVc7RUFDWCxhQUFhLEVBQUE7QUFHZjtFQUNFLGtCQUFrQjtFQUNsQixXQUFXO0VBQ1gsWUFBWTtFQUNaLGNBQWMsRUFBQTtBQUpoQjtJQU1JLGtCQUFrQjtJQUNsQixjQUFjLEVBQUE7QUFHbEI7RUFDRSxnQkFBZ0I7RUFDaEIsa0JBQWtCO0VBQ2xCLGNBQWMsRUFBQSIsImZpbGUiOiJzcmMvYXBwL3dvcmtlci1wcm9maWxlL3dvcmtlci1wcm9maWxlLmNvbXBvbmVudC5zY3NzIiwic291cmNlc0NvbnRlbnQiOlsiLyogQ1NTIG9mIHRoZSB3b3JrZXIgcHJvZmlsZSAqL1xyXG5cclxuLnByb2ZpbGUtY29udGFpbmVye1xyXG4gIHdpZHRoOiA0ODVweDtcclxuICBoZWlnaHQ6IDQ4NXB4O1xyXG4gIG1hcmdpbjogMCBhdXRvO1xyXG4gIG1hcmdpbi10b3A6IDUwcHg7XHJcbiAgLnByb2ZpbGUtbWVudXtcclxuICAgIGZsb2F0OiBsZWZ0O1xyXG4gICAgd2lkdGg6IDM3JTtcclxuICAgIGhlaWdodDogNDgycHg7XHJcbiAgICBiYWNrZ3JvdW5kOiAjZmZmO1xyXG4gICAgYm94LXNoYWRvdzogMCAwIDI1cHggcmdiYSgjMDAwLCAwLjIpO1xyXG4gICAgLmltYWdlLWNvbnRhaW5lcntcclxuICAgICAgd2lkdGg6IDcwcHg7XHJcbiAgICAgIGhlaWdodDogNzBweDtcclxuICAgICAgbWFyZ2luOiA2MHB4O1xyXG4gICAgICBpbWd7XHJcbiAgICAgICAgbWF4LXdpZHRoOiAxMDAlO1xyXG4gICAgICAgIGhlaWdodDogYXV0bztcclxuICAgICAgICBib3JkZXItcmFkaXVzOjUwJTtcclxuICAgICAgICAmOmhvdmVye1xyXG4gICAgICAgICAgb3BhY2l0eTogMC44O1xyXG4gICAgICAgIH1cclxuICAgICAgfVxyXG4gICAgfVxyXG4gICAgdWx7XHJcbiAgICAgIGxpc3Qtc3R5bGU6IG5vbmU7XHJcbiAgICAgIG1hcmdpbjogMDtcclxuICAgICAgcGFkZGluZzogMDtcclxuICAgICAgbGl7XHJcbiAgICAgICAgcGFkZGluZzogMTBweCAyMHB4O1xyXG4gICAgICAgIGZvbnQtc2l6ZTogMTNweDtcclxuICAgICAgICAmOmhvdmVyLCAmLmFjdGl2ZXtcclxuICAgICAgICAgIGJhY2tncm91bmQ6ICNmN2Y3Zjc7XHJcbiAgICAgICAgICBib3JkZXItbGVmdDogNXB4IHNvbGlkICAjMDUzMjc5O1xyXG4gICAgICAgIH1cclxuICAgICAgICAmOmxhc3QtY2hpbGR7XHJcbiAgICAgICAgICBtYXJnaW4tdG9wOiA1MHB4O1xyXG4gICAgICAgIH1cclxuICAgICAgfVxyXG4gICAgfVxyXG4gIH1cclxuICAucHJvZmlsZS1jb250ZW50e1xyXG4gICAgd2lkdGg6IDYzJTtcclxuICAgIGZsb2F0OiByaWdodDtcclxuICAgIGJhY2tncm91bmQ6ICNmZmY7XHJcbiAgICBib3gtc2hhZG93OiAwIDAgMjVweCByZ2JhKCMwMDAsIDAuMik7XHJcbiAgICAuYWN0aW9uc3tcclxuICAgICAgd2lkdGg6IDEwMCU7XHJcbiAgICAgIGJhY2tncm91bmQ6IGxpbmVhci1ncmFkaWVudCh0byByaWdodCwgICMwNTMyNzkgMCUsICM1OTk0RjEgMTAwJSk7XHJcbiAgICAgIGhlaWdodDogNDBweDtcclxuICAgICAgbGluZS1oZWlnaHQ6IDQwO1xyXG4gICAgICBjb2xvcjogI2ZmZjtcclxuICAgICAgcGFkZGluZzogMjBweCAwIDAgMDtcclxuICAgICAgYnV0dG9ue1xyXG4gICAgICAgIHBhZGRpbmctbGVmdDogMjBweDtcclxuICAgICAgICBmbG9hdDogbGVmdDtcclxuICAgICAgICAmOmhvdmVye1xyXG4gICAgICAgICAgb3BhY2l0eTogMC44O1xyXG4gICAgICAgIH1cclxuICAgICAgfVxyXG4gICAgICBidXR0b24rYnV0dG9ue1xyXG4gICAgICAgIHBhZGRpbmctcmlnaHQ6IDIwcHg7XHJcbiAgICAgICAgZmxvYXQ6IHJpZ2h0O1xyXG4gICAgICB9XHJcbiAgICB9XHJcbiAgICAucGlje1xyXG4gICAgICBiYWNrZ3JvdW5kOiBsaW5lYXItZ3JhZGllbnQodG8gcmlnaHQsICAjMDUzMjc5IDAlLCAjNTk5NEYxIDEwMCUpO1xyXG4gICAgICB0ZXh0LWFsaWduOiBjZW50ZXI7XHJcbiAgICAgIGNvbG9yOiAjZmZmO1xyXG4gICAgICBwYWRkaW5nOiAwIDAgMjBweCAwO1xyXG4gICAgICBpbWd7XHJcbiAgICAgICAgd2lkdGg6IDkwcHg7XHJcbiAgICAgICAgaGVpZ2h0OiBhdXRvO1xyXG4gICAgICAgIGJvcmRlci1yYWRpdXM6IDUwJTtcclxuICAgICAgICAmOmhvdmVye1xyXG4gICAgICAgICAgb3BhY2l0eTogMC44O1xyXG4gICAgICAgIH1cclxuICAgICAgfVxyXG4gICAgICBoMntcclxuICAgICAgICBmb250LXNpemU6IDE3cHg7XHJcbiAgICAgICAgcGFkZGluZzogMDtcclxuICAgICAgICBtYXJnaW46IDA7XHJcbiAgICAgICAgZm9udC13ZWlnaHQ6IDQwMDtcclxuICAgICAgfVxyXG4gICAgICBzcGFue1xyXG4gICAgICAgIGZvbnQtc2l6ZTogMTVweDtcclxuICAgICAgICBmb250LXdlaWdodDogMzAwO1xyXG4gICAgICB9XHJcbiAgICB9XHJcbiAgICAuc3VtbWFyeXtcclxuICAgICAgY29sb3I6ICNmZmY7XHJcbiAgICAgIC5jb250ZW50e1xyXG4gICAgICAgIHdpZHRoOiA1MCU7XHJcbiAgICAgICAgZmxvYXQ6IGxlZnQ7XHJcbiAgICAgICAgdGV4dC1hbGlnbjogY2VudGVyO1xyXG4gICAgICAgIGRpc3BsYXk6IGJsb2NrO1xyXG4gICAgICAgIGJhY2tncm91bmQ6IGxpbmVhci1ncmFkaWVudCh0byByaWdodCwgICMwNTMyNzkgMCUsICM1OTk0RjEgMTAwJSk7XHJcbiAgICAgICAgcGFkZGluZzogMTBweCAwO1xyXG4gICAgICAgIHNwYW57XHJcbiAgICAgICAgICBkaXNwbGF5OiBibG9jaztcclxuICAgICAgICAgIGZvbnQtc2l6ZTogMTVweDtcclxuICAgICAgICAgIGZvbnQtd2VpZ2h0OiA1MDA7XHJcbiAgICAgICAgfVxyXG4gICAgICB9XHJcbiAgICB9XHJcbiAgICAucHJvZmlsZS1kZXRhaWxze1xyXG4gICAgICBwYWRkaW5nLXRvcDogMjBweDtcclxuICAgICAgbWFyZ2luLXRvcDogMjBweDtcclxuICAgICAgdGV4dC1hbGlnbjogY2VudGVyO1xyXG4gICAgICAudGFibGV7XHJcbiAgICAgICAgd2lkdGg6IDEwMCU7XHJcbiAgICAgICAgZmxvYXQ6IGxlZnQ7XHJcbiAgICAgIH1cclxuICAgIH1cclxuICB9XHJcbn1cclxuXHJcbnRhYmxle1xyXG4gIHdpZHRoOiAxMDAlO1xyXG4gIGhlaWdodDogMjAwcHg7XHJcbn1cclxuXHJcbi5vcmRlci1kaWFsb2d7XHJcbiAgdGV4dC1hbGlnbjogY2VudGVyO1xyXG4gIHdpZHRoOiAxMDAlO1xyXG4gIGhlaWdodDogMTAwJTtcclxuICBtYXJnaW46IDAgYXV0bztcclxuICAubWF0LWRpYWxvZ3tcclxuICAgIHRleHQtYWxpZ246IGNlbnRlcjtcclxuICAgIG1hcmdpbjogMCBhdXRvO1xyXG4gIH1cclxufVxyXG4uY2VudGVye1xyXG4gIHBhZGRpbmctdG9wOiA4cHg7XHJcbiAgdGV4dC1hbGlnbjogY2VudGVyO1xyXG4gIG1hcmdpbjogMCBhdXRvO1xyXG59XHJcbiJdfQ== */"
 
 /***/ }),
 
@@ -1663,19 +1700,22 @@ module.exports = "/* CSS of the worker profile */\n.profile-container {\n  width
 /*!************************************************************!*\
   !*** ./src/app/worker-profile/worker-profile.component.ts ***!
   \************************************************************/
-/*! exports provided: WorkerProfileComponent, OrderInfoDialogComponent */
+/*! exports provided: WorkerProfileComponent, UploadWorkerProfileComponent, OrderInfoDialogComponent */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "WorkerProfileComponent", function() { return WorkerProfileComponent; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UploadWorkerProfileComponent", function() { return UploadWorkerProfileComponent; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "OrderInfoDialogComponent", function() { return OrderInfoDialogComponent; });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _WorkerAuth_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../WorkerAuth.service */ "./src/WorkerAuth.service.ts");
 /* harmony import */ var _angular_material__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/material */ "./node_modules/@angular/material/esm5/material.es5.js");
 /* harmony import */ var _order_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../order.service */ "./src/order.service.ts");
-/* harmony import */ var _authentification_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../authentification.service */ "./src/authentification.service.ts");
+/* harmony import */ var _services_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../services.service */ "./src/services.service.ts");
+/* harmony import */ var _authentification_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../authentification.service */ "./src/authentification.service.ts");
+
 
 
 
@@ -1690,6 +1730,8 @@ var WorkerProfileComponent = /** @class */ (function () {
         this.dialog = dialog;
         this.reviewPosted = 0;
         this.Orders = [];
+        this.displayedColumns = ['choose', 'idOrder', 'orderDate', 'name'];
+        this.displayedColumns2 = ['idOrder', 'orderDate', 'name'];
     }
     // At the start of the script we initialise the profile by getting the info of the worker and also the order he is doing right now
     WorkerProfileComponent.prototype.ngOnInit = function () {
@@ -1705,7 +1747,7 @@ var WorkerProfileComponent = /** @class */ (function () {
     WorkerProfileComponent.prototype.openDialog = function (order) {
         var _this = this;
         var dialogRef = this.dialog.open(OrderInfoDialogComponent, {
-            width: '500px',
+            width: '350px',
             data: { firstname: order.firstname, lastname: order.lastname, desc: order.desc }
         });
         // If the worker has done the order we delete it and if he post a review we add the review
@@ -1728,6 +1770,7 @@ var WorkerProfileComponent = /** @class */ (function () {
                     for (var i = 0; i < _this.Orders.length; i++) {
                         if (_this.Orders[i].idOrder === order.idOrder) {
                             _this.Orders.splice(i, 1);
+                            _this.dataSource = new _angular_material__WEBPACK_IMPORTED_MODULE_3__["MatTableDataSource"](_this.Orders);
                         }
                     }
                 });
@@ -1758,6 +1801,7 @@ var WorkerProfileComponent = /** @class */ (function () {
                     name: '',
                     desc: '',
                     price: 0,
+                    image: '',
                     firstname: '',
                     lastname: '',
                     idUser: 0
@@ -1776,6 +1820,7 @@ var WorkerProfileComponent = /** @class */ (function () {
                     aOrder.lastname = user.lastname;
                     aOrder.idUser = user.id;
                     _this.Orders.push(aOrder);
+                    _this.dataSource = new _angular_material__WEBPACK_IMPORTED_MODULE_3__["MatTableDataSource"](_this.Orders);
                     console.log(_this.Orders);
                 });
             });
@@ -1786,6 +1831,22 @@ var WorkerProfileComponent = /** @class */ (function () {
             _loop_1(order);
         }
     };
+    // If the admin click on the upload button if open a dialog page in which he will be able to download an image for the order
+    WorkerProfileComponent.prototype.openDialog2 = function () {
+        var _this = this;
+        var dialogRef = this.dialog.open(UploadWorkerProfileComponent, {
+            width: '250px',
+            data: { file: this.fileUrl }
+        });
+        // we store the image url which was upload by the admin
+        dialogRef.afterClosed().subscribe(function (result) {
+            if (result) {
+                _this.details.image = result;
+                console.log(result);
+                _this.auth.modify(_this.details.id, result).subscribe();
+            }
+        });
+    };
     WorkerProfileComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
             selector: 'app-worker-profile',
@@ -1794,10 +1855,55 @@ var WorkerProfileComponent = /** @class */ (function () {
         }),
         tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_WorkerAuth_service__WEBPACK_IMPORTED_MODULE_2__["WorkerAuthService"],
             _order_service__WEBPACK_IMPORTED_MODULE_4__["OrderService"],
-            _authentification_service__WEBPACK_IMPORTED_MODULE_5__["AuthentificationService"],
+            _authentification_service__WEBPACK_IMPORTED_MODULE_6__["AuthentificationService"],
             _angular_material__WEBPACK_IMPORTED_MODULE_3__["MatDialog"]])
     ], WorkerProfileComponent);
     return WorkerProfileComponent;
+}());
+
+// We create an other component in which we will display the window which will permit the admin to upload an image for the service
+var UploadWorkerProfileComponent = /** @class */ (function () {
+    function UploadWorkerProfileComponent(dialogRef, data, services) {
+        this.dialogRef = dialogRef;
+        this.data = data;
+        this.services = services;
+        this.fileIsUploading = false;
+        this.fileUploaded = false;
+    }
+    // if the admin decide to not upload a file
+    UploadWorkerProfileComponent.prototype.onNoClick = function () {
+        this.dialogRef.close();
+    };
+    // Uploading the file on firebase and keeping the url of file,
+    // we store the state of upload to evit bug if the admin submit while the file is loading
+    UploadWorkerProfileComponent.prototype.onUploadFile = function (file) {
+        var _this = this;
+        this.fileIsUploading = true;
+        this.services.uploadFile(file).then(function (url) {
+            _this.fileUrl = url;
+            _this.data.file = url;
+            _this.fileIsUploading = false;
+            _this.fileUploaded = true;
+        });
+    };
+    UploadWorkerProfileComponent.prototype.detectFiles = function (event) {
+        this.onUploadFile(event.target.files[0]);
+    };
+    // We send back the file path to the service component
+    UploadWorkerProfileComponent.prototype.UploadValidate = function () {
+        this.data.file = this.fileUrl;
+        this.dialogRef.close(this.data.file);
+    };
+    UploadWorkerProfileComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+            selector: 'app-upload-worker-profile',
+            template: __webpack_require__(/*! ./upload-worker-profile.html */ "./src/app/worker-profile/upload-worker-profile.html"),
+            styles: [__webpack_require__(/*! ../services/services.component.scss */ "./src/app/services/services.component.scss")]
+        }),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__param"](1, Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Inject"])(_angular_material__WEBPACK_IMPORTED_MODULE_3__["MAT_DIALOG_DATA"])),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_angular_material__WEBPACK_IMPORTED_MODULE_3__["MatDialogRef"], Object, _services_service__WEBPACK_IMPORTED_MODULE_5__["ServicesService"]])
+    ], UploadWorkerProfileComponent);
+    return UploadWorkerProfileComponent;
 }());
 
 // We definie the dialog component that we will open in a window
@@ -1812,7 +1918,8 @@ var OrderInfoDialogComponent = /** @class */ (function () {
     OrderInfoDialogComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
             selector: 'app-oder-info',
-            template: __webpack_require__(/*! ./order-info.html */ "./src/app/worker-profile/order-info.html")
+            template: __webpack_require__(/*! ./order-info.html */ "./src/app/worker-profile/order-info.html"),
+            styles: [__webpack_require__(/*! ./worker-profile.component.scss */ "./src/app/worker-profile/worker-profile.component.scss")]
         }),
         tslib__WEBPACK_IMPORTED_MODULE_0__["__param"](1, Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Inject"])(_angular_material__WEBPACK_IMPORTED_MODULE_3__["MAT_DIALOG_DATA"])),
         tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_angular_material__WEBPACK_IMPORTED_MODULE_3__["MatDialogRef"], Object])
@@ -1879,6 +1986,7 @@ var WorkerRegisterComponent = /** @class */ (function () {
             email: '',
             password: '',
             phone: '',
+            image: ''
         };
     }
     WorkerRegisterComponent.prototype.ngOnInit = function () {

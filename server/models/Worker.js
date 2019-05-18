@@ -24,6 +24,9 @@ module.exports = db.sequelize.define(
     phone: {
       type: Sequelize.STRING
     },
+    image: {
+      type: Sequelize.STRING
+    },
   },
   {
     timestamps: false

@@ -1,6 +1,6 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import { AuthentificationService, UserDetails } from '../../authentification.service';
-import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material';
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef, MatTableDataSource} from '@angular/material';
 import {ServicesService} from '../../services.service';
 import {DialogData, UploadServiceComponent} from '../services/services.component';
 
@@ -15,8 +15,10 @@ export class ProfileComponent implements OnInit {
 
 // We will store the user detail in that variable
   details: UserDetails;
-  review
+  review = []
   fileUrl = ''
+  dataSource
+  displayedColumns: string[] = ['Content'];
 
   constructor(private auth: AuthentificationService, public dialog: MatDialog) { }
 
@@ -35,8 +37,17 @@ export class ProfileComponent implements OnInit {
 
   GetAllReview(idUser) {
     this.auth.getReview(idUser).subscribe(review => {
-        this.review = review;
-        console.log(this.review)
+        console.log(review)
+        for(const aReview of review){
+          const aRev = {
+            Content: ''
+          }
+          aRev.Content = aReview.Content;
+          this.review.push(aRev)
+          console.log(aRev)
+          console.log(this.review)
+          this.dataSource = new MatTableDataSource(this.review);
+        }
     })
   }
 

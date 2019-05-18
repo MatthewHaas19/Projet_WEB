@@ -12,21 +12,23 @@ export interface WorkerDetails {
   email: string
   password: string
   phone: string
+  image: string
   exp: number
   iat: number
 }
 
-interface TokenResponse{
+interface TokenResponse2{
   token: string
 }
 
-export interface TokenPayload{
+export interface TokenPayload2{
   id: number
   firstname: string
   lastname: string
   email: string
   password: string
   phone: string
+  image: string
 }
 
 @Injectable()
@@ -69,11 +71,11 @@ export class WorkerAuthService {
   }
 
 
-  public register(user: TokenPayload) : Observable<any> {
+  public register(user: TokenPayload2) : Observable<any> {
     const base = this.http.post('/api/WorkerRegister',user)
 
     const request = base.pipe(
-      map((data: TokenResponse) => {
+      map((data: TokenResponse2) => {
         if(data.token) {
           this.saveToken(data.token)
         }
@@ -83,11 +85,11 @@ export class WorkerAuthService {
     return request
   }
 
-  public login(user: TokenPayload) : Observable<any> {
+  public login(user: TokenPayload2) : Observable<any> {
     const base = this.http.post('/api/WorkerLogin',user)
 
     const request = base.pipe(
-      map((data: TokenResponse) => {
+      map((data: TokenResponse2) => {
         if(data.token) {
           this.saveToken(data.token)
         }
@@ -115,6 +117,10 @@ export class WorkerAuthService {
 
   public addReview(review): Observable<any> {
     return this.http.post('/api/worker-review',review)
+  }
+
+  public modify(id, image): Observable<any> {
+    return this.http.put('/api/modify-worker/' + id, {img: image})
   }
 
 }

@@ -15,6 +15,7 @@ interface Order {
   desc: string;
   price: number;
   image: string;
+  imageWorker: string;
 }
 
 
@@ -95,6 +96,7 @@ export class CartComponent implements OnInit {
           firstname: '',
           lastname: '',
           image: '',
+          imageWorker: ''
         };
 
         aOrder.idOrder = order.idOrder;
@@ -114,6 +116,7 @@ export class CartComponent implements OnInit {
           this.worker.workerById(order.idWorker).subscribe(worker => {
             aOrder.firstname = worker.firstname;
             aOrder.lastname = worker.lastname;
+            aOrder.imageWorker = worker.image;
             this.Orders.push(aOrder);
             this.dataSource = new MatTableDataSource(this.Orders);
           });

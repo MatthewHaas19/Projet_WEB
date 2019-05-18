@@ -1,17 +1,23 @@
 <!-- Dialog page displayed when a worker click on an order he picked -->
+<div class="order-dialog">
 
-<h1 mat-dialog-title>{{data.firstname}} {{data.lastname}}</h1>
-<div mat-dialog-content>{{data.desc}}</div>
+  <h1 mat-dialog-title>{{data.firstname}} {{data.lastname}}</h1>
+  <div mat-dialog-content></div>
 
-<!-- We let the possibility for the worker to let a review before closing the order -->
-<mat-form-field class="example-full-width">
-  <input matInput #message maxlength="42" placeholder="Review" [(ngModel)]="data.review">
-  <mat-hint align="start"><strong>Don't disclose personal info</strong> </mat-hint>
-  <mat-hint align="end">{{message.value.length}} / 42</mat-hint>
-</mat-form-field>
+  <!-- We let the possibility for the worker to let a review before closing the order -->
+  <mat-form-field class="example-full-width">
+    <input matInput #message maxlength="42" placeholder="Laissez un avis" [(ngModel)]="data.review">
+    <mat-hint align="start"><strong>Facultatif</strong> </mat-hint>
+    <mat-hint align="end">{{message.value.length}} / 42</mat-hint>
+  </mat-form-field>
 
 
-<div mat-dialog-actions>
-  <button mat-button (click)="onNoClick()">Back</button>
-  <button mat-button [mat-dialog-close]="data.review">Order has been done</button>
+  <div mat-dialog-actions>
+    <div class="center">
+      <button mat-button (click)="onNoClick()" color="accent">Retour</button>
+      <button mat-button [mat-dialog-close]="data.review" color="primary">Le service a été rendu</button>
+    </div>
+  </div>
+
 </div>
+

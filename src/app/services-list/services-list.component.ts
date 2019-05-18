@@ -36,6 +36,8 @@ export interface IdType {
 export class ServicesListComponent implements OnInit {
 
   MyServices: ServiceDetails[];
+  MyServicesStored: ServiceDetails[];
+  name: string;
 
   private idType: IdType;
 
@@ -50,8 +52,10 @@ export class ServicesListComponent implements OnInit {
     this.services.getServices().subscribe(
       service => {
         this.MyServices = service;
+        this.MyServicesStored = service;
         for (let i = 0; i < this.MyServices.length; i++) {
            this.GetLibelle(this.MyServices[i].idType, i);
+           this.GetLibelle(this.MyServicesStored[i].idType, i);
         }
       },
       err => {
@@ -64,27 +68,41 @@ export class ServicesListComponent implements OnInit {
   GetLibelle(type: string, i) {
         this.services.LibelleOfServices(type).subscribe(data => {
           this.MyServices[i].idType = data.libelle.toString();
-          console.log(this.MyServices);
+          this.MyServicesStored[i].idType = data.libelle.toString();
     });
+  }
+
+  Search(){
+    if(this.name != ""){
+      this.MyServices = this.MyServices.filter(res => {
+        return res.name.toLocaleLowerCase().match(this.name.toLocaleLowerCase())
+      })
+    }
+    else if(this.name === ""){
+      this.MyServices = this.MyServicesStored
+    }
   }
 
   // We create an order for the user which order the service
   OrderOne(name) {
-    this.auth.profile().subscribe(
-      user => {
-        this.order.OrderOne(name, user.id);
-        this.snackBar.open('Ty for your order', '!', {
-          duration: 2000,
-        });
-        // We refresh the router-outlet to actualise the count of pending orders in the navbar
-        this.router.navigate(['cart']);
-        this.router.navigate(['services-list']);
+    if(this.auth.isLoggedIn()){
+      this.auth.profile().subscribe(
+        user => {
+          this.order.OrderOne(name, user.id);
+          this.snackBar.open('Votre demande de service a bien été prise en considération', '!', {
+            duration: 2000,
+          });
+          // We refresh the router-outlet to actualise the count of pending orders in the navbar
+          this.router.navigate(['cart']);
+          this.router.navigate(['']);
 
-      },
-      err => {
-        console.error((err));
-      }
-    );
+        },
+        err => {
+          console.error((err));
+        }
+      );
+    } else {
+      alert('Il faut s\'identifier pour passer commande')
+    }
   }
-
 }

@@ -2,8 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Validators, FormGroup, FormBuilder} from '@angular/forms';
 
 import {Router} from '@angular/router';
-import {TokenPayload} from '../../authentification.service';
-import {WorkerAuthService} from '../../WorkerAuth.service';
+import {TokenPayload2, WorkerAuthService} from '../../WorkerAuth.service';
 
 
 @Component({
@@ -16,13 +15,14 @@ export class WorkerRegisterComponent implements OnInit {
   userForm: FormGroup;
 
   // We define credentials to ensure to not have a conflict of data type with the authentification service
-  credentials: TokenPayload = {
+  credentials: TokenPayload2 = {
     id: 0,
     firstname: '',
     lastname: '',
     email: '',
     password: '',
     phone: '',
+    image: ''
   };
 
 

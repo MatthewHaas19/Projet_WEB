@@ -48,12 +48,8 @@ export class AppComponent implements OnInit {
   }
 
 
-  Cart() {
-    this.router.navigate(['/cart']);
-  }
-
   Login() {
-    this.router.navigate(['']);
+    this.router.navigate(['/login']);
   }
 
   Profile() {
@@ -74,11 +70,7 @@ export class AppComponent implements OnInit {
   }
 
   Services() {
-    this.router.navigate(['/services-list']);
-  }
-
-  AddServices() {
-    this.router.navigate(['/services']);
+    this.router.navigate(['']);
   }
 
   Logout() {
@@ -90,22 +82,13 @@ export class AppComponent implements OnInit {
   this.router.navigate(['register']);
 }
 
-  ProfileWorker() {
-    this.router.navigate(['/worker-profile']);
-  }
+
 
   LogoutWorker() {
     this.worker.logout();
     this.router.navigate(['/worker-login']);
   }
 
-  OrdersPending() {
-    this.router.navigate(['/order-pending']);
-  }
-
-  WorkerLogin() {
-    this.router.navigate(['/worker-login']);
-  }
 
 // We count the number of order of a client
   OrderCount() {

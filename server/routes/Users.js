@@ -126,10 +126,12 @@ console.log(req.params.id,req.body.img)
 users.get('/user-reviews/:id',(req,res) => {
 
   Review.findAll({
+    limit: 5,
     where: {
       idUser: req.params.id,
       Type: 'worker'
-    }
+    },
+    order: [[ 'idReview', 'DESC']]
   }).then(review => {
     if(review) {
       res.json(review)

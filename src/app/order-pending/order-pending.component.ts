@@ -35,7 +35,7 @@ export class OrderPendingComponent implements OnInit {
   expandedElement: Order | null;
 
   // We define in which order we will display the column
-  displayedColumns: string[] = ['idOrder', 'orderStatus', 'orderDate'];
+  displayedColumns: string[] = ['idOrder', 'name', 'orderDate'];
 
   // We import the services that we will use in this component
   constructor(private order: OrderService, private auth: AuthentificationService  , private worker: WorkerAuthService) { }
@@ -88,7 +88,8 @@ export class OrderPendingComponent implements OnInit {
           desc: '',
           price: 0,
           firstname: '',
-          lastname: ''
+          lastname: '',
+          image: ''
         };
 
         aOrder.idOrder = order.idOrder;
@@ -103,6 +104,7 @@ export class OrderPendingComponent implements OnInit {
         this.auth.userById(order.idUser).subscribe(user => {
           aOrder.firstname = user.firstname;
           aOrder.lastname = user.lastname;
+          aOrder.image = user.image;
           this.Orders.push(aOrder);
           this.dataSource = new MatTableDataSource(this.Orders);
         });

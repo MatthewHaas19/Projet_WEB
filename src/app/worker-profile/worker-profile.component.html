@@ -3,7 +3,7 @@
 <div class="profile-container">
   <div class="profile-menu">
     <div class="image-container">
-      <img src="https://pixeltime.ro/profile.jpg" alt="">
+      <img [src]="details?.image" alt="">
     </div>
     <ul>
       <li class="active">Profile</li>
@@ -14,11 +14,15 @@
   </div>
   <div class="profile-content">
     <div class="actions">
-      <mat-icon class="icon">add_a_photo</mat-icon>
-      <mat-icon class="icon">create</mat-icon>
+      <button mat-icon-button (click)="openDialog2()">
+        <mat-icon class="icon">add_a_photo</mat-icon>
+      </button>
+      <button mat-icon-button>
+        <mat-icon class="icon">create</mat-icon>
+      </button>
     </div>
     <div class="pic">
-      <img src="https://pixeltime.ro/profile.jpg" alt="">
+      <img [src]="details?.image" alt="">
       <h2>{{details?.firstname}} {{details?.lastname}}</h2>
       <span>{{details?.email}}</span>
     </div>
@@ -33,8 +37,20 @@
       </div>
     </div>
     <div class="profile-details">
-      <h2>Currents orders</h2>
-      <button mat-button *ngFor="let order of Orders" (click)="openDialog(order)">{{order.idOrder}} --Adress-- {{order.orderDate}} --{{order.name}}</button>
+      <table mat-table [dataSource]="dataSource" multiTemplateDataRows class="mat-elevation-z8" >
+        <ng-container matColumnDef="choose">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <th mat-cell *matCellDef="let row">
+            <mat-icon>keyboard_arrow_down</mat-icon>
+          </th>
+        </ng-container>
+        <ng-container matColumnDef="{{column}}" *ngFor="let column of displayedColumns2" >
+          <th mat-header-cell *matHeaderCellDef >{{column}}</th>
+          <td mat-cell *matCellDef="let element" > {{element[column]}} </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true;"></tr>
+        <tr mat-row *matRowDef="let element; columns: displayedColumns;" (click)="openDialog(element)"></tr>
+      </table>
     </div>
   </div>
 </div>

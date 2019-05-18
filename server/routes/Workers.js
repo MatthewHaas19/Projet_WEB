@@ -120,4 +120,21 @@ workers.get('/worker-reviews/:id',(req,res) => {
   })
 });
 
+workers.put('/modify-worker/:id',(req,res) => {
+  console.log(req.params.id,req.body.img)
+  Worker.update({
+      image: req.body.img,
+    },
+    {
+      where: {
+        id: req.params.id
+      }
+    }).then(worker => {
+    console.log(worker)
+    res.json(worker)
+  }).catch(err => {
+    console.log(err)
+  })
+});
+
 module.exports = workers;
