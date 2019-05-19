@@ -21,12 +21,14 @@ export class OrderService {
 
   constructor(private http: HttpClient, private router: Router){}
 
-  OrderOne(name, idUser){
+  OrderOne(name, idUser): Observable<any>{
     this.order.name = name
     this.order.idUser = idUser
-    this.http.post('/api/orderOne', this.order).subscribe(() => {
-      console.log('order added');
-    });
+    return this.http.post('/api/orderOne', this.order);
+  }
+
+  public orderDelete(id) : Observable<any>{
+    return this.http.delete('/api/orderDelete/'+id);
   }
 
   public getAllPendingOrders(idUser): Observable<any>{

@@ -23,6 +23,9 @@
             <h2>{{element.firstname}} {{element.lastname}}</h2>
             <img id="img1" [src]="element.imageWorker">
           </div>
+          <div class="worker-container" *ngIf="!element.idWorker">
+            <button mat-raised-button color="accent" (click)="orderDelete(element.idOrder)">Annuler la commande</button>
+          </div>
         </div>
       </div>
     </td>

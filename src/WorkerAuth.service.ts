@@ -54,7 +54,9 @@ export class WorkerAuthService {
     let payload
     if(token){
       payload = token.split('.')[1]
+      console.log(payload)
       payload = window.atob(payload)
+      console.log(payload)
       return JSON.parse(payload)
     }else{
       return null

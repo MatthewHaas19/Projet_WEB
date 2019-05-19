@@ -16,7 +16,8 @@ workers.post('/WorkerRegister',(req,res) => {
     lastname: req.body.lastname,
     email: req.body.email,
     password: req.body.password,
-    phone: req.body.phone
+    phone: req.body.phone,
+    image: 'https://pixeltime.ro/profile.jpg'
   };
       const hash = bcrypt.hashSync(userData.password, 10);
       userData.password = hash;

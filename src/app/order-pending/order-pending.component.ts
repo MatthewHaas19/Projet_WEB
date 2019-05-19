@@ -60,17 +60,22 @@ export class OrderPendingComponent implements OnInit {
     this.worker.profile().subscribe(
       user => {
         this.order.PickAnOrder(name, user.id).subscribe(data => {
-          for (let i = 0; i < this.Orders.length; i++) {
-            if (this.Orders[i].idOrder === name.idOrder) {
-              this.Orders.splice(i, 1);
-              this.dataSource = new MatTableDataSource(this.Orders);
+          if(!data.error){
+            for (let i = 0; i < this.Orders.length; i++) {
+              if (this.Orders[i].idOrder === name.idOrder) {
+                this.Orders.splice(i, 1);
+                this.dataSource = new MatTableDataSource(this.Orders);
+              }
             }
+            console.log(data);
           }
-          console.log(data);
+          else {
+            alert('Tu ne peux pas prendre plusieurs commandes de client différents')
+          }
         });
       },
       err => {
-        console.error((err));
+        console.log(err)
       }
     );
   }

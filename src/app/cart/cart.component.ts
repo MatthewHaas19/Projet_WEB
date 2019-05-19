@@ -4,6 +4,7 @@ import {OrderService} from '../../order.service';
 import {MatTableDataSource} from '@angular/material';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import {WorkerAuthService} from '../../WorkerAuth.service';
+import {Router} from '@angular/router';
 
 // We define the interface Order which correspond to the info of the order + the infos of the service
 
@@ -46,7 +47,8 @@ export class CartComponent implements OnInit {
   // We import the services that we will use in this component
   constructor(private auth: AuthentificationService,
               private worker: WorkerAuthService,
-              private order: OrderService) { }
+              private order: OrderService,
+              private router: Router) { }
 
   // ngOnInit() is the function that will be executed at the start of the script
   ngOnInit() {
@@ -64,6 +66,23 @@ export class CartComponent implements OnInit {
       }
       return 'black';
     }
+  }
+
+  orderDelete(id){
+    console.log(id)
+    this.order.orderDelete(id).subscribe(
+      () => {
+        console.log('Order deleted')
+        for (let i = 0; i < this.Orders.length; i++) {
+          if (this.Orders[i].idOrder === id) {
+            this.Orders.splice(i, 1);
+            this.dataSource = new MatTableDataSource(this.Orders);
+            this.router.navigate(['']);
+            this.router.navigate(['cart']);
+          }
+        }
+      }
+    )
   }
 
   // We get all the orders of a user

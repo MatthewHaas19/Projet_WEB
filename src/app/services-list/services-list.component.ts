@@ -100,14 +100,21 @@ export class ServicesListComponent implements OnInit {
     if(this.auth.isLoggedIn()){
       this.auth.profile().subscribe(
         user => {
-          this.order.OrderOne(name, user.id);
-          this.snackBar.open('Votre demande de service a bien été prise en considération', '!', {
-            duration: 2000,
-          });
-          // We refresh the router-outlet to actualise the count of pending orders in the navbar
-          this.router.navigate(['cart']);
-          this.router.navigate(['']);
-
+          this.order.OrderOne(name, user.id).subscribe(data => {
+            console.log(data)
+            if(!data.error){
+              this.snackBar.open('Votre demande de service a bien été prise en considération', '!', {
+                duration: 2000,
+              });
+              // We refresh the router-outlet to actualise the count of pending orders in the navbar
+              this.router.navigate(['cart']);
+              this.router.navigate(['']);
+            } else {
+              this.snackBar.open('Vous ne pouvez pas commander plusieurs fois le même service', '!', {
+                duration: 2000,
+              });
+            }
+          })
         },
         err => {
           console.error((err));
