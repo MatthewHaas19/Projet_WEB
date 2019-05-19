@@ -89,6 +89,8 @@ export class OrderPendingComponent implements OnInit {
           price: 0,
           firstname: '',
           lastname: '',
+          address: '',
+          phone: '',
           image: ''
         };
 
@@ -104,6 +106,8 @@ export class OrderPendingComponent implements OnInit {
         this.auth.userById(order.idUser).subscribe(user => {
           aOrder.firstname = user.firstname;
           aOrder.lastname = user.lastname;
+          aOrder.phone = user.phone;
+          aOrder.address = user.code + ' ' + user.city + ' ' + user.address
           aOrder.image = user.image;
           this.Orders.push(aOrder);
           this.dataSource = new MatTableDataSource(this.Orders);

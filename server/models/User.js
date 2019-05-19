@@ -24,6 +24,15 @@ module.exports = db.sequelize.define(
     phone: {
       type: Sequelize.STRING
     },
+    city: {
+      type: Sequelize.STRING
+    },
+    address: {
+      type: Sequelize.STRING
+    },
+    code: {
+      type: Sequelize.STRING
+    },
     isAdmin: {
       type: Sequelize.STRING,
       defaultValue: 'false'

@@ -20,6 +20,9 @@ export class LoginComponent implements OnInit {
     email: '',
     password: '',
     phone: '',
+    city: '',
+    address: '',
+    code: '',
   };
 
   userForm: FormGroup;

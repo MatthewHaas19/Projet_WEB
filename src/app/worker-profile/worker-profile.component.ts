@@ -184,7 +184,7 @@ export class WorkerProfileComponent implements OnInit {
 @Component({
   selector: 'app-upload-worker-profile',
   templateUrl: 'upload-worker-profile.html',
-  styleUrls: ['../services/services.component.scss']
+  styleUrls: ['worker-profile.component.scss']
 })
 export class UploadWorkerProfileComponent {
 

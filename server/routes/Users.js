@@ -17,6 +17,9 @@ users.post('/register',(req,res) => {
     email: req.body.email,
     password: req.body.password,
     phone: req.body.phone,
+    city: req.body.city,
+    address: req.body.address,
+    code: req.body.code,
     image: 'https://pixeltime.ro/profile.jpg'
   };
       const hash = bcrypt.hashSync(userData.password, 10);

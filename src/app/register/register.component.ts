@@ -22,6 +22,9 @@ export class RegisterComponent implements OnInit {
     email: '',
     password: '',
     phone: '',
+    city: '',
+    address: '',
+    code: '',
   };
 
 
@@ -41,7 +44,11 @@ export class RegisterComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
       cpassword: ['', Validators.required],
-      phone: ['', Validators.required]
+      phone: ['', Validators.required],
+      city: ['', Validators.required],
+      address: ['', Validators.required],
+      code: ['', Validators.required]
+
     });
   }
 
@@ -60,6 +67,10 @@ export class RegisterComponent implements OnInit {
     this.credentials.email = formValue.email;
     this.credentials.password = formValue.password;
     this.credentials.phone = formValue.phone;
+    this.credentials.city = formValue.city;
+    this.credentials.address = formValue.address;
+    this.credentials.code = formValue.code;
+
 
     this.auth.register(this.credentials).subscribe(
       (data) => {

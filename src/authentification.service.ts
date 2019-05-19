@@ -14,6 +14,9 @@ export interface UserDetails {
   email: string
   password: string
   phone: string
+  city: string
+  address: string
+  code: string
   isAdmin: string
   image: string
   exp: number
@@ -32,6 +35,9 @@ export interface TokenPayload{
   email: string
   password: string
   phone: string
+  city: string
+  address: string
+  code: string
 }
 
 @Injectable()
