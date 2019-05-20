@@ -42,6 +42,7 @@ export class ServicesComponent implements OnInit {
 
   serviceForm: FormGroup;
   fileUrl: string;
+  SubmitBlocked = false;
 
   constructor(public dialog: MatDialog,
               private formBuilder: FormBuilder,
@@ -90,7 +91,7 @@ export class ServicesComponent implements OnInit {
       this.infos.image = this.fileUrl;
     }
 
-    if (this.infos.name && this.infos.type && this.infos.desc && this.infos.type) {
+    if (!this.SubmitBlocked) {
       this.services.addService2(this.infos).then((res) => {
         this.router.navigate(['']);
       });
@@ -100,6 +101,7 @@ export class ServicesComponent implements OnInit {
 
   // If the admin click on the upload button if open a dialog page in which he will be able to download an image for the order
   openDialog(): void {
+    this.SubmitBlocked = true;
     const dialogRef = this.dialog.open(UploadServiceComponent, {
       width: '250px',
       data: {file: this.fileUrl}
@@ -107,6 +109,7 @@ export class ServicesComponent implements OnInit {
 
     // we store the image url which was upload by the admin
     dialogRef.afterClosed().subscribe(result => {
+      this.SubmitBlocked = false;
       console.log('The dialog was closed');
       if (result) {
         this.infos.image = result;

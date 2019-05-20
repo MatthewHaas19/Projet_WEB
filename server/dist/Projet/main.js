@@ -1740,6 +1740,7 @@ var ServicesComponent = /** @class */ (function () {
             price: 0,
             image: 'assets/images/service.jpg',
         };
+        this.SubmitBlocked = false;
     }
     // We get all or types from the server side to permit the admin to choose a type while creating the new service
     ServicesComponent.prototype.ngOnInit = function () {
@@ -1776,7 +1777,7 @@ var ServicesComponent = /** @class */ (function () {
         if (this.fileUrl && this.fileUrl !== '') {
             this.infos.image = this.fileUrl;
         }
-        if (this.infos.name && this.infos.type && this.infos.desc && this.infos.type) {
+        if (!this.SubmitBlocked) {
             this.services.addService2(this.infos).then(function (res) {
                 _this.router.navigate(['']);
             });
@@ -1785,12 +1786,14 @@ var ServicesComponent = /** @class */ (function () {
     // If the admin click on the upload button if open a dialog page in which he will be able to download an image for the order
     ServicesComponent.prototype.openDialog = function () {
         var _this = this;
+        this.SubmitBlocked = true;
         var dialogRef = this.dialog.open(UploadServiceComponent, {
             width: '250px',
             data: { file: this.fileUrl }
         });
         // we store the image url which was upload by the admin
         dialogRef.afterClosed().subscribe(function (result) {
+            _this.SubmitBlocked = false;
             console.log('The dialog was closed');
             if (result) {
                 _this.infos.image = result;
