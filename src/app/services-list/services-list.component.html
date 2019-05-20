@@ -29,7 +29,7 @@
             <p>{{service.desc}}</p>
           </div>
           <div class="bottom-button">
-            <button id="buttonS" mat-raised-button color="accent" type="submit" (click)="OrderOne(service.name)">Order</button>
+            <button id="buttonS" mat-raised-button color="accent" type="submit" [disabled]="isLoading" (click)="OrderOne(service.name)">Order</button>
           </div>
         </div>
       </mat-card>

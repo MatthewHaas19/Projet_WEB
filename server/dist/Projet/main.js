@@ -63,7 +63,9 @@ var WorkerAuthService = /** @class */ (function () {
         var payload;
         if (token) {
             payload = token.split('.')[1];
+            console.log(payload);
             payload = window.atob(payload);
+            console.log(payload);
             return JSON.parse(payload);
         }
         else {
@@ -505,7 +507,7 @@ var AppModule = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<!-- We use mat-table from Angular material to display the current orders of the client -->\n<!-- All our data is stored in the array 'dataSource' -->\n<table mat-table [dataSource]=\"dataSource\" multiTemplateDataRows class=\"mat-elevation-z8\" >\n\n  <!-- in 'element' there is all the infos of a client order  -->\n  <ng-container matColumnDef=\"{{column}}\" *ngFor=\"let column of displayedColumns\"> <!--  we use the directive ngFor to display all the columns -->\n    <th mat-header-cell *matHeaderCellDef>{{column}}</th> <!--  we define the header of the table -->\n    <td mat-cell *matCellDef=\"let element\" [style.color]=\"getColor(element[column])\"> {{element[column]}} </td>\n  </ng-container>\n\n  <!-- We define the detail that will expanded when clicking on the order -->\n  <ng-container matColumnDef=\"expandedDetail\">\n    <td mat-cell *matCellDef=\"let element\" [attr.colspan]=\"displayedColumns.length\">\n      <div class=\"example-element-detail\" [@detailExpand]=\"element == expandedElement ? 'expanded' : 'collapsed'\">\n        <div class=\"example-element-description\">\n          <div class=\"order-container\">\n            <img id=\"img1\" [src]=\"element.image\">\n            <h3>{{element.price}} €</h3>\n            <h4>{{element.desc}}</h4>\n          </div>\n          <div class=\"worker-container\" *ngIf=\"element.idWorker\">\n            <h3>Ta commande sera réalisée par :</h3>\n            <h2>{{element.firstname}} {{element.lastname}}</h2>\n            <img id=\"img1\" [src]=\"element.imageWorker\">\n          </div>\n        </div>\n      </div>\n    </td>\n  </ng-container>\n\n\n  <!-- we tell the table which columns will be rendered in the header and data rows -->\n  <tr mat-header-row *matHeaderRowDef=\"displayedColumns\"></tr>\n  <tr mat-row *matRowDef=\"let element; columns: displayedColumns;\"\n      class=\"example-element-row\"\n      [class.example-expanded-row]=\"expandedElement === element\"\n      (click)=\"expandedElement = expandedElement === element ? null : element\">\n  </tr>\n  <tr mat-row *matRowDef=\"let row; columns: ['expandedDetail']\" class=\"example-detail-row\"></tr>\n</table>\n\n"
+module.exports = "<!-- We use mat-table from Angular material to display the current orders of the client -->\n<!-- All our data is stored in the array 'dataSource' -->\n<table mat-table [dataSource]=\"dataSource\" multiTemplateDataRows class=\"mat-elevation-z8\" >\n\n  <!-- in 'element' there is all the infos of a client order  -->\n  <ng-container matColumnDef=\"{{column}}\" *ngFor=\"let column of displayedColumns\"> <!--  we use the directive ngFor to display all the columns -->\n    <th mat-header-cell *matHeaderCellDef>{{column}}</th> <!--  we define the header of the table -->\n    <td mat-cell *matCellDef=\"let element\" [style.color]=\"getColor(element[column])\"> {{element[column]}} </td>\n  </ng-container>\n\n  <!-- We define the detail that will expanded when clicking on the order -->\n  <ng-container matColumnDef=\"expandedDetail\">\n    <td mat-cell *matCellDef=\"let element\" [attr.colspan]=\"displayedColumns.length\">\n      <div class=\"example-element-detail\" [@detailExpand]=\"element == expandedElement ? 'expanded' : 'collapsed'\">\n        <div class=\"example-element-description\">\n          <div class=\"order-container\">\n            <img id=\"img1\" [src]=\"element.image\">\n            <h3>{{element.price}} €</h3>\n            <h4>{{element.desc}}</h4>\n          </div>\n          <div class=\"worker-container\" *ngIf=\"element.idWorker\">\n            <h3>Ta commande sera réalisée par :</h3>\n            <h2>{{element.firstname}} {{element.lastname}}</h2>\n            <img id=\"img1\" [src]=\"element.imageWorker\">\n          </div>\n          <div class=\"worker-container\" *ngIf=\"!element.idWorker\">\n            <button mat-raised-button color=\"accent\" (click)=\"orderDelete(element.idOrder)\">Annuler la commande</button>\n          </div>\n        </div>\n      </div>\n    </td>\n  </ng-container>\n\n\n  <!-- we tell the table which columns will be rendered in the header and data rows -->\n  <tr mat-header-row *matHeaderRowDef=\"displayedColumns\"></tr>\n  <tr mat-row *matRowDef=\"let element; columns: displayedColumns;\"\n      class=\"example-element-row\"\n      [class.example-expanded-row]=\"expandedElement === element\"\n      (click)=\"expandedElement = expandedElement === element ? null : element\">\n  </tr>\n  <tr mat-row *matRowDef=\"let row; columns: ['expandedDetail']\" class=\"example-detail-row\"></tr>\n</table>\n\n"
 
 /***/ }),
 
@@ -516,7 +518,7 @@ module.exports = "<!-- We use mat-table from Angular material to display the cur
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "/*  CSS of the cart component */\n#img1 {\n  min-width: 100px;\n  max-width: 200px;\n  width: 100%;\n  margin: 0 auto;\n  margin-top: 10%;\n  margin-bottom: 10%; }\ntable {\n  min-width: 150px;\n  max-width: 500px;\n  width: 100%;\n  margin: 0 auto;\n  margin-top: 10%;\n  margin-bottom: 10%; }\ntable .example-element-description {\n    padding: 16px;\n    width: 100%;\n    text-align: center;\n    display: block;\n    float: left; }\ntable .example-element-description .order-container {\n      width: 50%;\n      display: block;\n      float: left; }\ntable .example-element-description .worker-container {\n      width: 50%;\n      display: block;\n      float: left; }\ntr.example-detail-row {\n  height: 0; }\ntr.example-element-row:not(.example-expanded-row):hover {\n  background: #f5f5f5; }\ntr.example-element-row:not(.example-expanded-row):active {\n  background: #efefef; }\n.example-element-row td {\n  border-bottom-width: 0; }\n.example-element-detail {\n  overflow: hidden;\n  display: flex; }\n.example-element-symbol {\n  font-weight: bold;\n  font-size: 40px;\n  line-height: normal; }\n.example-element-description-attribution {\n  opacity: 0.5; }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvY2FydC9DOlxcVXNlcnNcXE1hdHRoZXdcXERlc2t0b3BcXFByb2pldF9XRUIvc3JjXFxhcHBcXGNhcnRcXGNhcnQuY29tcG9uZW50LnNjc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsK0JBQUE7QUFFQTtFQUNFLGdCQUFnQjtFQUNoQixnQkFBZ0I7RUFDaEIsV0FBWTtFQUNaLGNBQWM7RUFDZCxlQUFlO0VBQ2Ysa0JBQWtCLEVBQUE7QUFHcEI7RUFDRSxnQkFBZ0I7RUFDaEIsZ0JBQWdCO0VBQ2hCLFdBQVk7RUFDWixjQUFjO0VBQ2QsZUFBZTtFQUNmLGtCQUFrQixFQUFBO0FBTnBCO0lBUUksYUFBYTtJQUNiLFdBQVc7SUFDWCxrQkFBa0I7SUFDbEIsY0FBYztJQUNkLFdBQVcsRUFBQTtBQVpmO01BY00sVUFBVTtNQUNWLGNBQWM7TUFDZCxXQUFXLEVBQUE7QUFoQmpCO01BbUJNLFVBQVU7TUFDVixjQUFjO01BQ2QsV0FBVyxFQUFBO0FBS2pCO0VBQ0UsU0FBUyxFQUFBO0FBR1g7RUFDRSxtQkFBbUIsRUFBQTtBQUdyQjtFQUNFLG1CQUFtQixFQUFBO0FBR3JCO0VBQ0Usc0JBQXNCLEVBQUE7QUFHeEI7RUFDRSxnQkFBZ0I7RUFDaEIsYUFBYSxFQUFBO0FBS2Y7RUFDRSxpQkFBaUI7RUFDakIsZUFBZTtFQUNmLG1CQUFtQixFQUFBO0FBS3JCO0VBQ0UsWUFBWSxFQUFBIiwiZmlsZSI6InNyYy9hcHAvY2FydC9jYXJ0LmNvbXBvbmVudC5zY3NzIiwic291cmNlc0NvbnRlbnQiOlsiLyogIENTUyBvZiB0aGUgY2FydCBjb21wb25lbnQgKi9cclxuXHJcbiNpbWcxe1xyXG4gIG1pbi13aWR0aDogMTAwcHg7XHJcbiAgbWF4LXdpZHRoOiAyMDBweDtcclxuICB3aWR0aDogMTAwJSA7XHJcbiAgbWFyZ2luOiAwIGF1dG87XHJcbiAgbWFyZ2luLXRvcDogMTAlO1xyXG4gIG1hcmdpbi1ib3R0b206IDEwJTtcclxufVxyXG5cclxudGFibGV7XHJcbiAgbWluLXdpZHRoOiAxNTBweDtcclxuICBtYXgtd2lkdGg6IDUwMHB4O1xyXG4gIHdpZHRoOiAxMDAlIDtcclxuICBtYXJnaW46IDAgYXV0bztcclxuICBtYXJnaW4tdG9wOiAxMCU7XHJcbiAgbWFyZ2luLWJvdHRvbTogMTAlO1xyXG4gIC5leGFtcGxlLWVsZW1lbnQtZGVzY3JpcHRpb24ge1xyXG4gICAgcGFkZGluZzogMTZweDtcclxuICAgIHdpZHRoOiAxMDAlO1xyXG4gICAgdGV4dC1hbGlnbjogY2VudGVyO1xyXG4gICAgZGlzcGxheTogYmxvY2s7XHJcbiAgICBmbG9hdDogbGVmdDtcclxuICAgIC5vcmRlci1jb250YWluZXJ7XHJcbiAgICAgIHdpZHRoOiA1MCU7XHJcbiAgICAgIGRpc3BsYXk6IGJsb2NrO1xyXG4gICAgICBmbG9hdDogbGVmdDtcclxuICAgIH1cclxuICAgIC53b3JrZXItY29udGFpbmVye1xyXG4gICAgICB3aWR0aDogNTAlO1xyXG4gICAgICBkaXNwbGF5OiBibG9jaztcclxuICAgICAgZmxvYXQ6IGxlZnQ7XHJcbiAgICB9XHJcbiAgfVxyXG59XHJcblxyXG50ci5leGFtcGxlLWRldGFpbC1yb3cge1xyXG4gIGhlaWdodDogMDtcclxufVxyXG5cclxudHIuZXhhbXBsZS1lbGVtZW50LXJvdzpub3QoLmV4YW1wbGUtZXhwYW5kZWQtcm93KTpob3ZlciB7XHJcbiAgYmFja2dyb3VuZDogI2Y1ZjVmNTtcclxufVxyXG5cclxudHIuZXhhbXBsZS1lbGVtZW50LXJvdzpub3QoLmV4YW1wbGUtZXhwYW5kZWQtcm93KTphY3RpdmUge1xyXG4gIGJhY2tncm91bmQ6ICNlZmVmZWY7XHJcbn1cclxuXHJcbi5leGFtcGxlLWVsZW1lbnQtcm93IHRkIHtcclxuICBib3JkZXItYm90dG9tLXdpZHRoOiAwO1xyXG59XHJcblxyXG4uZXhhbXBsZS1lbGVtZW50LWRldGFpbCB7XHJcbiAgb3ZlcmZsb3c6IGhpZGRlbjtcclxuICBkaXNwbGF5OiBmbGV4O1xyXG59XHJcblxyXG5cclxuXHJcbi5leGFtcGxlLWVsZW1lbnQtc3ltYm9sIHtcclxuICBmb250LXdlaWdodDogYm9sZDtcclxuICBmb250LXNpemU6IDQwcHg7XHJcbiAgbGluZS1oZWlnaHQ6IG5vcm1hbDtcclxufVxyXG5cclxuXHJcblxyXG4uZXhhbXBsZS1lbGVtZW50LWRlc2NyaXB0aW9uLWF0dHJpYnV0aW9uIHtcclxuICBvcGFjaXR5OiAwLjU7XHJcbn1cclxuIl19 */"
+module.exports = "/*  CSS of the cart component */\n#img1 {\n  min-width: 100px;\n  max-width: 200px;\n  width: 100%;\n  margin: 0 auto;\n  margin-top: 10%;\n  margin-bottom: 10%; }\ntable {\n  min-width: 150px;\n  max-width: 500px;\n  width: 100%;\n  margin: 0 auto;\n  margin-top: 10%;\n  margin-bottom: 10%; }\ntable .example-element-description {\n    padding: 16px;\n    width: 100%;\n    text-align: center;\n    display: block;\n    float: left; }\ntable .example-element-description .order-container {\n      width: 50%;\n      display: block;\n      float: left; }\ntable .example-element-description .worker-container {\n      width: 50%;\n      display: block;\n      float: left; }\n.mat-raised-button {\n  margin-top: 100px; }\ntr.example-detail-row {\n  height: 0; }\ntr.example-element-row:not(.example-expanded-row):hover {\n  background: #f5f5f5; }\ntr.example-element-row:not(.example-expanded-row):active {\n  background: #efefef; }\n.example-element-row td {\n  border-bottom-width: 0; }\n.example-element-detail {\n  overflow: hidden;\n  display: flex; }\n.example-element-symbol {\n  font-weight: bold;\n  font-size: 40px;\n  line-height: normal; }\n.example-element-description-attribution {\n  opacity: 0.5; }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvY2FydC9DOlxcVXNlcnNcXE1hdHRoZXdcXERlc2t0b3BcXFByb2pldF9XRUIvc3JjXFxhcHBcXGNhcnRcXGNhcnQuY29tcG9uZW50LnNjc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsK0JBQUE7QUFFQTtFQUNFLGdCQUFnQjtFQUNoQixnQkFBZ0I7RUFDaEIsV0FBWTtFQUNaLGNBQWM7RUFDZCxlQUFlO0VBQ2Ysa0JBQWtCLEVBQUE7QUFHcEI7RUFDRSxnQkFBZ0I7RUFDaEIsZ0JBQWdCO0VBQ2hCLFdBQVk7RUFDWixjQUFjO0VBQ2QsZUFBZTtFQUNmLGtCQUFrQixFQUFBO0FBTnBCO0lBUUksYUFBYTtJQUNiLFdBQVc7SUFDWCxrQkFBa0I7SUFDbEIsY0FBYztJQUNkLFdBQVcsRUFBQTtBQVpmO01BY00sVUFBVTtNQUNWLGNBQWM7TUFDZCxXQUFXLEVBQUE7QUFoQmpCO01BbUJNLFVBQVU7TUFDVixjQUFjO01BQ2QsV0FBVyxFQUFBO0FBS2pCO0VBQ0UsaUJBQWlCLEVBQUE7QUFHbkI7RUFDRSxTQUFTLEVBQUE7QUFHWDtFQUNFLG1CQUFtQixFQUFBO0FBR3JCO0VBQ0UsbUJBQW1CLEVBQUE7QUFHckI7RUFDRSxzQkFBc0IsRUFBQTtBQUd4QjtFQUNFLGdCQUFnQjtFQUNoQixhQUFhLEVBQUE7QUFLZjtFQUNFLGlCQUFpQjtFQUNqQixlQUFlO0VBQ2YsbUJBQW1CLEVBQUE7QUFLckI7RUFDRSxZQUFZLEVBQUEiLCJmaWxlIjoic3JjL2FwcC9jYXJ0L2NhcnQuY29tcG9uZW50LnNjc3MiLCJzb3VyY2VzQ29udGVudCI6WyIvKiAgQ1NTIG9mIHRoZSBjYXJ0IGNvbXBvbmVudCAqL1xyXG5cclxuI2ltZzF7XHJcbiAgbWluLXdpZHRoOiAxMDBweDtcclxuICBtYXgtd2lkdGg6IDIwMHB4O1xyXG4gIHdpZHRoOiAxMDAlIDtcclxuICBtYXJnaW46IDAgYXV0bztcclxuICBtYXJnaW4tdG9wOiAxMCU7XHJcbiAgbWFyZ2luLWJvdHRvbTogMTAlO1xyXG59XHJcblxyXG50YWJsZXtcclxuICBtaW4td2lkdGg6IDE1MHB4O1xyXG4gIG1heC13aWR0aDogNTAwcHg7XHJcbiAgd2lkdGg6IDEwMCUgO1xyXG4gIG1hcmdpbjogMCBhdXRvO1xyXG4gIG1hcmdpbi10b3A6IDEwJTtcclxuICBtYXJnaW4tYm90dG9tOiAxMCU7XHJcbiAgLmV4YW1wbGUtZWxlbWVudC1kZXNjcmlwdGlvbiB7XHJcbiAgICBwYWRkaW5nOiAxNnB4O1xyXG4gICAgd2lkdGg6IDEwMCU7XHJcbiAgICB0ZXh0LWFsaWduOiBjZW50ZXI7XHJcbiAgICBkaXNwbGF5OiBibG9jaztcclxuICAgIGZsb2F0OiBsZWZ0O1xyXG4gICAgLm9yZGVyLWNvbnRhaW5lcntcclxuICAgICAgd2lkdGg6IDUwJTtcclxuICAgICAgZGlzcGxheTogYmxvY2s7XHJcbiAgICAgIGZsb2F0OiBsZWZ0O1xyXG4gICAgfVxyXG4gICAgLndvcmtlci1jb250YWluZXJ7XHJcbiAgICAgIHdpZHRoOiA1MCU7XHJcbiAgICAgIGRpc3BsYXk6IGJsb2NrO1xyXG4gICAgICBmbG9hdDogbGVmdDtcclxuICAgIH1cclxuICB9XHJcbn1cclxuXHJcbi5tYXQtcmFpc2VkLWJ1dHRvbntcclxuICBtYXJnaW4tdG9wOiAxMDBweDtcclxufVxyXG5cclxudHIuZXhhbXBsZS1kZXRhaWwtcm93IHtcclxuICBoZWlnaHQ6IDA7XHJcbn1cclxuXHJcbnRyLmV4YW1wbGUtZWxlbWVudC1yb3c6bm90KC5leGFtcGxlLWV4cGFuZGVkLXJvdyk6aG92ZXIge1xyXG4gIGJhY2tncm91bmQ6ICNmNWY1ZjU7XHJcbn1cclxuXHJcbnRyLmV4YW1wbGUtZWxlbWVudC1yb3c6bm90KC5leGFtcGxlLWV4cGFuZGVkLXJvdyk6YWN0aXZlIHtcclxuICBiYWNrZ3JvdW5kOiAjZWZlZmVmO1xyXG59XHJcblxyXG4uZXhhbXBsZS1lbGVtZW50LXJvdyB0ZCB7XHJcbiAgYm9yZGVyLWJvdHRvbS13aWR0aDogMDtcclxufVxyXG5cclxuLmV4YW1wbGUtZWxlbWVudC1kZXRhaWwge1xyXG4gIG92ZXJmbG93OiBoaWRkZW47XHJcbiAgZGlzcGxheTogZmxleDtcclxufVxyXG5cclxuXHJcblxyXG4uZXhhbXBsZS1lbGVtZW50LXN5bWJvbCB7XHJcbiAgZm9udC13ZWlnaHQ6IGJvbGQ7XHJcbiAgZm9udC1zaXplOiA0MHB4O1xyXG4gIGxpbmUtaGVpZ2h0OiBub3JtYWw7XHJcbn1cclxuXHJcblxyXG5cclxuLmV4YW1wbGUtZWxlbWVudC1kZXNjcmlwdGlvbi1hdHRyaWJ1dGlvbiB7XHJcbiAgb3BhY2l0eTogMC41O1xyXG59XHJcbiJdfQ== */"
 
 /***/ }),
 
@@ -537,6 +539,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_material__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/material */ "./node_modules/@angular/material/esm5/material.es5.js");
 /* harmony import */ var _angular_animations__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/animations */ "./node_modules/@angular/animations/fesm5/animations.js");
 /* harmony import */ var _WorkerAuth_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../WorkerAuth.service */ "./src/WorkerAuth.service.ts");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
+
 
 
 
@@ -546,10 +550,11 @@ __webpack_require__.r(__webpack_exports__);
 
 var CartComponent = /** @class */ (function () {
     // We import the services that we will use in this component
-    function CartComponent(auth, worker, order) {
+    function CartComponent(auth, worker, order, router) {
         this.auth = auth;
         this.worker = worker;
         this.order = order;
+        this.router = router;
         // We will us this array to store the response of the http request
         this.Orders = [];
         // We define in which order we will display the column
@@ -570,6 +575,21 @@ var CartComponent = /** @class */ (function () {
             }
             return 'black';
         }
+    };
+    CartComponent.prototype.orderDelete = function (id) {
+        var _this = this;
+        console.log(id);
+        this.order.orderDelete(id).subscribe(function () {
+            console.log('Order deleted');
+            for (var i = 0; i < _this.Orders.length; i++) {
+                if (_this.Orders[i].idOrder === id) {
+                    _this.Orders.splice(i, 1);
+                    _this.dataSource = new _angular_material__WEBPACK_IMPORTED_MODULE_4__["MatTableDataSource"](_this.Orders);
+                    _this.router.navigate(['']);
+                    _this.router.navigate(['cart']);
+                }
+            }
+        });
     };
     // We get all the orders of a user
     CartComponent.prototype.getAllOrder = function () {
@@ -647,7 +667,8 @@ var CartComponent = /** @class */ (function () {
         }),
         tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_authentification_service__WEBPACK_IMPORTED_MODULE_2__["AuthentificationService"],
             _WorkerAuth_service__WEBPACK_IMPORTED_MODULE_6__["WorkerAuthService"],
-            _order_service__WEBPACK_IMPORTED_MODULE_3__["OrderService"]])
+            _order_service__WEBPACK_IMPORTED_MODULE_3__["OrderService"],
+            _angular_router__WEBPACK_IMPORTED_MODULE_7__["Router"]])
     ], CartComponent);
     return CartComponent;
 }());
@@ -892,16 +913,24 @@ var OrderPendingComponent = /** @class */ (function () {
         console.log(name);
         this.worker.profile().subscribe(function (user) {
             _this.order.PickAnOrder(name, user.id).subscribe(function (data) {
-                for (var i = 0; i < _this.Orders.length; i++) {
-                    if (_this.Orders[i].idOrder === name.idOrder) {
-                        _this.Orders.splice(i, 1);
-                        _this.dataSource = new _angular_material__WEBPACK_IMPORTED_MODULE_3__["MatTableDataSource"](_this.Orders);
+                if (!data.error) {
+                    for (var i = 0; i < _this.Orders.length; i++) {
+                        if (_this.Orders[i].idOrder === name.idOrder) {
+                            _this.Orders.splice(i, 1);
+                            _this.Orders.sort(function (obj1, obj2) {
+                                return obj1.idOrder - obj2.idOrder;
+                            });
+                            _this.dataSource = new _angular_material__WEBPACK_IMPORTED_MODULE_3__["MatTableDataSource"](_this.Orders);
+                        }
                     }
+                    console.log(data);
                 }
-                console.log(data);
+                else {
+                    alert('Tu ne peux pas prendre plusieurs commandes de client différents');
+                }
             });
         }, function (err) {
-            console.error((err));
+            console.log(err);
         });
     };
     // this function is used to get complementary info of the order (user info & service info)
@@ -937,6 +966,9 @@ var OrderPendingComponent = /** @class */ (function () {
                     aOrder.address = user.code + ' ' + user.city + ' ' + user.address;
                     aOrder.image = user.image;
                     _this.Orders.push(aOrder);
+                    _this.Orders.sort(function (obj1, obj2) {
+                        return obj1.idOrder - obj2.idOrder;
+                    });
                     _this.dataSource = new _angular_material__WEBPACK_IMPORTED_MODULE_3__["MatTableDataSource"](_this.Orders);
                 });
             });
@@ -1265,7 +1297,7 @@ var RegisterComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<!-- HTML For the service list, we display all of the infos for each services using the directive ngFor -->\n<div class=\"search\">\n  <mat-form-field appearance=\"outline\" color=\"accent\" >\n    <mat-label>Find a service</mat-label>\n    <input matInput placeholder=\"...\" type=\"text\" #myInput [(ngModel)]=\"name\" (input)=\"Search()\" >\n    <mat-icon matSuffix>search</mat-icon>\n  </mat-form-field>\n</div>\n<div class=\"content\">\n  <div class=\"container\"*ngFor=\"let service of this.MyServices\">\n    <div class=\"service\" >\n      <mat-card>\n        <div class=\"top\">\n          <h2>{{service.name}}</h2>\n          <h4>{{service.idType}}</h4>\n        </div>\n        <div class=\"img-container\">\n          <img id=\"img1\" [src]=\"service.image\">\n          <div class=\"middle\" *ngIf=\"isAdmin()\">\n            <div class=\"buttons\">\n              <button mat-raised-button color=\"primary\" [routerLink]=\"['/services-modify',service.name]\">Modifier</button>\n              <button mat-raised-button color=\"warn\" (click)=\"onDelete(service.name, service.image)\">Supprimer</button>\n            </div>\n          </div>\n        </div>\n        <div class=\"bottom\">\n          <div class=\"bottom-container\">\n            <p>{{service.price}} €</p>\n            <p>{{service.desc}}</p>\n          </div>\n          <div class=\"bottom-button\">\n            <button id=\"buttonS\" mat-raised-button color=\"accent\" type=\"submit\" (click)=\"OrderOne(service.name)\">Order</button>\n          </div>\n        </div>\n      </mat-card>\n    </div>\n  </div>\n\n</div>\n"
+module.exports = "<!-- HTML For the service list, we display all of the infos for each services using the directive ngFor -->\n<div class=\"search\">\n  <mat-form-field appearance=\"outline\" color=\"accent\" >\n    <mat-label>Find a service</mat-label>\n    <input matInput placeholder=\"...\" type=\"text\" #myInput [(ngModel)]=\"name\" (input)=\"Search()\" >\n    <mat-icon matSuffix>search</mat-icon>\n  </mat-form-field>\n</div>\n<div class=\"content\">\n  <div class=\"container\"*ngFor=\"let service of this.MyServices\">\n    <div class=\"service\" >\n      <mat-card>\n        <div class=\"top\">\n          <h2>{{service.name}}</h2>\n          <h4>{{service.idType}}</h4>\n        </div>\n        <div class=\"img-container\">\n          <img id=\"img1\" [src]=\"service.image\">\n          <div class=\"middle\" *ngIf=\"isAdmin()\">\n            <div class=\"buttons\">\n              <button mat-raised-button color=\"primary\" [routerLink]=\"['/services-modify',service.name]\">Modifier</button>\n              <button mat-raised-button color=\"warn\" (click)=\"onDelete(service.name, service.image)\">Supprimer</button>\n            </div>\n          </div>\n        </div>\n        <div class=\"bottom\">\n          <div class=\"bottom-container\">\n            <p>{{service.price}} €</p>\n            <p>{{service.desc}}</p>\n          </div>\n          <div class=\"bottom-button\">\n            <button id=\"buttonS\" mat-raised-button color=\"accent\" type=\"submit\" [disabled]=\"isLoading\" (click)=\"OrderOne(service.name)\">Order</button>\n          </div>\n        </div>\n      </mat-card>\n    </div>\n  </div>\n\n</div>\n"
 
 /***/ }),
 
@@ -1311,6 +1343,7 @@ var ServicesListComponent = /** @class */ (function () {
         this.order = order;
         this.snackBar = snackBar;
         this.router = router;
+        this.isLoading = false;
     }
     // We init this page by getting all the services en then we will deplay them
     ServicesListComponent.prototype.ngOnInit = function () {
@@ -1357,15 +1390,26 @@ var ServicesListComponent = /** @class */ (function () {
     // We create an order for the user which order the service
     ServicesListComponent.prototype.OrderOne = function (name) {
         var _this = this;
+        this.isLoading = true;
         if (this.auth.isLoggedIn()) {
             this.auth.profile().subscribe(function (user) {
-                _this.order.OrderOne(name, user.id);
-                _this.snackBar.open('Votre demande de service a bien été prise en considération', '!', {
-                    duration: 2000,
+                _this.order.OrderOne(name, user.id).subscribe(function (data) {
+                    _this.isLoading = false;
+                    console.log(data);
+                    if (!data.error) {
+                        _this.snackBar.open('Votre demande de service a bien été prise en considération', '!', {
+                            duration: 2000,
+                        });
+                        // We refresh the router-outlet to actualise the count of pending orders in the navbar
+                        _this.router.navigate(['cart']);
+                        _this.router.navigate(['']);
+                    }
+                    else {
+                        _this.snackBar.open('Vous ne pouvez pas commander plusieurs fois le même service', '!', {
+                            duration: 2000,
+                        });
+                    }
                 });
-                // We refresh the router-outlet to actualise the count of pending orders in the navbar
-                _this.router.navigate(['cart']);
-                _this.router.navigate(['']);
             }, function (err) {
                 console.error((err));
             });
@@ -1504,6 +1548,10 @@ var ServicesModifyComponent = /** @class */ (function () {
         this.infos.price = formValue.price;
         if (this.fileUrl && this.fileUrl !== '') {
             this.infos.image = this.fileUrl;
+            console.log('test');
+        }
+        if (this.OldImage === this.infos.image) {
+            this.OldImage = 'assets/images/service.jpg';
         }
         if (!this.SubmitBlocked) {
             this.services.modifyService(this.OldImage, this.infos, this.idService).then(function (res) {
@@ -2485,9 +2533,10 @@ var OrderService = /** @class */ (function () {
     OrderService.prototype.OrderOne = function (name, idUser) {
         this.order.name = name;
         this.order.idUser = idUser;
-        this.http.post('/api/orderOne', this.order).subscribe(function () {
-            console.log('order added');
-        });
+        return this.http.post('/api/orderOne', this.order);
+    };
+    OrderService.prototype.orderDelete = function (id) {
+        return this.http.delete('/api/orderDelete/' + id);
     };
     OrderService.prototype.getAllPendingOrders = function (idUser) {
         return this.http.get('/api/OrderPending/' + idUser);

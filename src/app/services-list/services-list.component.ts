@@ -28,6 +28,7 @@ export interface IdType {
 }
 
 
+
 @Component({
   selector: 'app-services-list',
   templateUrl: './services-list.component.html',
@@ -39,6 +40,7 @@ export class ServicesListComponent implements OnInit {
   MyServicesStored: ServiceDetails[];
   name: string;
 
+  isLoading = false;
   private idType: IdType;
 
   constructor(private services: ServicesService,
@@ -97,10 +99,12 @@ export class ServicesListComponent implements OnInit {
 
   // We create an order for the user which order the service
   OrderOne(name) {
+    this.isLoading = true;
     if(this.auth.isLoggedIn()){
       this.auth.profile().subscribe(
         user => {
           this.order.OrderOne(name, user.id).subscribe(data => {
+            this.isLoading = false;
             console.log(data)
             if(!data.error){
               this.snackBar.open('Votre demande de service a bien été prise en considération', '!', {

@@ -8,13 +8,47 @@ const Compose = require("../models/Compose");
 const Service = require("../models/Service");
 orders.use(cors());
 
-
+Order.hasMany(Compose,{foreignKey: 'idOrder'})
+Compose.belongsTo(Order, {foreignKey: 'idOrder'})
 
 orders.post('/OrderOne',(req,res) => {
   const idUser = {
     idUser: req.body.idUser,
     orderDate: Date.now()
-  }
+  };
+
+  Service.findOne({
+    where: { name: req.body.name }
+  }).then(service => {
+    const idService = service.idServices;
+    Compose.findOne({
+      include: [{
+        model: Order,
+        where: { orderStatus: ['pending','On his way'], idUser: idUser.idUser}
+      }],
+      where: {idService: idService}
+    }).then(compose => {
+      if (compose) {
+        res.json({error: 'You already order this service'})
+      } else {
+        Order.create(idUser).then(order => {
+          Compose.create({idOrder: order.idOrder, idService: service.idServices}).then(compose => {
+            res.json(compose);
+          }).catch(err => {
+            res.json({error: 'Problem of creation'})
+          })
+        })
+      }
+    })
+  })
+});
+
+/*
+orders.post('/OrderOne',(req,res) => {
+  const idUser = {
+    idUser: req.body.idUser,
+    orderDate: Date.now()
+  };
 
   Service.findOne({
     where: { name: req.body.name }
@@ -22,39 +56,67 @@ orders.post('/OrderOne',(req,res) => {
     Order.findAll({
       where: { orderStatus: 'pending', idUser: idUser.idUser}
     }).then(oldOrders => {
-      console.log(oldOrders)
-      if(oldOrders.length){
-        console.log('test')
-        for(let i=0;i<oldOrders.length;i++){
-          Compose.findOne({
-            where: { idOrder: oldOrders[i].idOrder, idService: service.idServices }
-          }).then(compose => {
-            console.log(compose)
-            if(compose){
-              res.json({error: 'You can\'t pick multiple services'})
-              return ;
-            }
-            else{
-              Order.create(idUser).then(order => {
-                Compose.create({idOrder: order.idOrder, idService: service.idServices}).then(compose => {
-                  res.json(compose);
-                })
-              })
-            }
-          })
-        }
-      }
-      else{
-        console.log('order added')
+      console.log('Old orders:',oldOrders)
+      if(!oldOrders.length) {
+        console.log('------Create2----------')
         Order.create(idUser).then(order => {
           Compose.create({idOrder: order.idOrder, idService: service.idServices}).then(compose => {
             res.json(compose);
+            return 0;
+          }).catch(err => {
+            res.json({error: 'User already exists'})
           })
+        }).catch(err => {
+          res.json({error: 'User already exists'})
         })
       }
+      else{
+        console.log('test')
+        for(let i=0;i<oldOrders.length;i++){
+          console.log(oldOrders.idOrder)
+          Compose.findOne({
+            where: {
+              idOrder: oldOrders[i].idOrder,
+              idService: service.idServices
+            }
+          }).then(compose => {
+            console.log(compose)
+            if(compose){
+              console.log('cant pick service')
+              res.json({error: 'You can\'t pick multiple services'})
+              return 0;
+            }
+            else{
+              if(!compose){
+                console.log('------Create1----------')
+                Order.create(idUser).then(order => {
+                  Compose.create({idOrder: order.idOrder, idService: service.idServices}).then(compose => {
+                    res.json(compose);
+                    return 0;
+                  }).catch(err => {
+                    res.json({error: 'User already exists'})
+                  })
+                }).catch(err => {
+                  res.json({error: 'User already exists'})
+                })
+              }
+            }
+          }).catch(err => {
+            res.json({error: 'User already exists'})
+          })
+        }
+      }
+    }).catch(err => {
+      res.json({error: 'User already exists'})
     })
+  }).catch(err => {
+    res.json({error: 'User already exists'})
   })
 });
+
+
+
+*/
 
 
 orders.put('/setFinished',(req,res) => {
@@ -181,20 +243,21 @@ orders.get('/getServiceByOrder/:id',(req,res) => {
   })
 })
 
+
 orders.delete('/orderDelete/:id',(req,res) => {
   Order.findOne({
     where: {
       idOrder: req.params.id
     }
   }).then(order => {
-    Order.destroy({
+    Compose.destroy({
       where: {
-        idOrder: req.params.id
+        idOrder: order.idOrder
       }
     }).then(order2 => {
-      Compose.destroy({
+      Order.destroy({
         where: {
-          idOrder: order.idOrder
+          idOrder: req.params.id
         }
       }).then(compose => {
         console.log(compose)

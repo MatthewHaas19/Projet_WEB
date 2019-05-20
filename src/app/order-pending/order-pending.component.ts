@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {OrderService} from '../../order.service';
-import {MatTableDataSource} from '@angular/material';
+import { MatTableDataSource} from '@angular/material';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import {WorkerAuthService} from '../../WorkerAuth.service';
 import {AuthentificationService} from '../../authentification.service';
@@ -37,6 +37,7 @@ export class OrderPendingComponent implements OnInit {
   // We define in which order we will display the column
   displayedColumns: string[] = ['idOrder', 'name', 'orderDate'];
 
+
   // We import the services that we will use in this component
   constructor(private order: OrderService, private auth: AuthentificationService  , private worker: WorkerAuthService) { }
 
@@ -64,6 +65,9 @@ export class OrderPendingComponent implements OnInit {
             for (let i = 0; i < this.Orders.length; i++) {
               if (this.Orders[i].idOrder === name.idOrder) {
                 this.Orders.splice(i, 1);
+                this.Orders.sort(function(obj1, obj2) {
+                  return obj1.idOrder - obj2.idOrder
+                });
                 this.dataSource = new MatTableDataSource(this.Orders);
               }
             }
@@ -115,6 +119,9 @@ export class OrderPendingComponent implements OnInit {
           aOrder.address = user.code + ' ' + user.city + ' ' + user.address
           aOrder.image = user.image;
           this.Orders.push(aOrder);
+          this.Orders.sort(function(obj1, obj2) {
+            return obj1.idOrder - obj2.idOrder
+          });
           this.dataSource = new MatTableDataSource(this.Orders);
         });
       });

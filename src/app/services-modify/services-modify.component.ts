@@ -38,7 +38,7 @@ export class ServicesModifyComponent implements OnInit {
     type: '',
     desc: '',
     price: 0,
-    image: 'assets/images/service.jpg', // We definie a default image for a service
+    image: 'assets/images/service.jpg', // We define a default image for a service
   };
 
   idService
@@ -112,8 +112,11 @@ export class ServicesModifyComponent implements OnInit {
     this.infos.price = formValue.price;
     if (this.fileUrl && this.fileUrl !== '') {
       this.infos.image = this.fileUrl;
+      console.log('test');
     }
-
+    if(this.OldImage === this.infos.image){
+      this.OldImage = 'assets/images/service.jpg'
+    }
     if (!this.SubmitBlocked) {
       this.services.modifyService(this.OldImage,this.infos, this.idService).then((res) => {
         this.router.navigate(['']);
