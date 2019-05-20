@@ -1748,7 +1748,7 @@ var ServicesComponent = /** @class */ (function () {
         this.initForm();
         this.services.getTypes().subscribe(function (service) {
             var add = {
-                name: 'Ménager',
+                name: 'Types',
                 type: service
             };
             console.log(add);

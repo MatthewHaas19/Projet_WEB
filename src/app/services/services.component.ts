@@ -57,7 +57,7 @@ export class ServicesComponent implements OnInit {
     this.services.getTypes().subscribe(
       service => {
         const add = {
-          name : 'Ménager',
+          name : 'Types',
           type : service
         };
         console.log(add);
