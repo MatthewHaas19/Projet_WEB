@@ -37,6 +37,7 @@ import {OrderInfoDialogComponent, UploadWorkerProfileComponent, WorkerProfileCom
 import { OrderPendingComponent } from './order-pending/order-pending.component';
 import {MatSnackBarModule} from '@angular/material';
 import { ServicesModifyComponent } from './services-modify/services-modify.component';
+import { NotFoundComponent } from './not-found/not-found.component';
 
 const appRoutes: Routes = [
   { path: 'register', component: RegisterComponent},
@@ -50,7 +51,9 @@ const appRoutes: Routes = [
   { path: 'worker-register', component: WorkerRegisterComponent},
   { path: 'worker-profile', component: WorkerProfileComponent},
   { path: 'order-pending', component: OrderPendingComponent},
-  { path: '', component: ServicesListComponent}
+  { path: '', component: ServicesListComponent},
+  { path: 'not-found', component: NotFoundComponent},
+  { path: '**', redirectTo: 'not-found'}
 ]
 
 
@@ -72,7 +75,8 @@ const appRoutes: Routes = [
     OrderInfoDialogComponent,
     UploadProfileComponent,
     UploadWorkerProfileComponent,
-    ServicesModifyComponent
+    ServicesModifyComponent,
+    NotFoundComponent
   ],
   imports: [
     BrowserModule,

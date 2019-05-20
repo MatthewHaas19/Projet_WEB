@@ -1,7 +1,7 @@
 <!-- HTML For the service list, we display all of the infos for each services using the directive ngFor -->
 <div class="search">
   <mat-form-field appearance="outline" color="accent" >
-    <mat-label>Find a service</mat-label>
+    <mat-label>Trouver un service</mat-label>
     <input matInput placeholder="..." type="text" #myInput [(ngModel)]="name" (input)="Search()" >
     <mat-icon matSuffix>search</mat-icon>
   </mat-form-field>
@@ -29,7 +29,7 @@
             <p>{{service.desc}}</p>
           </div>
           <div class="bottom-button">
-            <button id="buttonS" mat-raised-button color="accent" type="submit" [disabled]="isLoading" (click)="OrderOne(service.name)">Order</button>
+            <button id="buttonS" mat-raised-button color="accent" type="submit" [disabled]="isLoading" (click)="OrderOne(service.name)">Commander</button>
           </div>
         </div>
       </mat-card>

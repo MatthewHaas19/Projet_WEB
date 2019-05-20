@@ -3,6 +3,8 @@ import { AuthentificationService, UserDetails } from '../../authentification.ser
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef, MatTableDataSource} from '@angular/material';
 import {ServicesService} from '../../services.service';
 import {DialogData, UploadServiceComponent} from '../services/services.component';
+import {OrderService} from '../../order.service';
+import {Router} from '@angular/router';
 
 
 
@@ -19,8 +21,10 @@ export class ProfileComponent implements OnInit {
   fileUrl = ''
   dataSource
   displayedColumns: string[] = ['Content'];
+  reviewCount = 0;
+  orderCount = 0;
 
-  constructor(private auth: AuthentificationService, public dialog: MatDialog) { }
+  constructor(private auth: AuthentificationService, public dialog: MatDialog, public order: OrderService, private router: Router) { }
 
   // At the start of the script we initialise the profile by getting the info of the user
   ngOnInit() {
@@ -28,6 +32,8 @@ export class ProfileComponent implements OnInit {
       user => {
         this.details = user;
         this.GetAllReview(user.id)
+        this.GetReviewCount(user.id)
+        this.GetOrderCount(user.id)
       },
       err => {
         console.error((err));
@@ -48,6 +54,19 @@ export class ProfileComponent implements OnInit {
           console.log(this.review)
           this.dataSource = new MatTableDataSource(this.review);
         }
+    })
+  }
+
+
+  GetReviewCount(idUser) {
+    this.auth.getReviewCount(idUser).subscribe(review => {
+      this.reviewCount = review.count
+    })
+  }
+
+  GetOrderCount(idUser) {
+    this.order.getOrderCount(idUser).subscribe(order => {
+      this.orderCount = order.count
     })
   }
 

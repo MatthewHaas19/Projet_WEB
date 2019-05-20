@@ -146,4 +146,20 @@ users.get('/user-reviews/:id',(req,res) => {
   })
 });
 
+users.get('/user-reviews-count/:id',(req,res) => {
+
+  Review.count({
+    where: {
+      idUser: req.params.id,
+      Type: 'worker'
+    },
+  }).then(review => {
+    res.json({count: review})
+  }).catch(err => {
+    res.send('error ' + err)
+  })
+});
+
+
+
 module.exports = users;

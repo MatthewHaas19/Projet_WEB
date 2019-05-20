@@ -35,7 +35,8 @@ export class OrderPendingComponent implements OnInit {
   expandedElement: Order | null;
 
   // We define in which order we will display the column
-  displayedColumns: string[] = ['idOrder', 'name', 'orderDate'];
+  displayedColumns: string[] = ['idOrder', 'name', 'orderDate', 'choose'];
+  displayedColumns2: string[] = ['idOrder', 'name', 'orderDate'];
 
 
   // We import the services that we will use in this component

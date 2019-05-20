@@ -7,9 +7,6 @@
     </div>
     <ul>
       <li class="active">Profile</li>
-      <li>Private Informations</li>
-      <li>Edit Profile</li>
-      <li>Logout</li>
     </ul>
   </div>
   <div class="profile-content">
@@ -17,7 +14,7 @@
       <button mat-icon-button (click)="openDialog()">
         <mat-icon class="icon">add_a_photo</mat-icon>
       </button>
-      <button mat-icon-button (click)="openDialog()">
+      <button mat-icon-button>
         <mat-icon class="icon">create</mat-icon>
       </button>
     </div>
@@ -28,12 +25,12 @@
     </div>
     <div class="summary">
       <div class="content">
-        <span>0</span>
+        <span>{{orderCount}}</span>
         <span>Services</span>
       </div>
       <div class="content">
-        <span>0</span>
-        <span>Review posted</span>
+        <span>{{reviewCount}}</span>
+        <span>Avis reçus</span>
       </div>
     </div>
     <div class="profile-details">

@@ -91,7 +91,7 @@ export class AppComponent implements OnInit {
   LogoutWorker() {
     this.worker.logout();
     this.Worker = false;
-    this.router.navigate(['/worker-login']);
+    this.router.navigate(['']);
   }
 
 

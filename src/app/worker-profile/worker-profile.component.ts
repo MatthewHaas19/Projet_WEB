@@ -5,6 +5,7 @@ import {OrderService} from '../../order.service';
 import {DialogData} from '../services/services.component';
 import {ServicesService} from '../../services.service';
 import {AuthentificationService} from '../../authentification.service';
+import {Router} from '@angular/router';
 
 interface Order {
   idOrder: number;
@@ -41,7 +42,8 @@ export class WorkerProfileComponent implements OnInit {
   constructor(private auth: WorkerAuthService,
               private order: OrderService,
               private user: AuthentificationService,
-              public dialog: MatDialog) { }
+              public dialog: MatDialog,
+              private router: Router) { }
 
   reviewPosted = 0;
   dataSource;
@@ -60,6 +62,7 @@ export class WorkerProfileComponent implements OnInit {
     );
     this.getAllOrder();
   }
+
 
   // We open a dialog page to display the info of the user while the worker his clicking on it
   openDialog(order): void {

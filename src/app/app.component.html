@@ -1,27 +1,39 @@
 <!-- Header -->
   <mat-toolbar color={{color}}>
   <mat-toolbar-row>
-  <span>MyServices</span>
+  <h3 routerLink="" >MyServices</h3>
   <span class="spacer"></span>
-    <button mat-icon-button routerLink="cart" *ngIf="isAuth()">
+    <button mat-icon-button routerLink="services" *ngIf="isAuth() && isAdmin()">
+      <mat-icon class="icon">grade</mat-icon>
+    </button>
+
+    <button mat-icon-button routerLink="order-pending" *ngIf="isWorker()">
+      <mat-icon>near_me</mat-icon>
+    </button>
+    <button id="b1" mat-icon-button routerLink="cart" *ngIf="isAuth()">
       <mat-icon matBadge = {{OrderNumber}} >near_me</mat-icon>
     </button>
+    <button mat-icon-button routerLink="profile" *ngIf="isAuth()">
+      <mat-icon>how_to_reg</mat-icon>
+    </button>
+    <button mat-icon-button routerLink="worker-profile" *ngIf="isWorker()">
+      <mat-icon>how_to_reg</mat-icon>
+    </button>
+
     <button mat-button [matMenuTriggerFor]="menu"><mat-icon class="icon">menu</mat-icon></button>
     <mat-menu #menu="matMenu" xPosition="before">
-      <button mat-menu-item routerLink="login" *ngIf="!isAuth() && !isWorker()">Login</button>
-      <button mat-menu-item routerLink="worker-login" *ngIf="!isAuth() && !isWorker()">Worker Login</button>
-      <button mat-menu-item routerLink="register" *ngIf="!isAuth() && !isWorker()">Register</button>
-      <button mat-menu-item (click)="Logout() " *ngIf="isAuth()">Logout</button>
-      <button mat-menu-item routerLink="">Services</button>
-      <button mat-menu-item routerLink="profile" *ngIf="isAuth()">Profile</button>
-      <button mat-menu-item routerLink="services" *ngIf="isAuth() && isAdmin()">Add Services</button>
-
-      <button mat-menu-item (click)="LogoutWorker()" *ngIf="isWorker()">Logout</button>
-      <button mat-menu-item routerLink="order-pending" *ngIf="isWorker()">Orders-Pending</button>
-      <button mat-menu-item routerLink="worker-profile" *ngIf="isWorker()">Profile</button>
+      <button mat-menu-item routerLink="" >Accueil</button>
+      <button mat-menu-item routerLink="login" *ngIf="!isAuth() && !isWorker()">Se connecter</button>
+      <button mat-menu-item routerLink="register" *ngIf="!isAuth() && !isWorker()">S'enregistrer</button>
+      <button mat-menu-item routerLink="worker-login" *ngIf="!isAuth() && !isWorker()">Espace livreur</button>
+      <button mat-menu-item routerLink="worker-register" *ngIf="!isAuth() && !isWorker()">Demander a devenir livreur</button>
+      <button mat-menu-item (click)="Logout() " *ngIf="isAuth()">Se deconnecter</button>
+      <button mat-menu-item (click)="LogoutWorker()" *ngIf="isWorker()">Se deconnecter</button>
     </mat-menu>
+
   </mat-toolbar-row>
-</mat-toolbar>
+
+  </mat-toolbar>
 
 <!-- Router outlet corresponding to the uri -->
 <router-outlet></router-outlet>

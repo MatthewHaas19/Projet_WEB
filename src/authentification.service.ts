@@ -142,6 +142,10 @@ export class AuthentificationService {
     return this.http.get('/api/user-reviews/' + idUser)
   }
 
+  public getReviewCount(idUser): Observable<any> {
+    return this.http.get('/api/user-reviews-count/' + idUser)
+  }
+
   public modify(id, image): Observable<any> {
     return this.http.put('/api/modify/' + id, {img: image})
   }

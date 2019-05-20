@@ -266,6 +266,18 @@ orders.delete('/orderDelete/:id',(req,res) => {
     })
   })
 });
+orders.get('/orderCount/:id',(req,res) => {
+
+  Order.count({
+    where: {
+      idUser: req.params.id
+    },
+  }).then(order => {
+    res.json({count: order})
+  }).catch(err => {
+    res.send('error ' + err)
+  })
+});
 
 
 module.exports = orders;

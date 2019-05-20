@@ -51,6 +51,10 @@ export class OrderService {
     return this.http.get('/api/getWorkerOrders/'+idWorker)
   }
 
+  public getOrderCount(idWorker): Observable<any>{
+    return this.http.get('/api/orderCount/'+idWorker)
+  }
+
   public setFinished(order): Observable<any> {
     return this.http.put('/api/setFinished', order)
   }

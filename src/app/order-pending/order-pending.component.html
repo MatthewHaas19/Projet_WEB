@@ -3,7 +3,7 @@
 <table mat-table [dataSource]="dataSource" multiTemplateDataRows class="mat-elevation-z8" >
 
   <!-- in 'element' there is all the infos of a client order  -->
-  <ng-container matColumnDef="{{column}}" *ngFor="let column of displayedColumns">
+  <ng-container matColumnDef="{{column}}" *ngFor="let column of displayedColumns2">
     <th mat-header-cell *matHeaderCellDef>{{column}}</th>
     <td mat-cell *matCellDef="let element"> {{element[column]}} </td>
   </ng-container>
@@ -27,6 +27,13 @@
         </div>
       </div>
     </td>
+  </ng-container>
+
+  <ng-container matColumnDef="choose">
+    <th mat-header-cell *matHeaderCellDef></th>
+    <th mat-cell *matCellDef="let row">
+      <mat-icon>keyboard_arrow_down</mat-icon>
+    </th>
   </ng-container>
 
 

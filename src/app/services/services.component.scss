@@ -73,3 +73,19 @@ mat-icon{
     opacity: 0.8;
   }
 }
+
+.order-dialog{
+  text-align: center;
+  width: 100%;
+  height: 100%;
+  margin: 0 auto;
+  .mat-dialog{
+    text-align: center;
+    margin: 0 auto;
+  }
+}
+.center{
+  padding-top: 8px;
+  text-align: center;
+  margin: 0 auto;
+}
