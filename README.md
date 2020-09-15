@@ -1,6 +1,6 @@
 # Projet
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.3.8.
+This project is my first web project, realised during my 3rd year at Polytech Montpellier.
 
 ## Development server
 
